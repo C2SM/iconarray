@@ -5,6 +5,7 @@ pipeline {
     environment {
        EMAIL_TO_1 = 'victoria.cherkas@meteoswiss.ch'
        EMAIL_TO_2 = 'annika.lauber@c2sm.ethz.ch'
+       CONDA_ENV_NAME = 'iconvis'
     }
     agent none
     stages {
@@ -23,9 +24,9 @@ pipeline {
                         sh 'bash miniconda.sh -b -p $WORKSPACE/miniconda'
                         sh 'conda config --set always_yes yes --set changeps1 no'
                         sh 'conda config --add channels conda-forge'
-                        sh 'conda env create --name psyplot_${NODE_NAME} --file env/environment.yml'
+                        sh 'conda env create --name ${CONDA_ENV_NAME}_${NODE_NAME} --file env/environment.yml'
                         sh '''source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-                            conda activate psyplot_${NODE_NAME}
+                            conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             source env/setup-conda-env.sh
                             conda deactivate
                             rm miniconda.sh'''
@@ -50,9 +51,9 @@ pipeline {
                         sh 'bash miniconda.sh -b -p $WORKSPACE/miniconda'
                         sh 'conda config --set always_yes yes --set changeps1 no'
                         sh 'conda config --add channels conda-forge'
-                        sh 'conda env create --name psyplot_${NODE_NAME} --file env/environment.yml'
+                        sh 'conda env create --name ${CONDA_ENV_NAME}_${NODE_NAME} --file env/environment.yml'
                         sh '''source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-                            conda activate psyplot_${NODE_NAME}
+                            conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             source env/setup-conda-env.sh
                             conda deactivate
                             rm miniconda.sh'''
@@ -93,10 +94,9 @@ pipeline {
                         script {
                             TestBadge.setStatus('running')
                             sh '''source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-                            conda activate psyplot_${NODE_NAME}
+                            conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             python -m cfgrib selfcheck
                             python -c "import cartopy; print(cartopy.config)"
-                            pytest testsuite/test*
                             pytest icon_vis/icon_vis/modules/tests'''
                         }
                     }
@@ -134,10 +134,9 @@ pipeline {
                         script {
                             TestBadge.setStatus('running')
                             sh '''source $WORKSPACE/miniconda/etc/profile.d/conda.sh
-                            conda activate psyplot_${NODE_NAME}
+                            conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             python -m cfgrib selfcheck
                             python -c "import cartopy; print(cartopy.config)"
-                            pytest testsuite/test*
                             pytest icon_vis/icon_vis/modules/tests'''
                         }
                     }
