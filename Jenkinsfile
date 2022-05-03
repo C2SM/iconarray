@@ -97,6 +97,7 @@ pipeline {
                             conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             python -m cfgrib selfcheck
                             python -c "import cartopy; print(cartopy.config)"
+                            python icon_vis/icon_vis/modules/get_data.py
                             pytest icon_vis/icon_vis/modules/tests'''
                         }
                     }
@@ -137,6 +138,7 @@ pipeline {
                             conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             python -m cfgrib selfcheck
                             python -c "import cartopy; print(cartopy.config)"
+                            python icon_vis/icon_vis/modules/get_data.py
                             pytest icon_vis/icon_vis/modules/tests'''
                         }
                     }
