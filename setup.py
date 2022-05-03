@@ -23,8 +23,8 @@ setup(
     version="v0.2.14",  # Required
     description="A project for visualizing/plotting ICON",  # Optional
     long_description=long_description,  # Optional
-    long_description_content_type="text/markdown",  # Optional (see note above)
-    url="https://github.com/C2SM/icon-vis",  # Optional
+    long_description_content_type="text/markdown",  # Optional 
+    url="https://github.com/C2SM/icon-vis-utils",  # Optional
     author="MeteoSwiss, C2SM",  # Optional
     author_email="victoria.cherkas@meteoswiss.ch, annika.lauber@c2sm.ethz.ch",  # Optional
     package_dir={"": "icon_vis"},  # Optional
