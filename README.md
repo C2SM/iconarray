@@ -1,7 +1,7 @@
 # icon-vis
 
-[![Build Status](https://jenkins-mch.cscs.ch/job/iconvis_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconvis_testsuite/)
-[![Build Status](https://jenkins-mch.cscs.ch/job/iconvis_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconvis_testsuite/)
+[![Build Status](https://jenkins-mch.cscs.ch/job/iconvis_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/)
+[![Build Status](https://jenkins-mch.cscs.ch/job/iconvis_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/)
 
 ## Introduction
 Collection of python scripts to visualise ICON-simulations on the unstructered grid. The different folders contain example code for different kind of plots. Example datasets for testing can be downloaded following the instructions in the [data](https://github.com/C2SM/icon-vis/tree/master/data) folder. Example plots for each folder are shown below. More detailed descriptions for each plot are in the README files of the different folders. The routines are mainly based on the python library  [psyplot](https://psyplot.github.io).
@@ -12,47 +12,17 @@ If you have any feature requests, feel free to raise an issue or contact us by e
 # Table of contents
 1. [Introduction](#introduction)
 2. [Environment Setup](#environment-setup)
-    - [Piz Daint](#piz-daint)
-    - [Run scripts on jupyter kernel](#run-scripts-on-jupyter-kernel)
     - [Conda environment](#conda-environment)
-3. [Example Plots](#example-plots)
-    - [Map Plot](#mapplot)
-    - [Vector Plot](#vectorplot)
-    - [Timeseries](#timeseries)
-    - [Vertical Profile](#vertical_profile)
-    - [Transect](#transect)
-    - [Combined Map Plot](#combinedplot)
-    - [Edge Map Plot](#edgeplot)
-4. [Usage](#usage)
-    - [Notebooks and Scripts](#notebooks-and-scripts)
-    - [Example Data](#example-data)
+3. [Usage](#usage)
     - [Modules](#modules)
     - [Formatoptions](#formatoptions)
-    - [Plotting Derived Variables](#plotting-derived-variables)
-    - [Plotting with GRIB/NETCDF](#plotting-gribnetcdf-icon-data)
-    - [Specifying Vertical Level](#specifying-vertical-level)
-5. [FAQs/Troubleshooting instructions](#trouble-shooting)
+4. [Example Plots](#example-plots)
 6. [Contacts](#contacts)
 7. [Acknowledgments](#acknowledgments)
 
 
 # Getting started with psyplot
 ## Environment Setup
-### Piz Daint
-
-To be able to run the scripts, you can source the pre-installed environment on Piz Daint by sourcing the load environment file:
-
-    source load_env.sh
-
-### Run scripts on jupyter kernel
-**Piz Daint**
-
-For running the ipython scripts on Piz Daint, create a psyplot-kernel with:
-
-    source env/create_jupyter_kernel.sh
-
-You can now start JupyterLab with https://jupyter.cscs.ch (Check [JupyterLab on CSCS](https://user.cscs.ch/tools/interactive/jupyterlab/) for more information) and open the _psyplot-kernel_ notebook.
-
 ### Conda environment
 
 <details>
@@ -94,78 +64,7 @@ You can install psy-transect with (not officially released yet):
     python -m pip install git+https://github.com/psyplot/psy-transect
 
 After creating the virtual environment and installing the requirements, the environment only needs to be activated for future usage. Make sure that the path is exported to ```~/miniconda3/bin```.
-
-# Example plots
-#### mapplot:
-See the [mapplot folder](./mapplot) for details on how this plot was made.
-
-<p float="left">
-<img src=mapplot/mapplot_example.png width="500"/>
-</p>
-
-#### vectorplot:
-See the [vectorplot folder](./vectorplot) for details on how these plots were made.
-
-<p float="left">
-<img src=vectorplot/VectorPlot_Reg.png width="450"/>
-<img src=vectorplot/VectorPlot_Stream.png width="450"/>
-</p>
-
-
-#### difference_map:
-See the [difference_map folder](./difference_map) for details on how this plot was made.
-<p float="left">
-<img src=difference_map/difference_map_example.png width="550"/>
-</p>
-
-#### timeseries:
-See the [timeseries folder](./timeseries) for details on how this plot was made.
-<p float="left">
-<img src=timeseries/timeseries_example.png width="500"/>
-</p>
-
-#### vertical_profile:
-See the [vertical_profile folder](./vertical_profile) for details on how this plot was made.
-
-<p float="left">
-<img src=vertical_profile/vertical_profile_example.png width="500"/>
-</p>
-
-#### transect:
-See the [transect folder](./transect) for details on how these plots were made.
-<p float="left">
-<img src=transect/Figure_1_transect.png width="450"/>
-<img src=transect/Figure_2_transect.png width="450"/>
-</p>
-
-#### combinedplot
-See the [combinedplot folder](./combinedplot) for details on how this plot was made.
-<p float="left">
-<img src=combinedplot/combined_plot.png width="500"/>
-</p>
-
-#### edgeplot
-The [edgeplot folder](./edgeplot) provides examples of plotting variables defined on the edge of ICON grid cells, as opposed to the cell center.
-See the [edgeplot folder](./edgeplot) for details on how the below plots were made.
-<p float="left">
-<img src=edgeplot/edge_scalar_plots.png width="900"/>
-<img src=edgeplot/vector_edge_plot.png width="500"/>
-</p>
-
 # Usage
-
-### Notebooks and Scripts
-
-Within this repository there are both Jupyter Notebooks and Python scripts for various examples of plots. The Python scripts can be used with your input data as parameters, or as guidance for creating your own script which is tailored to your data or visualization needs. The scripts and notebooks often use Python modules from the [modules](/modules) folder, as well as custom [formatoptions](/modules/formatoptions) which can then be used very easily while plotting with psyplot.
-
-### Example Data
-
-The notebooks and example plots in this repository use data which is stored on an FTP server. This data can be downloaded by running the `data/get_data.py` script. `cd data` and then run:
-
-	python get_data.py
-
-Or you can use the function `get_example_data` in your notebooks. More information on the data downloaded can be found in the [data folder](/data) README.
-
 ### Modules
 
 There are a number of [modules](/icon_vis/icon_vis/modules) which are part of the `icon-vis` package (installed by conda (see [env/environment.yml](env/environment.yml)) or pip (see [env/requirements.txt](env/requirements.txt)), which you can import like a normal python package into your scripts. To work with the modules and formatoptions from icon-vis, you can add this code block to the start of your script / notebook. You will see many examples of the modules being used within the scripts in this repo.
@@ -239,123 +138,6 @@ This repository includes various custom formatoptions, that are not included in 
 We encourage you to create your own formatoptions and contribute to this repository if they would be useful for others.
 
 Once registered to a plotter class, the formatoptions can be used as seen in many of the scripts, for example in [mapplot.py](/mapplot/mapplot.py)
-
-### Plotting Derived Variables
-
-If you want to plot derived variables, psyplot requires that the new variable has the correct coordinate encoding. These need to be set by you. For example, if you create a variable `delta_t` on your dataset `ds`, based on temperature calculated on the cell center, then you must set:
-```python
-ds.delta_t.encoding['coordinates'] = 'clat clon'
-```
-Whereas if your derived variable is an edge variable, for example derived from the tangential and normal components of the wind on the edges (`VN`, `VT`), then the coordinates encoding should be set as:
-```python
-ds.derived_edge_var.encoding['coordinates'] = 'elat elon'
-```
-You should also ensure that you have the cell or edge data required from the grid merged in the dataset. For variables on the cell center, your dataset will need not only `clat`, `clon`, but the bounds `clon_bnds`, `clat_bnds`, and the relationship must be defined between them, eg.
-
-```python
-ds.clon.attrs['bounds'] = 'clon_bnds'
-ds.clat.attrs['bounds'] = 'clat_bnds'
-```
-
-Likewise for edge variables, your dataset will require `elat`, `elon`, as well as:
-
-```python
-ds.elon.attrs['bounds'] = 'elon_bnds'
-ds.elat.attrs['bounds'] = 'elat_bnds'
-```
-
-The function `combine_grid_information` in the [grid.py](/modules/grid.py) sets the bounds attributes (among others) while merging the required grid data with the dataset.
-
-### Plotting GRIB/NETCDF ICON Data
-
-#### NETCDF
-
-NETCDF data often has everything you need to plot the data using psyplot, but sometimes it doesn't. For example the data could be missing the grid data, which is required for plotting. In this case the grid information can be added using the `combine_grid_information` function in the grid module. You just need to provide the location to the corresponding grid file. If you still have trouble plotting, check that the encoding coordinates for the variable you want to plot are set correctly - see [Plotting Derived Variables](#plotting-derived-variables) for more information.
-
-#### GRIB
-
-To open GRIB data using psyplot or xarray, you will need to use the `cfgrib` engine. eg:
-
-```python
-ds =  psy.open_dataset(icon_grib_file, engine='cfgrib', backend_kwargs={'indexpath': '', 'errors': 'ignore'})
-```
-
-GRIB data does not contain the grid information. This needs to be merged, and can be done using the `combine_grid_information` function in the grid module. You can provide either the file locations or xarray datasets to this function. This also sets the encoding coordinates as required.
-
-The `cfgrib` engine relies on an eccodes installation. The easiest way to set up your environment with the required dependencies for cfgrib is to use the [Conda](#conda-environment) setup.
-
-### Specifying Vertical Level
-
-You can specify the vertical level (height/altitude / pressure levels) at which you are plotting data by specifying the `z` formatoption. This specifies the index of the vertical level array.
-
-:bangbang: **Be careful** which direction your vertical level data is sorted, since the order direction could be changed by post processing tools.
-
-```python
-myplot = ds.psy.plot.mapvector(time=0, name=[['U', 'V']], z=8)
-```
-
-You can see which vertical dimension and value this corresponds to by printing the axes of the plot.
-
-```python
-print(myplot.axes)
-
-# OrderedDict([(<GeoAxesSubplot:title={'center':'Vector Plot after interpolating ICON data to Regular Grid'}>,
-#	      psyplot.project.Project([    arr11: 3-dim DataArray of U, V, with (variable, y_1, x_1)=(2, 101, 101),
-#             time=2021-11-23, grid_mapping_1=b'', z_1=1.05e+04]))])
-```
-
-Alternatively you can specify the vertical level using the dimension name. Eg if the name of the vertical dimension is generalVerticalLayer:
-
-```python
-myplot = ds.psy.plot.mapvector(time=0, name=[['U', 'V']], generalVerticalLayer=8)
-```
-# Trouble shooting
-
-1. Problems setting conda environment variables via `source env/setup-conda-env.sh`. 
-
-	> __init__() got an unexpected keyword argument 'capture_output'
-
-	Check for outdated spack commands in your $HOME/.bashrc (should align with instructione in [C2SM spack Documentation](https://c2sm.github.io/spack-c2sm/Install.html#automatically-source-preinstalled-spack-instance), and if using VS Code/Remote-SSH you might also need to uncheck **Remote.SSH: Use Local Server** in your VS Code Remote-SSH settings, to force a new connection upon reconnecting.
-
-2. Value error on `psy.open_dataset(f_grib2, engine="cfgrib", ...)`
-
-	> ValueError: conflicting sizes for dimension 'values': length 1567452 on 'VN' and length 1043968 on {'generalVerticalLayer': 'generalVerticalLayer', 'values': 'P'}
-
-	Solution: You might be trying to open a heterogeneous GRIB file with multiple hypercubes. Try `cfgrib.open_datasets` (open_datasets with an **s**!) which automates the selection of appropriate filter_by_keys and returns a list of all valid xarray.Dataset's in the GRIB file. [cfgrib Documentation](https://github.com/ecmwf/cfgrib)
-	
-```python
-import cfgrib 
-cfgrib.open_datasets(f_grib2, engine="cfgrib", backend_kwargs={'indexpath': '', 'squeeze':False}) 
-```
-
-3. The psyplot library needs the boundary variables (clon_bnds, clat_bnds). If they are not in the nc file, the information needs to be added with a grid file. The error is likely to be:
-	> *ValueError: Can only plot 2-dimensional data!*
-
-	Solutions: Add the path to a grid file in the config under the section 'var' with the option 'grid_file'.
-	Equally you could use the function combine_grid_information in the grid module if you do not use the config file.
-
-4. *ValueError: numpy.ndarray size changed, may indicate binary incompatibility.*
-
-    Can be solved by reinstalling numpy:
-
-        pip uninstall numpy
-
-        pip install numpy
-
-5. *ImportError: libproj.so.22: cannot open shared object file: No such file or directory*
-
-    For some reason the LD_LIBRARY_PATH is set wrong (probably a daint issue). Can be solved by setting the path to the lib folder of your environment:
-
-       export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/miniconda3/envs/your_env/lib
-
-    More information on this issue: https://github.com/conda-forge/cartopy-feedstock/issues/93
-
-6. *AttributeError: 'MapTransectMapPlot2D' object has no attribute 'convert_coordinate'*
-
-    That's a psyplot 1.4.1 error and should be resolved by installing the newest version of psyplot.
-
-    _Note: make sure there are no psyplot packages installed on the local user, e.g., under Users/username/.local/lib/python3.9/site-packages/. If there are, they need to be uninstalled and installed again._
-
 # Contacts
 
 This repo has been developed by:
