@@ -4,7 +4,7 @@ def TestBadge = addEmbeddableBadgeConfiguration(id: "test", subject: "Test")
 pipeline {
     environment {
        EMAIL_TO_1 = 'victoria.cherkas@meteoswiss.ch'
-       EMAIL_TO_2 = 'annika.lauber@c2sm.ethz.ch'
+       EMAIL_TO_2 = 'victoria.cherkas@meteoswiss.ch'
        CONDA_ENV_NAME = 'iconvis'
     }
     agent none
