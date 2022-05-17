@@ -19,7 +19,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 # Fields marked as "Optional" may be commented out.
 
 setup(
-    name="icon-vis",  # Required
+    name="icon-vis-utils",  # Required
     version="v0.1.0",  # Required
     description="A project for visualizing/plotting ICON",  # Optional
     long_description=long_description,  # Optional
