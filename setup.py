@@ -20,10 +20,10 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="icon-vis",  # Required
-    version="v0.2.14",  # Required
+    version="v0.1.0",  # Required
     description="A project for visualizing/plotting ICON",  # Optional
     long_description=long_description,  # Optional
-    long_description_content_type="text/markdown",  # Optional 
+    long_description_content_type="text/markdown",  # Optional
     url="https://github.com/C2SM/icon-vis-utils",  # Optional
     author="MeteoSwiss, C2SM",  # Optional
     author_email="victoria.cherkas@meteoswiss.ch, annika.lauber@c2sm.ethz.ch",  # Optional
