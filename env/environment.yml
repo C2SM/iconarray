@@ -14,5 +14,5 @@ dependencies:
 - psy-reg
 - cartopy
 - pip:
-  - "--editable=git+https://github.com/C2SM/icon-vis@v0.2.14#egg=icon-vis"
+  - "git+https://github.com/C2SM/icon-vis-utils@v0.1.0#egg=icon-vis-utils"
 - pre-commit
