@@ -9,60 +9,11 @@
 
 # Table of contents
 1. [Introduction](#introduction)
-2. [Environment Setup](#environment-setup)
-    - [Conda environment](#conda-environment)
-3. [Usage](#usage)
-    - [Modules](#modules)
-    - [Formatoptions](#formatoptions)
-4. [Example Plots](#example-plots)
+2. [Modules](#modules)
+3. [Formatoptions](#formatoptions)
 6. [Contacts](#contacts)
 7. [Acknowledgments](#acknowledgments)
 
-
-# Getting started with psyplot
-## Environment Setup
-### Conda environment
-
-<details>
-  <summary>Installing Miniconda on Tsa/Daint (CSCS)</summary>
-
-  ### Installing Miniconda on Tsa/Daint (CSCS)
-1. Look up most recent Miniconda version for Linux 64-bit on the [Miniconda documentation pages](https://docs.conda.io/en/latest/miniconda.html)
-2. Install as user specific miniconda e.g. on /scratch (enter ```cd $SCRATCH``` at the command line to get to your personal scratch directory).
-   When the command prompt asks for installation location, provide the path to your scratch and append ```/miniconda3```.
-
-        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-
-        bash Miniconda3-latest-Linux-x86_64.sh
-
-3. Export path to your conda installation (if using daint/euler/tsa: install miniconda on scratch to avoid memory issues).
-
-        export PATH="$SCRATCH/miniconda3/bin:$PATH"
-
-</details>
-
-Create a conda environement _psyplot_ with python[version>=3.7,<3.10] (psy-view requirement) and install requirements:
-
-    conda env create -n psyplot -f env/environment.yml
-
-Activate environment (use "source activate" in case "conda activate" does not work):
-
-    conda activate psyplot
-
-If you already have the environment but want to update it:
-
-    conda env update --file local.yml --prune
-
-If you are using the conda setup and want to use GRIB data, you will need to set the ```GRIB_DEFINITION_PATH```. This can be done on Tsa/Daint by sourcing the script ```setup-conda-env.sh```. It only needs to be run a single time, as it will save the ```GRIB_DEFINITION_PATH``` environment variable to the conda environment. You will need to deactivate and reactivate the conda environment after doing this. You can check it has been correctly set by ``` conda env config vars list```. This script also sets the Fieldextra path, which is used for data interpolation. See [FAQs](#trouble-shooting) if you get an error running this.
-
-    source env/setup-conda-env.sh
-    
-You can install psy-transect with (not officially released yet):
-
-    python -m pip install git+https://github.com/psyplot/psy-transect
-
-After creating the virtual environment and installing the requirements, the environment only needs to be activated for future usage. Make sure that the path is exported to ```~/miniconda3/bin```.
-# Usage
 ### Modules
 
 There are a number of [modules](/icon_vis/icon_vis/modules) which are part of the `icon-vis` package (installed by conda (see [env/environment.yml](env/environment.yml)) or pip (see [env/requirements.txt](env/requirements.txt)), which you can import like a normal python package into your scripts. To work with the modules and formatoptions from icon-vis, you can add this code block to the start of your script / notebook. You will see many examples of the modules being used within the scripts in this repo.
