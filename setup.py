@@ -20,7 +20,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="icon_data_processing",  # Required
-    version="v0.1.6",  # Required
+    version="v0.1.7",  # Required
     description="A package of modules for processing and plotting ICON data.",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional
@@ -28,7 +28,10 @@ setup(
     author="MeteoSwiss, C2SM",  # Optional
     author_email="victoria.cherkas@meteoswiss.ch, annika.lauber@c2sm.ethz.ch",  # Optional
     package_dir={"": "ICON_data_processing"},  # Optional
-    packages=find_packages(),  # Required
+    packages=find_packages(
+        where='ICON_data_processing',
+        include=['backend','core','plot','utils'],
+    ),  # Required
     python_requires=">=3.7, <4",
     install_requires=[],  # Optional
 )
