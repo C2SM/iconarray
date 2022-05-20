@@ -19,12 +19,12 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 # Fields marked as "Optional" may be commented out.
 
 setup(
-    name="icon-vis-utils",  # Required
-    version="v0.1.1",  # Required
-    description="A project for visualizing/plotting ICON",  # Optional
+    name="icon-data-processing",  # Required
+    version="v0.1.2",  # Required
+    description="A package of modules for processing and plotting ICON data.",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional
-    url="https://github.com/C2SM/icon-vis-utils",  # Optional
+    url="https://github.com/C2SM/ICON-data-processing",  # Optional
     author="MeteoSwiss, C2SM",  # Optional
     author_email="victoria.cherkas@meteoswiss.ch, annika.lauber@c2sm.ethz.ch",  # Optional
     package_dir={"": "icon_vis"},  # Optional
