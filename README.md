@@ -1,4 +1,4 @@
-# icon-vis
+# icon-data-processing (WIP)
 
 [![Build Status](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/)
 [![Build Status](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/)
