@@ -1,4 +1,4 @@
-import iconarray  # import icon-vis self-written modules
+import iconarray
 import pytest
 
 from iconarray.backend import grid
