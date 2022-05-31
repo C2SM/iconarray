@@ -1,6 +1,6 @@
-import iconarray
 import pytest
 
+import iconarray
 from iconarray.backend import grid
 
 f_wo_celldata = "data/example_data/nc/lfff01000000.nc"

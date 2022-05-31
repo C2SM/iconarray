@@ -29,7 +29,7 @@ setup(
     author_email="victoria.cherkas@meteoswiss.ch, annika.lauber@c2sm.ethz.ch",  # Optional
     # package_dir={"": "iconarray"},  # Optional
     packages=find_packages(
-        exclude=['tests'],
+        exclude=["tests"],
     ),  # Required
     python_requires=">=3.7, <4",
     install_requires=[],  # Optional
