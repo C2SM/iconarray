@@ -14,5 +14,5 @@ dependencies:
 - psy-reg
 - cartopy
 - pip:
-  - "git+https://github.com/C2SM/ICON-data-processing@v0.1.6#egg=ICON-data-processing"
+  - "git+ssh://git@github.com/C2SM/ICON-data-processing.git@v0.1.8#egg=ICON-data-processing"
 - pre-commit
