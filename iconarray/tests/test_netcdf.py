@@ -1,6 +1,7 @@
-import icon_vis.modules as iconvis  # import icon-vis self-written modules
+import iconarray  # import icon-vis self-written modules
 import pytest
-from icon_vis.modules import grid
+
+from iconarray.backend import grid
 
 f_wo_celldata = "data/example_data/nc/lfff01000000.nc"
 f_w_celldata = "data/example_data/nc/lfff00000000z"
@@ -12,7 +13,7 @@ f_grid = "data/example_data/grids/ICON-1E_DOM01.nc"
 
 def test_wo_celldata():
 
-    ds_cell = iconvis.combine_grid_information(f_wo_celldata, f_grid)
+    ds_cell = iconarray.combine_grid_information(f_wo_celldata, f_grid)
 
     assert "cell" in list(
         ds_cell.T.dims
@@ -34,7 +35,7 @@ def test_wo_celldata():
 
 def test_w_celldata():
 
-    ds_cell = iconvis.combine_grid_information(f_w_celldata, f_grid)
+    ds_cell = iconarray.combine_grid_information(f_w_celldata, f_grid)
 
     assert "cell" in list(
         ds_cell.T.dims
@@ -57,4 +58,4 @@ def test_w_celldata():
 def test_wrong_grid():
 
     with pytest.raises(grid.WrongGridException):
-        iconvis.combine_grid_information(f_celldata_incomatible_w_grid, f_grid)
+        iconarray.combine_grid_information(f_celldata_incomatible_w_grid, f_grid)

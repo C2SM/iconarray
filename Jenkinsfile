@@ -5,7 +5,7 @@ pipeline {
     environment {
        EMAIL_TO_1 = 'victoria.cherkas@meteoswiss.ch'
        EMAIL_TO_2 = 'victoria.cherkas@meteoswiss.ch'
-       CONDA_ENV_NAME = 'iconvis'
+       CONDA_ENV_NAME = 'iconarray'
     }
     agent none
     stages {
@@ -97,8 +97,8 @@ pipeline {
                             conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             python -m cfgrib selfcheck
                             python -c "import cartopy; print(cartopy.config)"
-                            python icon_vis/icon_vis/modules/get_data.py
-                            pytest icon_vis/icon_vis/modules/tests'''
+                            python iconarray/utils/get_data.py
+                            pytest iconarray/tests'''
                         }
                     }
                     post {
@@ -138,8 +138,8 @@ pipeline {
                             conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             python -m cfgrib selfcheck
                             python -c "import cartopy; print(cartopy.config)"
-                            python icon_vis/icon_vis/modules/get_data.py
-                            pytest icon_vis/icon_vis/modules/tests'''
+                            python iconarray/utils/get_data.py
+                            pytest iconarray/tests'''
                         }
                     }
                     post {
