@@ -29,8 +29,8 @@ setup(
     author_email="victoria.cherkas@meteoswiss.ch, annika.lauber@c2sm.ethz.ch",  # Optional
     package_dir={"": "ICON_data_processing"},  # Optional
     packages=find_packages(
-        where='ICON_data_processing',
-        include=['backend','core','plot','utils'],
+        where="ICON_data_processing",
+        include=["backend", "core", "plot", "utils"],
     ),  # Required
     python_requires=">=3.7, <4",
     install_requires=[],  # Optional
