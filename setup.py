@@ -20,16 +20,15 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="iconarray",  # Required
-    version="v0.1.14",  # Required
+    version="v0.1.15",  # Required
     description="A package of modules for processing and plotting ICON data.",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional
     url="https://github.com/C2SM/iconarray",  # Optional
     author="MeteoSwiss, C2SM",  # Optional
     author_email="victoria.cherkas@meteoswiss.ch, annika.lauber@c2sm.ethz.ch",  # Optional
-    # package_dir={"": "iconarray"},  # Optional
+    package_dir={"": "iconarray"},  # Optional
     packages=find_packages(
-        where='iconarray',
         include=['backend','core','plot','utils'],
     ),  # Required
     python_requires=">=3.7, <4",
