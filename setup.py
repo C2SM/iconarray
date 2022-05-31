@@ -20,7 +20,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="iconarray",  # Required
-    version="v0.1.15",  # Required
+    version="v0.1.16",  # Required
     description="A package of modules for processing and plotting ICON data.",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional
@@ -29,7 +29,7 @@ setup(
     author_email="victoria.cherkas@meteoswiss.ch, annika.lauber@c2sm.ethz.ch",  # Optional
     package_dir={"": "iconarray"},  # Optional
     packages=find_packages(
-        include=['backend','core','plot','utils'],
+        exclude=['tests'],
     ),  # Required
     python_requires=">=3.7, <4",
     install_requires=[],  # Optional
