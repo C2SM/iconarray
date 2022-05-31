@@ -1,5 +1,6 @@
 import cfgrib
-import icon_vis.modules as iconvis  # import icon-vis self-written modules
+
+import iconarray
 
 f_vt_vn = "data/example_data/grib/vnvt00010000"  # ONLY VN, VT variables
 f_alldata = "data/example_data/grib/lfff00010000_edgeplots"  # VN, VT AND cell center variables (P, T, U, V etc)
@@ -27,7 +28,7 @@ def test_grid_edge():
 
     _ds_cell, ds_edge = open_file(f_alldata)
 
-    ds_edgevars = iconvis.combine_grid_information(ds_edge, f_grid)
+    ds_edgevars = iconarray.combine_grid_information(ds_edge, f_grid)
 
     assert list(ds_edgevars.data_vars) == [
         "VN",
@@ -55,7 +56,7 @@ def test_grid_cell():
 
     ds_cell, _ds_edge = open_file(f_alldata)
 
-    ds_cellvars = iconvis.combine_grid_information(ds_cell, f_grid)
+    ds_cellvars = iconarray.combine_grid_information(ds_cell, f_grid)
 
     assert list(ds_cellvars.data_vars) == [
         "P",

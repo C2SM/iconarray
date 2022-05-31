@@ -5,7 +5,7 @@ pipeline {
     environment {
        EMAIL_TO_1 = 'victoria.cherkas@meteoswiss.ch'
        EMAIL_TO_2 = 'victoria.cherkas@meteoswiss.ch'
-       CONDA_ENV_NAME = 'iconvis'
+       CONDA_ENV_NAME = 'iconarray'
     }
     agent none
     stages {
@@ -14,18 +14,18 @@ pipeline {
                 stage('setup miniconda on daint') {
                     agent { label 'daint' }
                     environment {
-                        PATH = "$WORKSPACE/miniconda/bin:$PATH"
+                        PATH = "$WORKSPACE/miniconda_$NODE_NAME/bin:$PATH"
                     }
                     steps {
                         script {
                             BuildBadge.setStatus('running')
                         }
                         sh 'wget -O ${WORKSPACE}/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh'
-                        sh 'bash miniconda.sh -b -p $WORKSPACE/miniconda'
+                        sh 'bash miniconda.sh -b -p $WORKSPACE/miniconda_${NODE_NAME}'
                         sh 'conda config --set always_yes yes --set changeps1 no'
                         sh 'conda config --add channels conda-forge'
                         sh 'conda env create --name ${CONDA_ENV_NAME}_${NODE_NAME} --file env/environment.yml'
-                        sh '''source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                        sh '''source $WORKSPACE/miniconda_${NODE_NAME}/etc/profile.d/conda.sh
                             conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             source env/setup-conda-env.sh
                             conda deactivate
@@ -41,18 +41,18 @@ pipeline {
                 stage('setup miniconda on tsa') {
                     agent { label 'tsa' }
                     environment {
-                        PATH = "$WORKSPACE/miniconda/bin:$PATH"
+                        PATH = "$WORKSPACE/miniconda_$NODE_NAME/bin:$PATH"
                     }
                     steps {
                         script {
                             BuildBadge.setStatus('running')
                         }
                         sh 'wget -O ${WORKSPACE}/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh'
-                        sh 'bash miniconda.sh -b -p $WORKSPACE/miniconda'
+                        sh 'bash miniconda.sh -b -p $WORKSPACE/miniconda_${NODE_NAME}'
                         sh 'conda config --set always_yes yes --set changeps1 no'
                         sh 'conda config --add channels conda-forge'
                         sh 'conda env create --name ${CONDA_ENV_NAME}_${NODE_NAME} --file env/environment.yml'
-                        sh '''source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                        sh '''source $WORKSPACE/miniconda_${NODE_NAME}/etc/profile.d/conda.sh
                             conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             source env/setup-conda-env.sh
                             conda deactivate
@@ -88,17 +88,17 @@ pipeline {
                 stage('test on daint') {
                     agent { label 'daint' }
                     environment {
-                        PATH = "$WORKSPACE/miniconda/bin:$PATH"
+                        PATH = "$WORKSPACE/miniconda_${NODE_NAME}/bin:$PATH"
                     }
                     steps {
                         script {
                             TestBadge.setStatus('running')
-                            sh '''source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                            sh '''source $WORKSPACE/miniconda_${NODE_NAME}/etc/profile.d/conda.sh
                             conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             python -m cfgrib selfcheck
                             python -c "import cartopy; print(cartopy.config)"
-                            python icon_vis/icon_vis/modules/get_data.py
-                            pytest icon_vis/icon_vis/modules/tests'''
+                            python iconarray/utils/get_data.py
+                            pytest iconarray/tests'''
                         }
                     }
                     post {
@@ -129,17 +129,17 @@ pipeline {
                 stage('test on tsa') {
                     agent { label 'tsa' }
                     environment {
-                        PATH = "$WORKSPACE/miniconda/bin:$PATH"
+                        PATH = "$WORKSPACE/miniconda_${NODE_NAME}/bin:$PATH"
                     }
                     steps {
                         script {
                             TestBadge.setStatus('running')
-                            sh '''source $WORKSPACE/miniconda/etc/profile.d/conda.sh
+                            sh '''source $WORKSPACE/miniconda_${NODE_NAME}/etc/profile.d/conda.sh
                             conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
                             python -m cfgrib selfcheck
                             python -c "import cartopy; print(cartopy.config)"
-                            python icon_vis/icon_vis/modules/get_data.py
-                            pytest icon_vis/icon_vis/modules/tests'''
+                            python iconarray/utils/get_data.py
+                            pytest iconarray/tests'''
                         }
                     }
                     post {

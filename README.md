@@ -1,7 +1,7 @@
-# icon-data-processing (WIP)
+# iconarray (WIP)
 
-[![Build Status](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/)
-[![Build Status](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconvis_utils_testsuite/)
+[![Build Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
+[![Build Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
 
 ## Introduction
 
@@ -16,17 +16,17 @@
 
 ### Modules
 
-There are a number of [modules](/icon_vis/icon_vis/modules) which are part of the `icon-vis` package (installed by conda (see [env/environment.yml](env/environment.yml)) or pip (see [env/requirements.txt](env/requirements.txt)), which you can import like a normal python package into your scripts. To work with the modules and formatoptions from icon-vis, you can add this code block to the start of your script / notebook. You will see many examples of the modules being used within the scripts in this repo.
+There are a number of [modules](/iconarray) which are part of the `iconarray` package (installed by conda (see [env/environment.yml](env/environment.yml)), which you can import like a normal python package into your scripts. To work with the modules from iconarray, you can add this code block to the start of your script / notebook. You will see many examples of the modules being used within the scripts in this repo.
 
 ```python
-from icon_vis import formatoptions # import icon-vis self-written formatoptions
-import icon_vis.modules as iconvis # import icon-vis self-written modules
+import iconarray # import iconarray modules
+from iconarray.plot import formatoptions # import plotting formatoptions (for use with psyplot)
 ```
 
 Then you can use the functions or modules as needed, eg:
 
 ```python
-iconvis.get_example_data()
+iconarray.get_example_data()
 ```
 
 #### grid - [modules/grid.py](modules/grid.py)
