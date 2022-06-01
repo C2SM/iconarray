@@ -1,11 +1,11 @@
-# iconarray (WIP)
+# iconarray
 
 [![Build Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
 [![Build Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
 
 ## Introduction
 
-**WIP Repository!**
+The iconarray python package contains various modules to facilitate working with ICON data with xarray or other xarray based tools (such as psyplot - a plotting package). iconarray was developed together with [icon-vis](https://github.com/C2SM/icon-vis).
 
 # Table of contents
 1. [Introduction](#introduction)
@@ -92,6 +92,3 @@ Once registered to a plotter class, the formatoptions can be used as seen in man
 This repo has been developed by:
 * Annika Lauber (C2SM) - annika.lauber@c2sm.ethz.ch
 * Victoria Cherkas (MeteoSwiss) - victoria.cherkas@meteoswiss.ch
-
-# Acknowledgments
-Whenever using psyplot for a publication it should be cited https://psyplot.github.io/psyplot/#how-to-cite-psyplot.

@@ -4,9 +4,7 @@ data/*.nc
 __pychace__/
 *.pyc
 .ipynb_checkpoints
-testsuite/output/
 scratch/
 *scratch*
 tmp/
 fieldextra.diagnostic
-psyplot_grib
