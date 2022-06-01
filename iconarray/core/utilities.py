@@ -7,15 +7,23 @@ from scipy import stats
 def ind_from_latlon(lats, lons, lat, lon, verbose=False):
     """Find the nearest neighbouring index to given location.
 
-    Args:
-        lats (2d array):            Latitude grid
-        lons (2d array):            Longitude grid
-        lat (float):                Latitude of location
-        lon (float):                Longitude of location
-        verbose (bool, optional):   Print information. Defaults to False.
+    Parameters
+    ----------
+    lats : 2d array
+        Latitude grid
+    lons : 2d array
+        Longitude grid
+    lat : float
+        Latitude of location
+    lon : float
+        Longitude of location
+    verbose : bool
+        Print information. Defaults to False.
 
-    Returns:
-        int     Index of nearest grid point.
+    Returns
+    -------
+        index : int
+        Index of nearest grid point.
     """
     dist = [
         np.sqrt((lats[i] - lat) ** 2 + (lons[i] - lon) ** 2) for i in range(len(lats))
