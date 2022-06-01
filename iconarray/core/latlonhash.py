@@ -1,6 +1,7 @@
-import xarray as xr
-import numpy as np
 import math
+
+import numpy as np
+import xarray as xr
 
 
 def check_loc(loc):
@@ -63,6 +64,21 @@ class icon2latlon:
         return iind_clon, iind_clat
 
     def latlon_grid(self, loc):
+        """Generate a lat/lon grid that covers the entire ICON grid, such that each.
+
+        ICON grid element falls only in one lat/lon grid cell. Some of the lat/lon grid cells
+        might not contain any ICON grid element.
+        Parameters
+        ----------
+        loc: the location of the elements that will be mapped into the lat/lon grid.
+             Values must be one of ['cell','edge','vertex']
+        Returns
+        -------
+        latlongrid: xarray.DataArray
+            A new DataArray with x,y dimensions and lat/lon coordinates covering
+            the original ICON grid. The values contain the indices of the corresponding
+            element in the ICON grid.
+        """
         check_loc(loc)
         lon_coord_name = loc[0] + "lon"
         lat_coord_name = loc[0] + "lat"

@@ -1,7 +1,8 @@
-import xarray as xr
-from iconarray.core.crop import Crop
 import cfgrib
+import xarray as xr
+
 from iconarray.backend.grid import combine_grid_information
+from iconarray.core.crop import Crop
 
 
 def test_crop():
@@ -24,6 +25,7 @@ def test_crop():
     crop = Crop(ds_grid, [0.165, 0.18], [0.8, 0.81])
     grid_cropped = crop.crop_grid()
     data_cropped = crop.crop_data(ds_cell)
+    print(grid_cropped, data_cropped)
 
 
 if __name__ == "__main__":
