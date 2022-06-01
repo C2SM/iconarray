@@ -1,6 +1,6 @@
 import xarray as xr
-from utilities import awhere_drop
-from latlonhash import icon2latlon
+from .utilities import awhere_drop
+from .latlonhash import icon2latlon
 import numpy as np
 
 
@@ -10,91 +10,94 @@ class Crop:
         self.lon_bnds = lon_bnds
         self.lat_bnds = lat_bnds
 
-    def crop_neighbour_table_index(self, field, target_grid):
+    def reindex_neighbour_table(self, field, loc, target_grid):
         shape = field.shape
-        loc = field.dims[-1]
-        assert loc in ["cell", "edge", "vertex"]
-        if loc == "cell":
-            lon_coord_name = "clon"
-            lat_coord_name = "clat"
-        elif loc == "edge":
-            lon_coord_name = "elon"
-            lat_coord_name = "elat"
-        elif loc == "vertex":
-            lon_coord_name = "vlon"
-            lat_coord_name = "vlat"
-        else:
-            raise ValueError("Wrong location for field")
+        lon_coord_name = loc[0] + "lon"
+        lat_coord_name = loc[0] + "lat"
 
         neighbor_cell_index = field.data.flatten()
-        print("ooo", field.coords, field.dims)
         lon_coords = self.full_grid.coords[lon_coord_name][neighbor_cell_index]
         lat_coords = self.full_grid.coords[lat_coord_name][neighbor_cell_index]
         i2ll = icon2latlon(target_grid)
-        iind_clon, iind_clat = i2ll.latlon_indices_of_coords(
-            loc, lon_coords, lat_coords
-        )
-        print("RRR", lon_coords[0:100])
-        iind_clon = iind_clon.where(neighbor_cell_index > 0, -1)
-        iind_clat = iind_clat.where(neighbor_cell_index > 0, -1)
 
-        print("LLL", iind_clon)
-        print("jjj", np.amax(iind_clon), np.amax(iind_clat))
+        iind_lon, iind_lat = i2ll.latlon_indices_of_coords(loc, lon_coords, lat_coords)
+        # if there is no neighbour, i.e index -1 or 0, the index was extracted
+        # for value -1, which is a valid element index. Here we reset again the index
+        # to -1
+        iind_lon = iind_lon.where(neighbor_cell_index > 0, -1)
+        iind_lat = iind_lat.where(neighbor_cell_index > 0, -1)
 
         cropped_clatlon_to_icon = i2ll.latlon_grid(loc)
-
-        res = cropped_clatlon_to_icon[iind_clon, iind_clat].where(
-            (iind_clon >= 0) & (iind_clat >= 0), -1
+        res = cropped_clatlon_to_icon[iind_lon, iind_lat].where(
+            (iind_lon >= 0) & (iind_lat >= 0), -1
         )
-        print("LLLLLL", res)
-        assert (
-            np.amax(res) == len(target_grid.coords[lon_coord_name]) & np.amin(res) > 0
+        assert (np.amax(res.data) == len(target_grid.coords[lon_coord_name])) & (
+            np.amin(res.data) >= -1
         )
 
-        return res
+        return xr.DataArray(
+            data=res.data.reshape(shape), dims=field.dims, coords=field.coords
+        )
+
+    def reindex_neighbour_tables(self, target_grid):
+        fieldloc = {
+            "edge_of_cell": "edge",
+            "vertex_of_cell": "vertex",
+            "adjacent_cell_of_edge": "cell",
+            "edge_vertices": "vertex",
+            "cells_of_vertex": "cell",
+            "edges_of_vertex": "edge",
+            "vertices_of_vertex": "vertex",
+            "neighbor_cell_index": "cell",
+        }
+
+        res_grid = target_grid.copy()
+
+        for field in fieldloc:
+            res_grid[field] = self.reindex_neighbour_table(
+                target_grid[field], fieldloc[field], target_grid
+            )
+
+        return res_grid
 
     def crop_grid(self):
-        cell_vars = [
-            var
-            for var in self.full_grid.data_vars
-            if "cell" in self.full_grid[var].dims
-        ]
-        cgrid_filt = awhere_drop(
-            self.full_grid[cell_vars],
-            (self.full_grid.coords["clon"] > self.lon_bnds[0])
-            & (self.full_grid.coords["clon"] < self.lon_bnds[1])
-            & (self.full_grid.coords["clat"] > self.lat_bnds[0])
-            & (self.full_grid.coords["clat"] < self.lat_bnds[1]),
-        )
-        edge_vars = [
-            var
-            for var in self.full_grid.data_vars
-            if "edge" in self.full_grid[var].dims
-        ]
+        return self.reindex_neighbour_tables(self.crop_fields())
 
-        egrid_filt = awhere_drop(
-            self.full_grid[edge_vars],
-            (self.full_grid.coords["elon"] > self.lon_bnds[0])
-            & (self.full_grid.coords["elon"] < self.lon_bnds[1])
-            & (self.full_grid.coords["elat"] > self.lat_bnds[0])
-            & (self.full_grid.coords["elat"] < self.lat_bnds[1]),
-        )
+    def crop_fields(self):
 
-        vertex_vars = [
-            var
-            for var in self.full_grid.data_vars
-            if "vertex" in self.full_grid[var].dims
-        ]
+        filtered_grid = []
+        for loc in ["cell", "edge", "vertex"]:
+            loc_vars = [
+                var
+                for var in self.full_grid.data_vars
+                if loc in self.full_grid[var].dims
+            ]
+            lon_coord_name = loc[0] + "lon"
+            lat_coord_name = loc[0] + "lat"
+            locgrid_filt = awhere_drop(
+                self.full_grid[loc_vars],
+                (self.full_grid.coords[lon_coord_name] > self.lon_bnds[0])
+                & (self.full_grid.coords[lon_coord_name] < self.lon_bnds[1])
+                & (self.full_grid.coords[lat_coord_name] > self.lat_bnds[0])
+                & (self.full_grid.coords[lat_coord_name] < self.lat_bnds[1]),
+            )
+            filtered_grid.append(locgrid_filt)
 
-        vgrid_filt = awhere_drop(
-            self.full_grid[vertex_vars],
-            (self.full_grid.coords["vlon"] > self.lon_bnds[0])
-            & (self.full_grid.coords["vlon"] < self.lon_bnds[1])
-            & (self.full_grid.coords["vlat"] > self.lat_bnds[0])
-            & (self.full_grid.coords["vlat"] < self.lat_bnds[1]),
-        )
+        return xr.merge(filtered_grid)
 
-        return xr.merge([cgrid_filt, egrid_filt, vgrid_filt])
+    def crop_data(self, ds):
 
-    def __call__(self, grid: xr.Dataset):
-        pass
+        ds_res = ds.copy()
+        for coord in ["cell", "edge"]:
+            if coord in ds.coords:
+                lon_coord_name = coord[0] + "lon"
+                lat_coord_name = coord[0] + "lat"
+                ds_res = ds_res.where(
+                    (self.full_grid.coords[lon_coord_name] > self.lon_bnds[0])
+                    & (self.full_grid.coords[lon_coord_name] < self.lon_bnds[1])
+                    & (self.full_grid.coords[lat_coord_name] > self.lat_bnds[0])
+                    & (self.full_grid.coords[lat_coord_name] < self.lat_bnds[1]),
+                    drop=True,
+                )
+
+        return ds_res

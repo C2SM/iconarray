@@ -3,6 +3,11 @@ import numpy as np
 import math
 
 
+def check_loc(loc):
+    if loc not in ["cell", "edge", "vertex"]:
+        raise ValueError("Wrong location: {loc}".format(loc=loc))
+
+
 class latlon_spec:
     def __init__(self, loc, lon_coords, lat_coords):
         self.lon_bnds = [np.amin(lon_coords).data, np.amax(lon_coords).data]
@@ -17,6 +22,7 @@ class latlon_spec:
 
 class icon2latlon:
     def __init__(self, grid: xr.Dataset):
+        # TODO Only coords are required
         self.grid = grid
         self.grid_spec = {}
 
@@ -30,8 +36,7 @@ class icon2latlon:
             )
 
     def latlon_indices_of_coords(self, loc, lons, lats):
-        assert loc in ["cell", "edge", "vertex"]
-
+        check_loc(loc)
         iind_clon = xr.DataArray(
             (
                 (lons.data - self.grid_spec[loc].lon_bnds[0]) / self.grid_spec[loc].dlon
@@ -58,8 +63,9 @@ class icon2latlon:
         return iind_clon, iind_clat
 
     def latlon_grid(self, loc):
-        if loc not in ["cell", "edge", "vertex"]:
-            raise ValueError("Wrong location: {loc}".format(loc=loc))
+        check_loc(loc)
+        lon_coord_name = loc[0] + "lon"
+        lat_coord_name = loc[0] + "lat"
 
         nx = int(
             (self.grid_spec[loc].Dlon + self.grid_spec[loc].dlon)
@@ -71,7 +77,7 @@ class icon2latlon:
         )
 
         ind_clon, ind_clat = self.latlon_indices_of_coords(
-            "cell", self.grid.coords["clon"], self.grid.coords["clat"]
+            loc, self.grid.coords[lon_coord_name], self.grid.coords[lat_coord_name]
         )
 
         clatlon = xr.DataArray(data=np.zeros([nx, ny]).astype("int"), dims=["x", "y"])
