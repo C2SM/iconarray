@@ -54,9 +54,7 @@ def get_example_data():
                 continue  # It's probably not a directory.
         ftp.quit()
     except Exception:
-        raise Exception(
-            """Getting example data from FTP server failed."""
-        )
+        raise Exception("""Getting example data from FTP server failed.""")
 
 
 if __name__ == "__main__":
