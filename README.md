@@ -7,6 +7,8 @@
 
 The iconarray python package contains various modules to facilitate working with ICON data with xarray or other xarray based tools (such as psyplot - a plotting package). iconarray was developed together with [icon-vis](https://github.com/C2SM/icon-vis).
 
+[![API Documentation](https://c2sm.github.io/iconarray/))
+
 # Table of contents
 1. [Introduction](#introduction)
 2. [Modules](#modules)
