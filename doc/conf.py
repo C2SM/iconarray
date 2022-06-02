@@ -44,7 +44,14 @@ extensions = [
 
 autosummary_generate = True
 
-autodoc_mock_imports=["numpy","six","xarray","scipy"]
+autodoc_mock_imports=[
+    "numpy","six","xarray","scipy",
+    "os", "subprocess", "pathlib",
+    "psyplot", "cartopy", "psy_simple",
+    "configparser", "sys", "cfgrib",
+    "iconarray", "pytest",
+    "urllib", "ftplib"
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
