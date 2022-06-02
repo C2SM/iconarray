@@ -18,9 +18,9 @@ This page provides an auto-generated summary of iconarray's API.
 .. autosummary::
    :toctree: generated/
 
-   iconarray.core
-   iconarray.core.utilities 
-   iconarray.core.utilities.ind_from_latlon
+   core
+   core.utilities 
+   core.utilities.ind_from_latlon
 
 Indices and tables
 ==================
