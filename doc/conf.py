@@ -40,7 +40,11 @@ release = "v0.1.19"
 extensions = [    
     'sphinx.ext.autodoc',
     "sphinx.ext.autosummary", 
+    "sphinx.ext.napoleon",
+    'numpydoc'
              ]
+
+numpydoc_show_class_members = False
 
 autosummary_generate = True
 
@@ -64,17 +68,11 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = "alabaster"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary"]
 
 # -- Options for HTML output ----------------------------------------------
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -88,6 +86,14 @@ html_context = {
     "github_version": "main",
     "doc_path": "doc",
 }
+
+# Napoleon configurations
+
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_param = False
+napoleon_use_rtype = False
+napoleon_preprocess_types = True
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
