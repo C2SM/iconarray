@@ -27,7 +27,9 @@ jobs:
     - name: Commit documentation changes
       run: |
         pwd
-        ls
+        ls docs
+        echo ' '
+        ls docs/_build
         git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
         cp -r doc/_build/html/* gh-pages/
         cd gh-pages
