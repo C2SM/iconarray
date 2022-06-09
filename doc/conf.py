@@ -41,7 +41,6 @@ extensions = [
     'sphinx.ext.autodoc',
     "sphinx.ext.autosummary", 
     "sphinx.ext.napoleon",
-    'numpydoc'
              ]
 
 numpydoc_show_class_members = False
