@@ -15,7 +15,7 @@ jobs:
     - uses: C2SM/sphinx-action@sphinx-latest
       with:
         pre-build-command: "python -m pip install --upgrade pip && python -m pip install sphinx_book_theme numpydoc"
-        build-command: "sphinx-build -b html . _build/html"
+        build-command: "sphinx-build -b html . _build"
         docs-folder: "doc/"
     # Great extra actions to compose with:
     # Create an artifact of the html output.
