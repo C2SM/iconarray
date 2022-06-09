@@ -5,7 +5,8 @@ from scipy import stats
 
 
 def ind_from_latlon(lats, lons, lat, lon, verbose=False):
-    """Find the nearest neighbouring index to given location.
+    """
+    Find the nearest neighbouring index to given location.
 
     Parameters
     ----------
@@ -21,9 +22,46 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
         Print information. Defaults to False.
 
     Returns
-    -------
+    ----------
         index : int
         Index of nearest grid point.
+
+    See Also
+    ----------
+    Dataset.to_array
+    Dataset.stack
+    DataArray.to_unstacked_dataset
+
+    Examples
+    ----------
+    >>> data = xr.Dataset(
+    ...     data_vars={
+    ...         "a": (("x", "y"), [[0, 1, 2], [3, 4, 5]]),
+    ...         "b": ("x", [6, 7]),
+    ...     },
+    ...     coords={"y": ["u", "v", "w"]},
+    ... )
+
+    >>> data
+    <xarray.Dataset>
+    Dimensions:  (x: 2, y: 3)
+    Coordinates:
+        * y        (y) <U1 'u' 'v' 'w'
+    Dimensions without coordinates: x
+    Data variables:
+        a        (x, y) int64 0 1 2 3 4 5
+        b        (x) int64 6 7
+
+    >>> data.to_stacked_array("z", sample_dims=["x"])
+    <xarray.DataArray 'a' (x: 2, z: 4)>
+    array([[0, 1, 2, 6],
+            [3, 4, 5, 7]])
+    Coordinates:
+        * z         (z) object MultiIndex
+        * variable  (z) object 'a' 'a' 'a' 'b'
+        * y         (z) object 'u' 'v' 'w' nan
+    Dimensions without coordinates: x
+
     """
     dist = [
         np.sqrt((lats[i] - lat) ** 2 + (lons[i] - lon) ** 2) for i in range(len(lats))
