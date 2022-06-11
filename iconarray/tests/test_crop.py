@@ -1,31 +1,54 @@
 import cfgrib
 import xarray as xr
 
-from iconarray.backend.grid import combine_grid_information
+from iconarray.backend.grid import consistency_check
 from iconarray.core.crop import Crop
 
 
 def test_crop():
 
-    in_data = "/code/rz+/icon_data_processing_incubator/data/ICON/R19B08/lfff00010000"
-    in_grid = "/code/rz+/icon_data_processing_incubator/data/ICON/R19B08/icon_grid_0001_R19B08_mch.nc"
+    in_cell_data = "data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_cell.nc"
+    in_edge_data = "data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_edge.nc"
+    in_grid = "data/icon_grid_0001_R19B08_lon:0.152-0.154_lat:0.8745-0.8755.nc"
 
     ds_grid = xr.open_dataset(in_grid)
-    dss = cfgrib.open_datasets(
-        in_data,
-        backend_kwargs={
-            "errors": "ignore",
-            "read_keys": ["typeOfLevel", "gridType"],
-            "filter_by_keys": {"typeOfLevel": "generalVerticalLayer"},
-        },
-        encode_cf=("time", "geography", "vertical"),
-    )
-    ds_cell = combine_grid_information(dss[0], in_grid)
+    ds_cell = xr.open_dataset(in_cell_data)
+    ds_edge = xr.open_dataset(in_edge_data)
 
-    crop = Crop(ds_grid, [0.165, 0.18], [0.8, 0.81])
-    grid_cropped = crop.crop_grid()
-    data_cropped = crop.crop_data(ds_cell)
-    print(grid_cropped, data_cropped)
+    lon_bnds = [0.1525, 0.1535]
+    lat_bnds = [0.8748, 0.8752]
+    crop = Crop(ds_grid, lon_bnds, lat_bnds)
+    assert consistency_check(crop.rgrid)
+
+    cell_cropped = crop(ds_cell)
+    edge_cropped = crop(ds_edge)
+
+    min_lon = cell_cropped["clon"].min().data
+    max_lon = cell_cropped["clon"].max().data
+    min_lat = cell_cropped["clat"].min().data
+    max_lat = cell_cropped["clat"].max().data
+
+    assert (
+        (min_lon > lon_bnds[0])
+        & (max_lon < lon_bnds[1])
+        & (min_lat > lat_bnds[0])
+        & (max_lat < lat_bnds[1])
+    )
+
+    elon_bnds = [0.15245, 0.1536]
+    elat_bnds = [0.87475, 0.8753]
+
+    min_lon = edge_cropped["elon"].min().data
+    max_lon = edge_cropped["elon"].max().data
+    min_lat = edge_cropped["elat"].min().data
+    max_lat = edge_cropped["elat"].max().data
+
+    assert (
+        (min_lon > elon_bnds[0])
+        & (max_lon < elon_bnds[1])
+        & (min_lat > elat_bnds[0])
+        & (max_lat < elat_bnds[1])
+    )
 
 
 if __name__ == "__main__":
