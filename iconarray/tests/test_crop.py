@@ -1,7 +1,6 @@
 import xarray as xr
 
-from iconarray.backend.grid import consistency_check
-from iconarray.core.crop import Crop
+import iconarray
 
 
 def test_crop():
@@ -16,8 +15,8 @@ def test_crop():
 
     lon_bnds = [0.1525, 0.1535]
     lat_bnds = [0.8748, 0.8752]
-    crop = Crop(ds_grid, lon_bnds, lat_bnds)
-    assert consistency_check(crop.rgrid)
+    crop = iconarray.Crop(ds_grid, lon_bnds, lat_bnds)
+    assert iconarray.grid_consistency_check(crop.rgrid)
 
     cell_cropped = crop(ds_cell)
     edge_cropped = crop(ds_edge)

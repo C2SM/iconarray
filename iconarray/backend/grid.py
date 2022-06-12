@@ -433,7 +433,7 @@ def check_cell2cell(ds_grid: xr.Dataset):
     return np.array_equal(cell2cell.data, ds_grid["neighbor_cell_index"].data.flatten())
 
 
-def consistency_check(ds_grid: xr.Dataset):
+def grid_consistency_check(ds_grid: xr.Dataset):
     """Perform consistency check of the grid.
 
     It checks various (not all) neighbor lookup tables
