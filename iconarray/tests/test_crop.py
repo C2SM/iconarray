@@ -1,4 +1,3 @@
-import cfgrib
 import xarray as xr
 
 from iconarray.backend.grid import consistency_check

@@ -1,8 +1,8 @@
 import math
+from typing import Tuple
 
 import numpy as np
 import xarray as xr
-from typing import Tuple
 
 
 def check_loc(loc):
@@ -25,6 +25,7 @@ class latlon_spec:
 class Icon2latlon:
     """Creates a field in a Cartesian lat/lon grid whose elements contain the ICON grid indices of the element
     whose lat/lon coordinates are contained within the cartesian element.
+
     It can be used as a hashing of the ICON grid indices in order to search for nearest neighbor ICON indices
     with O(1) complexity.
 
@@ -100,13 +101,13 @@ class Icon2latlon:
 
         Parameters
         ----------
-        loc: the location of the elements: cell, edge or vertex
-        lons: sequence of longitude coordinates
-        lats: sequence of latitude coordinates
+        loc : the location of the elements: cell, edge or vertex
+        lons : sequence of longitude coordinates
+        lats : sequence of latitude coordinates
 
         Returns
         -------
-        ind_clon,ind_clat: Tuple[xr.DataArray, xr.DataArray]
+        ind_clon,ind_clat : Tuple[xr.DataArray, xr.DataArray]
 
         indices for the Cartesian lat/lon grid pointing to the element with coordinates of the parameters lons/lats.
         """

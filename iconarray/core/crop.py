@@ -1,8 +1,9 @@
+from typing import Dict, List
+
 import numpy as np
 import xarray as xr
 
 from .latlonhash import Icon2latlon
-from typing import List, Dict
 
 
 class Crop:
