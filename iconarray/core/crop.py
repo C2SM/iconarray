@@ -76,7 +76,7 @@ class Crop:
     **********************
 
     create a crop instance with the lat/lon coordinates for the region of interest
-    >>> crop = Crop(ds_grid, [0.148, 0.155], [0.871, 0.877])
+    >>> crop = Crop(grid, [0.148, 0.155], [0.871, 0.877])
     >>> crop.cropped_grid()
     Dimensions:                        (cell: 986, nv: 3, edge: 1530, nc: 2, no: 4,
                                         vertex: 545, ne: 6)
@@ -118,17 +118,8 @@ class Crop:
         global_grid:          0
     **********************
 
-    open a dataset from grib data:
-    >>> dss = cfgrib.open_datasets(
-        in_data,
-        backend_kwargs={
-            "errors": "ignore",
-            "read_keys": ["typeOfLevel", "gridType"],
-            "filter_by_keys": {"typeOfLevel": "generalVerticalLayer"},
-        },
-        encode_cf=("time", "geography", "vertical"),
-    )
-    >>> ds_cell = combine_grid_information(dss[0], in_grid)
+    open a dataset with data:
+    >>> ds_cell = xr.open_datasets("lfff00010000_cell.nc")
     >>> ds_cell
     Dimensions:                  (generalVerticalLayer: 80, time: 1, cell: 1043968,
                                   vertices: 3)
@@ -282,7 +273,6 @@ class Crop:
         -------
         A new dataset with all grid variables cropped to the target domain
         """
-
         self.idx_subset["cell"] = np.argwhere(
             (self.full_grid.coords["clon"].data > self.lon_bnds[0])
             & (self.full_grid.coords["clon"].data < self.lon_bnds[1])

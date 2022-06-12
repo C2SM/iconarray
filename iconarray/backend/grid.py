@@ -280,8 +280,12 @@ def check_vertex2cell(ds_grid: xr.Dataset):
     Returns
     -------
     True if consistency check is successful
-    """
 
+    Raises
+    ------
+    ValueError
+        if negative indices (expect for special value -1) are found in the neighbor lookup tables
+    """
     if np.count_nonzero(ds_grid["edge_of_cell"] == -1):
         raise ValueError("negative neighbour indices of edge_of_cell not expected")
 
@@ -334,6 +338,11 @@ def check_cell2vertex(ds_grid: xr.Dataset):
     Returns
     -------
     True if consistency check is successful
+
+    Raises
+    ------
+    ValueError
+        if negative indices (expect for special value -1) are found in the neighbor lookup tables
     """
     if np.count_nonzero(ds_grid["edge_of_cell"] == -1):
         raise ValueError("negative neighbour indices of edge_of_cell not expected")
