@@ -2,6 +2,7 @@ import math
 
 import numpy as np
 import xarray as xr
+from typing import Tuple
 
 
 def check_loc(loc):
@@ -21,9 +22,65 @@ class latlon_spec:
         self.dlat = math.sqrt(self.cell_area)
 
 
-class icon2latlon:
+class Icon2latlon:
+    """Creates a field in a Cartesian lat/lon grid whose elements contain the ICON grid indices of the element
+    whose lat/lon coordinates are contained within the cartesian element.
+    It can be used as a hashing of the ICON grid indices in order to search for nearest neighbor ICON indices
+    with O(1) complexity.
+
+    Parameters
+    ----------
+    grid: xr.Dataset
+        the ICON grid information, it should contain the following coordinates: clon,clat,elon,elat,vlon,vlat
+
+    Example
+    -------
+
+    open the ICON grid:
+    >>> ds_grid = xr.open_dataset("icon_grid_0001_R19B08_lon:0.1525-0.1535_lat:0.8748-0.8752.nc")
+
+    create the 2D array that maps ICON grid indices into a lat/lon Cartesian grid
+
+    >>> i2ll = Icon2latlon(ds_grid)
+    >>> cartgrid_ind = i2ll.latlon_grid("cell")
+    >>> cartgrid_ind
+
+    array([[ 3,  0,  0,  1],
+        [ 0,  0,  0,  0],
+        [ 0,  4,  2,  0],
+        [ 0,  0,  0,  0],
+        [ 5,  0,  0,  9],
+        [ 0,  0,  0,  0],
+        [ 6,  0,  8,  0],
+        [ 0,  0,  0,  0],
+        [10,  0,  0,  0],
+        [ 0,  0,  0,  7]])
+    Dimensions without coordinates: x, y
+
+    the lat/lon bounds of the grid are lon:[0.1525,0.1535], lat[0.8748,0.8752]
+    we can search for the ICON indices of the following coordinates:
+
+    >>> lons = xr.DataArray([0.152871, 0.153016])
+    >>> lats = xr.DataArray([0.875108, 0.874878])
+    >>> inds_lon, inds_lat = i2ll.latlon_indices_of_coords("cell", lons, lats)
+    >>> inds_lon
+    <xarray.DataArray (cindex: 2)>
+    array([2, 4])
+    Dimensions without coordinates: cindex
+    >>> inds_lat
+     <xarray.DataArray (cindex: 2)>
+    array([2, 0])
+    Dimensions without coordinates: cindex
+
+    retrieve the ICON indices:
+    >>> icon_inds = cartgrid_ind[inds_lon, inds_lat]
+    >>> icon_inds
+    <xarray.DataArray (cindex: 2)>
+    array([2, 5])
+    Dimensions without coordinates: cindex
+    """
+
     def __init__(self, grid: xr.Dataset):
-        # TODO Only coords are required
         self.grid = grid
         self.grid_spec = {}
 
@@ -36,7 +93,23 @@ class icon2latlon:
                 self.grid.coords[lat_coords_name],
             )
 
-    def latlon_indices_of_coords(self, loc, lons, lats):
+    def latlon_indices_of_coords(
+        self, loc, lons, lats
+    ) -> Tuple[xr.DataArray, xr.DataArray]:
+        """Retrieve the indices in the lat/lon grid associated with a sequence of lon/lat coordinates.
+
+        Parameters
+        ----------
+        loc: the location of the elements: cell, edge or vertex
+        lons: sequence of longitude coordinates
+        lats: sequence of latitude coordinates
+
+        Returns
+        -------
+        ind_clon,ind_clat: Tuple[xr.DataArray, xr.DataArray]
+
+        indices for the Cartesian lat/lon grid pointing to the element with coordinates of the parameters lons/lats.
+        """
         check_loc(loc)
         iind_clon = xr.DataArray(
             (
@@ -63,11 +136,12 @@ class icon2latlon:
 
         return iind_clon, iind_clat
 
-    def latlon_grid(self, loc):
-        """Generate a lat/lon grid that covers the entire ICON grid, such that each.
+    def latlon_grid(self, loc) -> xr.DataArray:
+        """Generate a lat/lon grid that covers the entire ICON grid.
 
-        ICON grid element falls only in one lat/lon grid cell. Some of the lat/lon grid cells
-        might not contain any ICON grid element.
+        Each ICON grid element (cell, edge or vertex) falls only into one lat/lon grid cell.
+        Some of the lat/lon grid cells might not contain any ICON grid element.
+
         Parameters
         ----------
         loc: the location of the elements that will be mapped into the lat/lon grid.

@@ -1,7 +1,7 @@
 import numpy as np
 import xarray as xr
 
-from .latlonhash import icon2latlon
+from .latlonhash import Icon2latlon
 from typing import List, Dict
 
 
@@ -216,7 +216,7 @@ class Crop:
         # list of coordinates for the indices of the neighbors
         lon_coords = self.full_grid.coords[lon_coord_name][neighbor_flat_index]
         lat_coords = self.full_grid.coords[lat_coord_name][neighbor_flat_index]
-        i2ll = icon2latlon(target_grid)
+        i2ll = Icon2latlon(target_grid)
 
         # compute the list of cartesian coordinates of a lat/lon grid where
         # the coordinates (of the lookup table elements) fall
