@@ -3,7 +3,8 @@ name: CI
 on:
   push:
     branches:    
-      - doc-deployment
+      - main
+      - doc
 
 jobs:
   build:
