@@ -42,8 +42,6 @@ Plotting functions
 Plotting functions here
 
 
-
-
 Indices and tables
 ==================
 
