@@ -12,13 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Install dependencies
-      run: |
-        $CONDA/bin/conda env update --file env/environment.yml --name base
     - uses: C2SM/sphinx-action@sphinx-latest
       with:
         pre-build-command: ''
