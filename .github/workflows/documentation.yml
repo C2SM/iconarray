@@ -12,9 +12,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        $CONDA/bin/conda env update --file env/environment.yml --name base
     - uses: C2SM/sphinx-action@sphinx-latest
       with:
-        pre-build-command: "ls && ls doc"
+        pre-build-command: ''
         docs-folder: "doc/"
     # Great extra actions to compose with:
     # Create an artifact of the html output.
@@ -26,6 +33,10 @@ jobs:
     # ===============================
     - name: Commit documentation changes
       run: |
+        pwd
+        ls doc
+        echo ' '
+        ls doc/_build
         git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
         cp -r doc/_build/html/* gh-pages/
         cd gh-pages
