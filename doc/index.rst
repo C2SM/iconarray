@@ -29,18 +29,37 @@ Core functions
 Backend functions
 ------------------
 
-Backend functions here
+.. currentmodule:: iconarray.backend
 
-Utility functions
-------------------
+.. autosummary::
+   :toctree: generated/
 
-Utility functions here
+   grid
+   grid.combine_grid_information
 
 Plotting functions
 ------------------
 
-Plotting functions here
+.. currentmodule:: iconarray.plot
 
+.. autosummary::
+   :toctree: generated/
+
+   formatoptions
+   formatoptions.borders
+   formatoptions.lakes
+   formatoptions.rivers
+   config
+
+Utility functions
+------------------
+
+.. currentmodule:: iconarray.utils
+
+.. autosummary::
+   :toctree: generated/
+
+   get_data
 
 Indices and tables
 ==================
