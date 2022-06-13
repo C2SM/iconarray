@@ -7,7 +7,7 @@ __pychace__/
 scratch/
 *scratch*
 tmp/
-fieldextra.diagnostisc
-doc/*
+fieldextra.diagnostic
 dist/
 *.egg-info
+doc/_build
