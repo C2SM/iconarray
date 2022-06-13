@@ -23,6 +23,9 @@ Core functions
 .. autosummary::
    :toctree: generated/
 
+   crop
+   crop.Crop
+   latlonhash
    utilities
    utilities.ind_from_latlon
 

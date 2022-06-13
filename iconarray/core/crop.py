@@ -16,8 +16,9 @@ class Crop:
 
     Parameters
     ----------
-    grid: xr.Dataset
+    grid : xr.Dataset
         The input dataset representing an ICON grid. The dataset should contain at least:
+
         - cell,edge and vertex dimensions.
         - clon,clat,elon,elat,vlon,vlat coordinates
         - edge_of_cell, vertex_of_cell variables that provide the connectivity between edge and vertex
@@ -30,8 +31,8 @@ class Crop:
     >>> in_grid = 'icon_grid_0001_R19B08.nc'
     >>> grid = xr.open_dataset(in_grid)
     >>> grid
-
     <xarray.Dataset>
+
     Dimensions:                        (cell: 1043968, vertex: 523485,
                                         edge: 1567452, nv: 3, nc: 2, ne: 6, no: 4,
                                         max_chdom: 1, cell_grf: 14, edge_grf: 24,
@@ -59,6 +60,7 @@ class Crop:
         end_idx_v                      (max_chdom, vert_grf) int32 ...
         parent_edge_index              (edge) int32 ...
         parent_vertex_index            (vertex) int32 ...
+
     Attributes: (12/18)
         title:                ICON grid description
         institution:          Max Planck Institute for Meteorology/Deutscher Wett...
@@ -73,22 +75,26 @@ class Crop:
         uuidOfParHGrid:       e6ddd597-9c90-27b1-fbac-c40d47f72ba0
         uuidOfHGrid:          5a0a863d-2523-9515-7789-4930e3452bc0
         global_grid:          0
-    **********************
 
     create a crop instance with the lat/lon coordinates for the region of interest
     >>> crop = Crop(grid, [0.148, 0.155], [0.871, 0.877])
     >>> crop.cropped_grid()
-    Dimensions:                        (cell: 986, nv: 3, edge: 1530, nc: 2, no: 4,
+
+    Dimensions:                         (cell: 986, nv: 3, edge: 1530, nc: 2, no: 4,
                                         vertex: 545, ne: 6)
+
     Coordinates:
+
         clon                           (cell) float64 0.1544 0.1546 ... 0.1549
         clat                           (cell) float64 0.8766 0.8768 ... 0.871 0.8711
         elon                           (edge) float64 ...
         elat                           (edge) float64 ...
         vlon                           (vertex) float64 ...
         vlat                           (vertex) float64 ...
+
     Dimensions without coordinates: cell, nv, edge, nc, no, vertex, ne
     Data variables: (12/45)
+
         cell_area                      (cell) float64 ...
         lon_cell_centre                (cell) float64 ...
         lat_cell_centre                (cell) float64 ...
@@ -102,7 +108,9 @@ class Crop:
         edge_orientation               (ne, vertex) int32 ...
         refin_v_ctrl                   (vertex) int32 ...
         parent_vertex_index            (vertex) int32 ...
+
     Attributes: (12/18)
+
         title:                ICON grid description
         institution:          Max Planck Institute for Meteorology/Deutscher Wett...
         source:               svn://rclh.dwd.de/for0adm/SVN_icontools/tags/iconto...
@@ -116,24 +124,26 @@ class Crop:
         uuidOfParHGrid:       e6ddd597-9c90-27b1-fbac-c40d47f72ba0
         uuidOfHGrid:          5a0a863d-2523-9515-7789-4930e3452bc0
         global_grid:          0
-    **********************
 
     open a dataset with data:
     >>> ds_cell = xr.open_datasets("lfff00010000_cell.nc")
     >>> ds_cell
+
     Dimensions:                  (generalVerticalLayer: 80, time: 1, cell: 1043968,
                                   vertices: 3)
     Coordinates:
         number                   int64 1
         forecast_reference_time  datetime64[ns] 2022-02-16
         step                     timedelta64[ns] 01:00:00
-    * generalVerticalLayer     (generalVerticalLayer) float64 1.0 2.0 ... 80.0
-    * time                     (time) datetime64[ns] 2022-02-16T01:00:00
+      * generalVerticalLayer     (generalVerticalLayer) float64 1.0 2.0 ... 80.0
+      * time                     (time) datetime64[ns] 2022-02-16T01:00:00
         clon                     (cell) float32 0.2887 0.2889 ... 0.2422 0.2423
         clat                     (cell) float32 0.7384 0.7384 ... 0.7472 0.7474
         clat_bnds                (cell, vertices) float32 0.7385 0.7384 ... 0.7475
         clon_bnds                (cell, vertices) float32 0.2888 0.2886 ... 0.2423
+
     Dimensions without coordinates: cell, vertices
+
     Data variables:
         unknown                  (time, generalVerticalLayer, cell) float32 0.0 ....
         pres                     (time, generalVerticalLayer, cell) float32 4.675...
@@ -166,7 +176,9 @@ class Crop:
         clat                     (cell) float32 0.8766 0.8768 ... 0.871 0.8711
         clat_bnds                (cell, vertices) float32 0.8765 0.8767 ... 0.8712
         clon_bnds                (cell, vertices) float32 0.1544 0.1546 ... 0.1547
+
     Dimensions without coordinates: cell, vertices
+
     Data variables:
         unknown                  (time, generalVerticalLayer, cell) float32 0.0 ....
         pres                     (time, generalVerticalLayer, cell) float32 4.596...
