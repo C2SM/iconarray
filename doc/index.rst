@@ -15,12 +15,51 @@ API reference
 
 This page provides an auto-generated summary of iconarray's API.
 
+Core functions
+------------------
+
+.. currentmodule:: iconarray.core
+
 .. autosummary::
    :toctree: generated/
 
-   core
-   core.utilities 
-   core.utilities.ind_from_latlon
+   utilities
+   utilities.ind_from_latlon
+
+Backend functions
+------------------
+
+.. currentmodule:: iconarray.backend
+
+.. autosummary::
+   :toctree: generated/
+
+   grid
+   grid.combine_grid_information
+
+Plotting functions
+------------------
+
+.. currentmodule:: iconarray.plot
+
+.. autosummary::
+   :toctree: generated/
+
+   formatoptions
+   formatoptions.borders
+   formatoptions.lakes
+   formatoptions.rivers
+   config
+
+Utility functions
+------------------
+
+.. currentmodule:: iconarray.utils
+
+.. autosummary::
+   :toctree: generated/
+
+   get_data
 
 Indices and tables
 ==================

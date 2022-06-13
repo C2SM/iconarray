@@ -10,9 +10,16 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+
+current_dir = os.path.dirname(__file__)
+target_dir = os.path.abspath(os.path.join(current_dir, "../"))
+print(os.listdir(target_dir))
+sys.path.insert(0, target_dir)
+
+print("target_dir:", end=" ")
+print(target_dir)
 
 
 # -- Project information -----------------------------------------------------
@@ -30,7 +37,34 @@ release = "v0.1.19"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+]
+
+numpydoc_show_class_members = False
+
+autosummary_generate = True
+
+autodoc_mock_imports = [
+    "numpy",
+    "six",
+    "xarray",
+    "scipy",
+    "os",
+    "subprocess",
+    "pathlib",
+    "psyplot",
+    "cartopy",
+    "psy_simple",
+    "configparser",
+    "sys",
+    "cfgrib",
+    "pytest",
+    "urllib",
+    "ftplib",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -43,23 +77,17 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = "alabaster"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.autosummary"]
-
 # -- Options for HTML output ----------------------------------------------
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 html_theme = "sphinx_book_theme"
-html_title = ""
+html_title = "iconarray"
 
 html_context = {
     "github_user": "C2SM",
@@ -67,6 +95,14 @@ html_context = {
     "github_version": "main",
     "doc_path": "doc",
 }
+
+# Napoleon configurations
+
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_param = False
+napoleon_use_rtype = False
+napoleon_preprocess_types = True
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

@@ -13,7 +13,8 @@ def awhere_drop(ds, cond):
 
 
 def ind_from_latlon(lats, lons, lat, lon, verbose=False):
-    """Find the nearest neighbouring index to given location.
+    """
+    Find the nearest neighbouring index to given location.
 
     Parameters
     ----------
@@ -29,9 +30,32 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
         Print information. Defaults to False.
 
     Returns
-    -------
-        index : int
+    ----------
+    index : int
         Index of nearest grid point.
+
+    See Also
+    ----------
+    iconarray.core.utilities
+
+    Examples
+    ----------
+    >>> # Get values of grid cell closest to coordinate
+    >>> # E.g. Zürich:
+    >>> lon = 8.54
+    >>> lat = 47.38
+    >>> lats = np.rad2deg(ds.clat.values[:])
+    >>> lons = np.rad2deg(ds.clon.values[:])
+    >>> ind = iconarray.ind_from_latlon(
+    ...         lats,lons,lat,lon,verbose=True
+    ...         )
+
+    >>> ind
+    3352
+    # Closest ind: 3352
+    #  Given lat: 47.380 vs found lat: 47.372
+    #  Given lon: 8.540 vs found lon: 8.527
+
     """
     dist = [
         np.sqrt((lats[i] - lat) ** 2 + (lons[i] - lon) ** 2) for i in range(len(lats))
