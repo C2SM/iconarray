@@ -64,7 +64,26 @@ def add_grid_information(nc_file, grid_file):
 
 
 def combine_grid_information(file, grid_file):
+    """
+    Combine grid information. 
 
+    Parameters
+    ----------
+    file : file or ds
+        data file
+    grid_file : grid file or ds
+        grid file
+
+    Returns
+    ----------
+    ds : xarray.Dataset
+        dataset
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     if isinstance(grid_file, pathlib.PurePath) or isinstance(grid_file, str):
         grid = psy.open_dataset(grid_file)
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
