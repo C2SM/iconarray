@@ -28,39 +28,26 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
 
     See Also
     ----------
-    Dataset.to_array
-    Dataset.stack
-    DataArray.to_unstacked_dataset
+    iconarray.core.utilities
 
     Examples
     ----------
-    >>> data = xr.Dataset(
-    ...     data_vars={
-    ...         "a": (("x", "y"), [[0, 1, 2], [3, 4, 5]]),
-    ...         "b": ("x", [6, 7]),
-    ...     },
-    ...     coords={"y": ["u", "v", "w"]},
-    ... )
+    >>> # Get values of grid cell closest to coordinate
+    >>> # E.g. Zürich:
+    >>> lon = 8.54
+    >>> lat = 47.38
+    >>> lats = np.rad2deg(data.clat.values[:])
+    >>> lons = np.rad2deg(data.clon.values[:])
+    >>> ind = iconvis.ind_from_latlon(
+    ...         lats,lons,lat,lon,verbose=True
+    ...         )
+    >>> var_coord = var[:,ind]
 
-    >>> data
-    <xarray.Dataset>
-    Dimensions:  (x: 2, y: 3)
-    Coordinates:
-        * y        (y) <U1 'u' 'v' 'w'
-    Dimensions without coordinates: x
-    Data variables:
-        a        (x, y) int64 0 1 2 3 4 5
-        b        (x) int64 6 7
-
-    >>> data.to_stacked_array("z", sample_dims=["x"])
-    <xarray.DataArray 'a' (x: 2, z: 4)>
-    array([[0, 1, 2, 6],
-            [3, 4, 5, 7]])
-    Coordinates:
-        * z         (z) object MultiIndex
-        * variable  (z) object 'a' 'a' 'a' 'b'
-        * y         (z) object 'u' 'v' 'w' nan
-    Dimensions without coordinates: x
+    >>> ind
+    3352
+    # Closest ind: 3352
+    #  Given lat: 47.380 vs found lat: 47.372
+    #  Given lon: 8.540 vs found lon: 8.527
 
     """
     dist = [
