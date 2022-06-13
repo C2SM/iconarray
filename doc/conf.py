@@ -18,7 +18,7 @@ target_dir = os.path.abspath(os.path.join(current_dir, "../"))
 print(os.listdir(target_dir))
 sys.path.insert(0, target_dir)
 
-print('target_dir:', end=" ")
+print("target_dir:", end=" ")
 print(target_dir)
 
 
@@ -37,23 +37,33 @@ release = "v0.1.19"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [    
-    'sphinx.ext.autodoc',
-    "sphinx.ext.autosummary", 
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
-             ]
+]
 
 numpydoc_show_class_members = False
 
 autosummary_generate = True
 
-autodoc_mock_imports=[
-    "numpy","six","xarray","scipy",
-    "os", "subprocess", "pathlib",
-    "psyplot", "cartopy", "psy_simple",
-    "configparser", "sys", "cfgrib",
+autodoc_mock_imports = [
+    "numpy",
+    "six",
+    "xarray",
+    "scipy",
+    "os",
+    "subprocess",
+    "pathlib",
+    "psyplot",
+    "cartopy",
+    "psy_simple",
+    "configparser",
+    "sys",
+    "cfgrib",
     "pytest",
-    "urllib", "ftplib"
+    "urllib",
+    "ftplib",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

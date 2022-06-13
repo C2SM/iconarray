@@ -23,7 +23,7 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
 
     Returns
     ----------
-        index : int
+    index : int
         Index of nearest grid point.
 
     See Also
@@ -36,12 +36,11 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
     >>> # E.g. Zürich:
     >>> lon = 8.54
     >>> lat = 47.38
-    >>> lats = np.rad2deg(data.clat.values[:])
-    >>> lons = np.rad2deg(data.clon.values[:])
-    >>> ind = iconvis.ind_from_latlon(
+    >>> lats = np.rad2deg(ds.clat.values[:])
+    >>> lons = np.rad2deg(ds.clon.values[:])
+    >>> ind = iconarray.ind_from_latlon(
     ...         lats,lons,lat,lon,verbose=True
     ...         )
-    >>> var_coord = var[:,ind]
 
     >>> ind
     3352
