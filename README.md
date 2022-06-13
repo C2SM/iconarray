@@ -1,7 +1,7 @@
 # iconarray
 
-[![Build Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
-[![Build Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
+[![Build Status](https://jenkins-mch.cscs.ch/buildStatus/icon?job=iconarray_testsuite?config=build)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
+[![Test Status](https://jenkins-mch.cscs.ch/buildStatus/icon?job=iconarray_testsuite?config=test)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
 
 ## Introduction
 
