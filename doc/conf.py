@@ -52,7 +52,7 @@ autodoc_mock_imports=[
     "os", "subprocess", "pathlib",
     "psyplot", "cartopy", "psy_simple",
     "configparser", "sys", "cfgrib",
-    "iconarray", "pytest",
+    "pytest",
     "urllib", "ftplib"
 ]
 
