@@ -8,3 +8,6 @@ scratch/
 *scratch*
 tmp/
 fieldextra.diagnostic
+dist/
+*.egg-info
+doc/_build
