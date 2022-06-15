@@ -30,7 +30,6 @@ def test_grid_edge():
 
     Ensure that edge varialbes are extracted to ds_edge and grid information is correctly added.
     """
-
     _ds_cell, ds_edge = _open_file(f_alldata)
 
     ds_edgevars = iconarray.combine_grid_information(ds_edge, f_grid)

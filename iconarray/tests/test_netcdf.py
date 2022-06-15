@@ -64,8 +64,6 @@ def test_w_celldata():
 
 
 def test_wrong_grid():
-    """
-    Test that combine_grid_information raises an error when trying to add the data from an incorrect grid to data from a NETCDF file.
-    """
+    """Test that combine_grid_information raises an error when trying to add the data from an incorrect grid to data from a NETCDF file."""
     with pytest.raises(grid.WrongGridException):
         iconarray.combine_grid_information(f_celldata_incomatible_w_grid, f_grid)
