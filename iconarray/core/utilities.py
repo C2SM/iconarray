@@ -93,6 +93,16 @@ def wilks(pvals, alpha):
 # show_data_vars can be used in python scripts to find out which variable name psyplot will need to plot that variable.
 # eg if GRIB_cfVarName is defined, cfgrib will set this as the variable name, as opposed to GRIB_shortName.
 def show_data_vars(ds):
+    """
+    Print a table with variables in dataset.
+
+    The first column is the variable name chosen by cfgrib to use eg. when plotting with psyplot.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+        Dataset of ICON GRIB data opened with cgrib engine or cfgrib.
+    """
     if type(ds) is str:
         Exception(
             "Argument is not a Dataset. Please open the dataset via psy.open_dataset() and pass returned Dataset to this function."
