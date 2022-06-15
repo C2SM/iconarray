@@ -6,6 +6,11 @@ from urllib.parse import urlparse
 
 
 def get_example_data():
+    """
+    Download example ICON data from FTP server (NETCDF, GRIB and Grid files) to current directory.
+
+    If using icon-vis repository, the data is downloaded to a data folder under icon-vis root directory.
+    """
     cwd = Path(os.getcwd()).resolve()
 
     # If in icon-vis directory, get icon-vis root path,
