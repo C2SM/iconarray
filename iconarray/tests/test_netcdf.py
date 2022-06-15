@@ -12,7 +12,11 @@ f_grid = "data/example_data/grids/ICON-1E_DOM01.nc"
 
 
 def test_wo_celldata():
+    """
+    Test the combine_grid_information function with a NETCDF file containing cell center variables.
 
+    Ensure that grid information is correctly added.
+    """
     ds_cell = iconarray.combine_grid_information(f_wo_celldata, f_grid)
 
     assert "cell" in list(
@@ -34,7 +38,11 @@ def test_wo_celldata():
 
 
 def test_w_celldata():
+    """
+    Test the combine_grid_information function with a NETCDF file containing cell center variables.
 
+    Ensure that grid information is correctly added.
+    """
     ds_cell = iconarray.combine_grid_information(f_w_celldata, f_grid)
 
     assert "cell" in list(
@@ -56,6 +64,8 @@ def test_w_celldata():
 
 
 def test_wrong_grid():
-
+    """
+    Test that combine_grid_information raises an error when trying to add the data from an incorrect grid to data from a NETCDF file.
+    """
     with pytest.raises(grid.WrongGridException):
         iconarray.combine_grid_information(f_celldata_incomatible_w_grid, f_grid)
