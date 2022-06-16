@@ -71,7 +71,32 @@ def create_remap_nl(
     in_grid_file,
     out_grid_file="",
 ):
+    """
+    Create REMAP namelist for Fieldextra remapping.
 
+    See fieldextra documentation for more information on the namelists.
+    https://github.com/COSMO-ORG/fieldextra
+
+    Parameters
+    ----------
+    gridtype : string
+        'icon' or 'regular'
+    remap_namelist_path : Path
+        Output path to save namelist file.
+    data_file : Path
+        Path to ICON data.
+    file_out : Path
+        Output path for interpolated ICON data.
+    num_dates : integer
+        Number of time steps in data.
+    out_regrid_options : string
+        Information on output grid. See fieldextra documentation.
+    in_grid_file : Path
+        Path to original grid of ICON data.
+    out_grid_file : Path
+        Path to new grid to interpolate data to.
+        In case of interpolating to regular grid, this defaults to "".
+    """
     if gridtype == "icon":
         varname_translation = ""
         gridtype = "another (coarser) ICON Grid."
@@ -134,10 +159,10 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="Swizer
 
     # LOG file
     with open(output_dir / "LOG_ICON_REG_REMAP.txt", "w") as f:
-        log_fx(f, remap_namelist_path)
+        _log_fx(f, remap_namelist_path)
 
     with open(output_dir / "LOG_ICON_REG_REMAP.txt", "r") as f:
-        print_status(f, output_dir, file_out)
+        _print_status(f, output_dir, file_out)
 
     return file_out
 
@@ -171,15 +196,15 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
     )
 
     with open(output_dir / "LOG_ICON_ICON_REMAP.txt", "w") as f:
-        log_fx(f, remap_namelist_path)
+        _log_fx(f, remap_namelist_path)
 
     with open(output_dir / "LOG_ICON_ICON_REMAP.txt", "r") as f:
-        print_status(f, output_dir, file_out)
+        _print_status(f, output_dir, file_out)
 
     return file_out
 
 
-def log_fx(f, remap_namelist_path):
+def _log_fx(f, remap_namelist_path):
     try:
         fieldextra_exe = os.environ["FIELDEXTRA_PATH"]
         fxcommand = f"ulimit -s unlimited;  export OMP_STACKSIZE=500M; {fieldextra_exe} {remap_namelist_path};"
@@ -200,7 +225,7 @@ def log_fx(f, remap_namelist_path):
         )
 
 
-def print_status(f, output_dir, file_out):
+def _print_status(f, output_dir, file_out):
     for line in reversed(f.readlines()):
         line = line.rstrip()
         if len(line) > 1:
