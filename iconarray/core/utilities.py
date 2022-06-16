@@ -61,6 +61,50 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
 
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
+    """
+    Get the position of given coordinates on the current map plot
+
+    Parameters
+    ----------
+    lon : float
+        Longitude of location
+    lat : float
+        Latitude of location
+    lonmin : float
+        Minimum longitude of map extent
+    lonmax: float
+        Maximum longitude of map extent
+    latmin : float
+        Minimum latitude of map extent
+    latmax: float
+        Maximum latitude of map extent
+
+    Returns
+    ----------
+    pos_lon: float
+        Position of given longitude on map plot
+    pos_lat: float
+        Position of given latitude on map plot
+
+    See Also
+    ----------
+    iconarray.core.utilities
+
+    Examples
+    ----------
+    >>> # Add marker at certain location on map
+    >>> # E.g. Zürich:
+    >>> lon = 8.54
+    >>> lat = 47.38
+    >>> lonmin = 5.8
+    >>> lonmax = 10.7
+    >>> latmin = 45.5
+    >>> latmax = 48.0
+    >>> pp = ds.psy.plot.mapplot(name="temp", map_extent[lonmin,lonmax,latmin,latmax])
+    >>> pos_lon, pos_lat = iconvis.add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax)
+    >>> fig.axes[0].plot(pos_lon, pos_lat, transform=fix.axes[0].transAxes)
+    """
+
     llon = lonmax - lonmin
     llat = latmax - latmin
     pos_lon = (lon - lonmin) / llon
