@@ -142,7 +142,7 @@ def get_stats(varin1, varin2):
     ----------
     >>> # Get means, difference and p values comparing two model outputs (ds1 and ds2)
     >>> var1_mean, var2_mean, var_diff, var_pval = iconvis.get_stats(ds1['T'].values, ds2['T'].values)
-    >>> # Get data points, which are significantly different at level a=0.05
+    >>> # Get data points, which are significantly different at level 0.05
     >>> pval_sig = np.argwhere(var_pval>0.05)
     """
 
@@ -155,6 +155,33 @@ def get_stats(varin1, varin2):
 
 
 def wilks(pvals, alpha):
+    """
+    Get threshold for p-values at which differences are significant at level alpha if the dependency of data points is accounted for according to Wilks et al. 2016 (https://doi.org/10.1175/BAMS-D-15-00267.1)
+
+    Parameters
+    ----------
+    pvals : array
+        p-values
+    alpha : float
+        Significance level
+
+    Returns
+    ----------
+    pfdr: float
+        Threshold for significance
+
+    See Also
+    ----------
+    iconarray.core.utilities
+
+    Examples
+    ----------
+    >>> # Get data points, which are significantly different at level 0.05 when accounting for data dependency
+    >>> _,_,_,var_pval = iconvis.get_stats(ds1['T'].values, ds2['T'].values)
+    >>> pfdr = iconvis.wilks(var_pval, 0.05)
+    >>> pval_sig = np.argwhere(var_pval>pfdr)
+    """
+
     pval_1d = pvals.ravel()
     pval_rank = np.sort(pval_1d)
     N = np.size(pvals)
