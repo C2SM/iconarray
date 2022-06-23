@@ -68,19 +68,6 @@ def check_grid_information(file):
     return "clon_bnds" in data.keys()
 
 
-# Make sure that clon_bnds exists afterwards
-def add_grid_information(nc_file, grid_file):
-    grid_ds = psy.open_dataset(grid_file)
-    if isinstance(nc_file, pathlib.PurePath) or isinstance(nc_file, str):
-        icon_ds = psy.open_dataset(nc_file).squeeze()
-    else:
-        icon_ds = nc_file.squeeze()
-    data = icon_ds.rename({"ncells": "cell"}).merge(grid_ds)
-    for _k, v in six.iteritems(data.data_vars):
-        add_cell_encoding(v)
-    return data
-
-
 def combine_grid_information(file, grid_file):
     """
     Combine grid information. 
