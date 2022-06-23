@@ -62,7 +62,7 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
     """
-    Get the position of given coordinates on the current map plot to add markers
+    Get the position of given coordinates on the current map plot to add markers.
 
     Parameters
     ----------
@@ -104,7 +104,6 @@ def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
     >>> pos_lon, pos_lat = iconvis.add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax)
     >>> fig.axes[0].plot(pos_lon, pos_lat, transform=fix.axes[0].transAxes)
     """
-
     llon = lonmax - lonmin
     llat = latmax - latmin
     pos_lon = (lon - lonmin) / llon
@@ -114,7 +113,7 @@ def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
 
 def get_stats(varin1, varin2):
     """
-    Get mean, difference of mean and p value for the T-test of the means of two independent samples (varin1, varin2)
+    Get mean, difference of mean and p value for the T-test of the means of two independent samples (varin1, varin2).
 
     Parameters
     ----------
@@ -145,7 +144,6 @@ def get_stats(varin1, varin2):
     >>> # Get data points, which are significantly different at level 0.05
     >>> pval_sig = np.argwhere(var_pval>0.05)
     """
-
     varin1_mean = np.mean(varin1, axis=0)
     varin2_mean = np.mean(varin2, axis=0)
     varin_diff = varin2_mean - varin1_mean
@@ -156,7 +154,7 @@ def get_stats(varin1, varin2):
 
 def wilks(pvals, alpha):
     """
-    Get threshold for p-values at which differences are significant at level alpha if the dependency of data points is accounted for according to Wilks et al. 2016 (https://doi.org/10.1175/BAMS-D-15-00267.1)
+    Get threshold for p-values at which differences are significant at level alpha if the dependency of data points is accounted for according to Wilks et al. 2016 (https://doi.org/10.1175/BAMS-D-15-00267.1).
 
     Parameters
     ----------
@@ -181,7 +179,6 @@ def wilks(pvals, alpha):
     >>> pfdr = iconvis.wilks(var_pval, 0.05)
     >>> pval_sig = np.argwhere(var_pval>pfdr)
     """
-
     pval_1d = pvals.ravel()
     pval_rank = np.sort(pval_1d)
     N = np.size(pvals)

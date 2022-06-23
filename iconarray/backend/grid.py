@@ -60,7 +60,6 @@ def check_grid_information(file):
     iconarray.backend
 
     """
-
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
         data = open_dataset(file)
     else:
