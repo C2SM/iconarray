@@ -62,7 +62,7 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
     """
-    Get the position of given coordinates on the current map plot
+    Get the position of given coordinates on the current map plot to add markers
 
     Parameters
     ----------
@@ -113,6 +113,39 @@ def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
 
 
 def get_stats(varin1, varin2):
+    """
+    Get mean, difference of mean and p value for the T-test of the means of two independent samples (varin1, varin2)
+
+    Parameters
+    ----------
+    varin1 : float
+        First sample
+    varin2 : float
+        Second sample (must have the same shape as varin1, except in axis=0)
+
+    Returns
+    ----------
+    varin1_mean: array
+        Mean of first sample
+    varin2_mean: array
+        Mean of second sample
+    varin_diff: float
+        Difference of means
+    pval: float
+        p-value for the T-test of the means
+
+    See Also
+    ----------
+    iconarray.core.utilities
+
+    Examples
+    ----------
+    >>> # Get means, difference and p values comparing two model outputs (ds1 and ds2)
+    >>> var1_mean, var2_mean, var_diff, var_pval = iconvis.get_stats(ds1['T'].values, ds2['T'].values)
+    >>> # Get data points, which are significantly different at level a=0.05
+    >>> pval_sig = np.argwhere(var_pval>0.05)
+    """
+
     varin1_mean = np.mean(varin1, axis=0)
     varin2_mean = np.mean(varin2, axis=0)
     varin_diff = varin2_mean - varin1_mean
