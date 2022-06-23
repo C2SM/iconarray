@@ -70,7 +70,7 @@ def check_grid_information(file):
 
 def combine_grid_information(file, grid_file):
     """
-    Combine grid information. 
+    Combine grid information.
 
     Parameters
     ----------
