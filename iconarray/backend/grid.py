@@ -43,6 +43,24 @@ def add_edge_encoding(obj):
 
 
 def check_grid_information(file):
+    """
+    Check if grid information is available in file.
+
+    Parameters
+    ----------
+    file : file or ds
+        data file
+
+    Returns
+    ----------
+    boolean
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
+
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
         data = open_dataset(file)
     else:
