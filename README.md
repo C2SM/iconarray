@@ -3,6 +3,9 @@
 [![Build Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
 [![Test Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
 
+[![Available on pypi](https://badge.fury.io/py/iconarray.svg)](https://pypi.python.org/pypi/iconarray/)
+[![Docs](https://github.com/C2SM/iconarray/workflows/docs/badge.svg?branch=main)](https://c2sm.github.io/iconarray/)
+
 ## Introduction
 
 The iconarray python package contains various modules to facilitate working with ICON data with xarray or other xarray based tools (such as psyplot - a plotting package). iconarray was developed together with [icon-vis](https://github.com/C2SM/icon-vis).
