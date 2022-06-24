@@ -83,6 +83,13 @@ def combine_grid_information(file, grid_file):
     ds : xarray.Dataset
         dataset
 
+    Raises
+    ----------
+    TypeError
+        Grid or data file annot be opened to xr.core.dataset.Dataset
+    WrongGridException
+        Cell dimension and grid dimension are none
+
     See Also
     ----------
     iconarray.backend
@@ -97,7 +104,7 @@ def combine_grid_information(file, grid_file):
 
     datasetType = xr.core.dataset.Dataset
     if type(ds) != datasetType or type(grid) != datasetType:
-        raise Exception(
+        raise TypeError(
             """Grid or data file could not be opened to xr.core.dataset.Dataset."""
         )
 
