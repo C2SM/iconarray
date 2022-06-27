@@ -10,7 +10,7 @@ class Crop:
     """Cut the domain of an ICON grid and data to a region specified by a lat/lon retangle.
 
     All cells whose center coordinates are not contained within the lat/lon region will be dropped.
-    All neighbour edges and vertices of the selected cells will be included in the cropped domain
+    All neighbour edges and vertices of the selected cells will be included in the cropped domain.
     As a result, some edges and/or vertices, boundaries of an included triangle, might have coordinate
     that are not contained within the lat/lon region.
 
