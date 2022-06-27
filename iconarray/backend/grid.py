@@ -86,7 +86,7 @@ def combine_grid_information(file, grid_file):
     Raises
     ----------
     TypeError
-        Grid or data file annot be opened to xr.core.dataset.Dataset
+        Grid or data file cannot be opened to xr.core.dataset.Dataset
     WrongGridException
         Cell dimension and grid dimension are none
 
