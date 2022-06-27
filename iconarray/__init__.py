@@ -7,5 +7,5 @@ from .core.utilities import (
     show_data_vars,
     wilks,
 )
-from .plot.config import get_several_input, read_config
+from .plot.config import read_config
 from .utils.get_data import get_example_data
