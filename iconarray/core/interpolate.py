@@ -127,9 +127,9 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
     """
     REMAP ICON data to regular grid using Fieldextra.
 
-    This calls the create_ICON_to_Regulargrid_remap_nl() function to create a fieldextra 
-    namelist with your datafile, and subsequently runs fieldextra with this namelist. 
-    The output file along with a LOG and the namelist are saved in a tmp folder. 
+    This calls the create_ICON_to_Regulargrid_remap_nl() function to create a fieldextra
+    namelist with your datafile, and subsequently runs fieldextra with this namelist.
+    The output file along with a LOG and the namelist are saved in a tmp folder.
     The function returns the file location of the output file.
 
     See fieldextra documentation for more information on fieldextra.
@@ -146,6 +146,11 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
         Path to original grid file of the ICON data.
     region : string
         Switzerland or Europe. Defaults to Swizerland.
+
+    Returns
+    ----------
+    file_out : Path
+        Path to resulting interpolated data.
     """
     remap_namelist_fname = "NAMELIST_ICON_REG_REMAP"
     output_dir = Path(os.path.abspath(Path("./tmp/fieldextra")))
@@ -194,9 +199,9 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
     """
     REMAP ICON data to another ICON grid using Fieldextra.
 
-    This calls the create_ICON_to_Regulargrid_remap_nl() function to create a fieldextra 
-    namelist with your datafile, and subsequently runs fieldextra with this namelist. 
-    The output file along with a LOG and the namelist are saved in a tmp folder. 
+    This calls the create_ICON_to_Regulargrid_remap_nl() function to create a fieldextra
+    namelist with your datafile, and subsequently runs fieldextra with this namelist.
+    The output file along with a LOG and the namelist are saved in a tmp folder.
     The function returns the file location of the output file.
 
     See fieldextra documentation for more information on fieldextra.
@@ -214,6 +219,11 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
     out_grid_file : Path
         Path to new grid to interpolate data to.
         In case of interpolating to regular grid, this defaults to "".
+
+    Returns
+    ----------
+    file_out : Path
+        Path to resulting interpolated data.
     """
     remap_namelist_fname = "NAMELIST_ICON_ICON_REMAP"
     output_dir = Path("./tmp/fieldextra")
