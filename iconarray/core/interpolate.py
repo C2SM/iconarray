@@ -123,7 +123,7 @@ def create_remap_nl(
     print("\nFieldextra Namelist saved to:" + os.path.abspath(remap_namelist_path))
 
 
-def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="Swizerland"):
+def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
     """
     REMAP ICON data to regular grid using Fieldextra.
 
