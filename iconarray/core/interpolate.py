@@ -1,3 +1,5 @@
+"""The functions in interpolate.py are used to facilitate the interpolation of ICON vector data to a regular grid, or a coarser ICON grid, for the purpose of vectorplots, e.g., wind plots. For psyplot we recommend to plot wind data on the regular grid as you can then scale the density of arrows in a vector plot as desired."""
+
 import os
 import subprocess
 from pathlib import Path

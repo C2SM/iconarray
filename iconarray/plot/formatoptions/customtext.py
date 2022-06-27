@@ -1,3 +1,5 @@
+"""Formatoption that adds customized text to mapplot, mapvector, and mapcombined plots created by psyplot."""
+
 import psyplot.project as psy
 from psyplot.plotter import Formatoption
 

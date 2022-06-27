@@ -1,3 +1,5 @@
+"""Formatoption that adds lakes to mapplot, mapvector, and mapcombined plots created by psyplot."""
+
 import psyplot.project as psy
 from cartopy.feature import GSHHSFeature
 from psyplot.plotter import Formatoption

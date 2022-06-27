@@ -1,3 +1,9 @@
+"""
+The utilities.py module contains various functions useful for analysing or plotting (ICON) data using xarray.
+
+Contains public functions: ind_from_latlon, add_coordinates, get_stats wilks, show_data_vars
+"""
+
 import numpy as np
 import six
 import xarray

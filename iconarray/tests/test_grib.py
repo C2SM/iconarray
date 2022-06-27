@@ -1,3 +1,9 @@
+"""
+This module contains tests for the function combine_grid_information on grib data.
+
+Contains tests: test_grid_edge, test_grid_cell
+"""
+
 import cfgrib
 
 import iconarray

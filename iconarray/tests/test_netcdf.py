@@ -1,3 +1,9 @@
+"""
+This module contains tests for the function combine_grid_information on netcdf data.
+
+Contains tests: test_wo_celldata, test_w_celldata, test_wrong_grid
+"""
+
 import pytest
 
 import iconarray

@@ -1,3 +1,4 @@
+"""Formatoption that adds text containing mean and maximum wind within plotted data."""
 import psyplot.project as psy
 from psyplot.plotter import Formatoption
 

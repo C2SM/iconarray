@@ -1,3 +1,5 @@
+"""Formatoption that adds a title to mapplot, mapvector, and mapcombined plots created by psyplot."""
+
 import psyplot.project as psy
 from psy_simple.base import TextBase
 from psyplot.plotter import Formatoption

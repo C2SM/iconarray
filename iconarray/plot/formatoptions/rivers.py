@@ -1,3 +1,5 @@
+"""Formatoption that adds rivers to mapplot, mapvector, and mapcombined plots created by psyplot."""
+
 import psyplot.project as psy
 from cartopy.feature import NaturalEarthFeature
 from psyplot.plotter import BEFOREPLOTTING, Formatoption

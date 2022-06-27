@@ -1,3 +1,5 @@
+"""The grid module contains functions relating to the grid information for ICON data, such as merging ICON data with the grid data to provide one merged dataset."""
+
 import pathlib
 
 import numpy as np

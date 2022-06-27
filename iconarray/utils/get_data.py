@@ -1,3 +1,9 @@
+"""
+This script/module contains the function get_example_data which downloads example ICON data from FTP server (NETCDF, GRIB and Grid files).
+
+If using as a script, you can simply run: `python get_data.py`.
+"""
+
 import ftplib
 import os
 import urllib.request

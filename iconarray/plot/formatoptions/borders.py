@@ -1,10 +1,12 @@
+"""Formatoption that adds internal land borders on mapplot, mapvector, and mapcombined plots created by psyplot."""
+
 import cartopy.feature as cf
 import psyplot.project as psy
 from psyplot.plotter import Formatoption
 
 
 class Borders(Formatoption):
-    """Draw borders on a map."""
+    """Add internal land borders on mapplot, mapvector, and mapcombined plots created by psyplot."""
 
     children = ["lsm"]
     default = {"color": "black", "linewidth": 1.0}

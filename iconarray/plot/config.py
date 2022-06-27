@@ -1,4 +1,6 @@
-# Load modules
+"""This module config.py contains the public function read_config which parses configuration file for plotting scripts in icon-vis."""
+
+
 import configparser
 import sys
 from pathlib import Path
