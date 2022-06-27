@@ -37,6 +37,7 @@ class Icon2latlon:
     -------
 
     open the ICON grid:
+
     >>> ds_grid = xr.open_dataset("icon_grid_0001_R19B08_lon:0.1525-0.1535_lat:0.8748-0.8752.nc")
 
     create the 2D array that maps ICON grid indices into a lat/lon Cartesian grid
@@ -44,40 +45,41 @@ class Icon2latlon:
     >>> i2ll = Icon2latlon(ds_grid)
     >>> cartgrid_ind = i2ll.latlon_grid("cell")
     >>> cartgrid_ind
-
-    array([[ 3,  0,  0,  1],
-        [ 0,  0,  0,  0],
-        [ 0,  4,  2,  0],
-        [ 0,  0,  0,  0],
-        [ 5,  0,  0,  9],
-        [ 0,  0,  0,  0],
-        [ 6,  0,  8,  0],
-        [ 0,  0,  0,  0],
-        [10,  0,  0,  0],
-        [ 0,  0,  0,  7]])
-    Dimensions without coordinates: x, y
+    ... array([[ 3,  0,  0,  1],
+    ...     [ 0,  0,  0,  0],
+    ...     [ 0,  4,  2,  0],
+    ...     [ 0,  0,  0,  0],
+    ...     [ 5,  0,  0,  9],
+    ...     [ 0,  0,  0,  0],
+    ...     [ 6,  0,  8,  0],
+    ...     [ 0,  0,  0,  0],
+    ...     [10,  0,  0,  0],
+    ...     [ 0,  0,  0,  7]])
+    ... Dimensions without coordinates: x, y
 
     the lat/lon bounds of the grid are lon:[0.1525,0.1535], lat[0.8748,0.8752]
+
     we can search for the ICON indices of the following coordinates:
 
     >>> lons = xr.DataArray([0.152871, 0.153016])
     >>> lats = xr.DataArray([0.875108, 0.874878])
     >>> inds_lon, inds_lat = i2ll.latlon_indices_of_coords("cell", lons, lats)
     >>> inds_lon
-    <xarray.DataArray (cindex: 2)>
-    array([2, 4])
-    Dimensions without coordinates: cindex
+    ... <xarray.DataArray (cindex: 2)>
+    ... array([2, 4])
+    ... Dimensions without coordinates: cindex
     >>> inds_lat
-     <xarray.DataArray (cindex: 2)>
-    array([2, 0])
-    Dimensions without coordinates: cindex
+    ...  <xarray.DataArray (cindex: 2)>
+    ... array([2, 0])
+    ... Dimensions without coordinates: cindex
 
     retrieve the ICON indices:
+    
     >>> icon_inds = cartgrid_ind[inds_lon, inds_lat]
     >>> icon_inds
-    <xarray.DataArray (cindex: 2)>
-    array([2, 5])
-    Dimensions without coordinates: cindex
+    ... <xarray.DataArray (cindex: 2)>
+    ... array([2, 5])
+    ... Dimensions without coordinates: cindex
     """
 
     def __init__(self, grid: xr.Dataset):
