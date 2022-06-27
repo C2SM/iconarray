@@ -43,24 +43,28 @@ def _add_edge_encoding(obj):
 
 
 def check_grid_information(file):
+    """
+    Check if grid information is available in file.
+
+    Parameters
+    ----------
+    file : file or ds
+        data file
+
+    Returns
+    ----------
+    boolean
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
         data = open_dataset(file)
     else:
         data = file
     return "clon_bnds" in data.keys()
-
-
-# Make sure that clon_bnds exists afterwards
-def add_grid_information(nc_file, grid_file):
-    grid_ds = psy.open_dataset(grid_file)
-    if isinstance(nc_file, pathlib.PurePath) or isinstance(nc_file, str):
-        icon_ds = psy.open_dataset(nc_file).squeeze()
-    else:
-        icon_ds = nc_file.squeeze()
-    data = icon_ds.rename({"ncells": "cell"}).merge(grid_ds)
-    for _k, v in six.iteritems(data.data_vars):
-        _add_cell_encoding(v)
-    return data
 
 
 def combine_grid_information(file, grid_file):
@@ -79,6 +83,13 @@ def combine_grid_information(file, grid_file):
     ds : xarray.Dataset
         dataset
 
+    Raises
+    ----------
+    TypeError
+        Grid or data file cannot be opened to xr.core.dataset.Dataset
+    WrongGridException
+        Cell dimension and grid dimension are none
+
     See Also
     ----------
     iconarray.backend
@@ -93,7 +104,7 @@ def combine_grid_information(file, grid_file):
 
     datasetType = xr.core.dataset.Dataset
     if type(ds) != datasetType or type(grid) != datasetType:
-        raise Exception(
+        raise TypeError(
             """Grid or data file could not be opened to xr.core.dataset.Dataset."""
         )
 

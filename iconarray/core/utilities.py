@@ -61,6 +61,49 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
 
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
+    """
+    Get the position of given coordinates on the current map plot to add markers.
+
+    Parameters
+    ----------
+    lon : float
+        Longitude of location
+    lat : float
+        Latitude of location
+    lonmin : float
+        Minimum longitude of map extent
+    lonmax: float
+        Maximum longitude of map extent
+    latmin : float
+        Minimum latitude of map extent
+    latmax: float
+        Maximum latitude of map extent
+
+    Returns
+    ----------
+    pos_lon: float
+        Position of given longitude on map plot
+    pos_lat: float
+        Position of given latitude on map plot
+
+    See Also
+    ----------
+    iconarray.core.utilities
+
+    Examples
+    ----------
+    >>> # Add marker at certain location on map
+    >>> # E.g. Zürich:
+    >>> lon = 8.54
+    >>> lat = 47.38
+    >>> lonmin = 5.8
+    >>> lonmax = 10.7
+    >>> latmin = 45.5
+    >>> latmax = 48.0
+    >>> pp = ds.psy.plot.mapplot(name="temp", map_extent[lonmin,lonmax,latmin,latmax])
+    >>> pos_lon, pos_lat = iconvis.add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax)
+    >>> fig.axes[0].plot(pos_lon, pos_lat, transform=fix.axes[0].transAxes)
+    """
     llon = lonmax - lonmin
     llat = latmax - latmin
     pos_lon = (lon - lonmin) / llon
@@ -69,6 +112,38 @@ def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
 
 
 def get_stats(varin1, varin2):
+    """
+    Get mean, difference of mean and p value for the T-test of the means of two independent samples (varin1, varin2).
+
+    Parameters
+    ----------
+    varin1 : float
+        First sample
+    varin2 : float
+        Second sample (must have the same shape as varin1, except in axis=0)
+
+    Returns
+    ----------
+    varin1_mean: array
+        Mean of first sample
+    varin2_mean: array
+        Mean of second sample
+    varin_diff: float
+        Difference of means
+    pval: float
+        p-value for the T-test of the means
+
+    See Also
+    ----------
+    iconarray.core.utilities
+
+    Examples
+    ----------
+    >>> # Get means, difference and p values comparing two model outputs (ds1 and ds2)
+    >>> var1_mean, var2_mean, var_diff, var_pval = iconvis.get_stats(ds1['T'].values, ds2['T'].values)
+    >>> # Get data points, which are significantly different at level 0.05
+    >>> pval_sig = np.argwhere(var_pval>0.05)
+    """
     varin1_mean = np.mean(varin1, axis=0)
     varin2_mean = np.mean(varin2, axis=0)
     varin_diff = varin2_mean - varin1_mean
@@ -78,6 +153,32 @@ def get_stats(varin1, varin2):
 
 
 def wilks(pvals, alpha):
+    """
+    Get threshold for p-values at which differences are significant at level alpha if the dependency of data points is accounted for according to Wilks et al. 2016 (https://doi.org/10.1175/BAMS-D-15-00267.1).
+
+    Parameters
+    ----------
+    pvals : array
+        p-values
+    alpha : float
+        Significance level
+
+    Returns
+    ----------
+    pfdr: float
+        Threshold for significance
+
+    See Also
+    ----------
+    iconarray.core.utilities
+
+    Examples
+    ----------
+    >>> # Get data points, which are significantly different at level 0.05 when accounting for data dependency
+    >>> _,_,_,var_pval = iconvis.get_stats(ds1['T'].values, ds2['T'].values)
+    >>> pfdr = iconvis.wilks(var_pval, 0.05)
+    >>> pval_sig = np.argwhere(var_pval>pfdr)
+    """
     pval_1d = pvals.ravel()
     pval_rank = np.sort(pval_1d)
     N = np.size(pvals)
