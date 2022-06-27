@@ -18,6 +18,22 @@ def _get_several_input(config, sect, opt, f=False, i=False):
 
 
 def read_config(config_path):
+    """
+    Parse configuration file for plotting scripts in icon-vis.
+
+    ICON-vis contains some plotting scripts that make use of configuration files: https://github.com/C2SM/icon-vis
+    This function reads the config files and returns an array of settings for plotting.
+
+    Parameters
+    ---------
+    config_path: Path
+        Path of configuration file.
+
+    Returns
+    ---------
+    [var, map_cfg, coord, plot]: array
+        Configuration information relating to the variable to be plotted, the map, coordinates and the plot.
+    """
     # Check if config_path is a file
     configPath = Path(config_path)
     if not configPath.is_file():
