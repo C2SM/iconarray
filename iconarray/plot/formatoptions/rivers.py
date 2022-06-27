@@ -4,6 +4,7 @@ from psyplot.plotter import BEFOREPLOTTING, Formatoption
 
 
 class Rivers(Formatoption):
+    """Add rivers to mapplot, mapvector, and mapcombined plots created by psyplot."""
 
     #: the default value for the formatoption
     default = None

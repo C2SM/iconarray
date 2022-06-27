@@ -4,6 +4,7 @@ from psyplot.plotter import Formatoption
 
 
 class Lakes(Formatoption):
+    """Add lakes to mapplot, mapvector, and mapcombined plots created by psyplot."""
 
     #: the default value for the formatoption
     default = True

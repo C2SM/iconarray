@@ -3,6 +3,12 @@ from psyplot.plotter import Formatoption
 
 
 class MeanMaxWind(Formatoption):
+    """
+    Add text containing mean and maximum wind within plotted data.
+
+    Add text containing mean and maximum wind within plotted data to in mapvector, and mapcombined plots created by psyplot.
+    Warning: this has not been tested for validity.
+    """
 
     #: the default value for the formatoption
     default = False

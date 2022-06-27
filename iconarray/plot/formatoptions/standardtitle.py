@@ -4,6 +4,12 @@ from psyplot.plotter import Formatoption
 
 
 class StandardTitle(TextBase, Formatoption):
+    """
+    Add title to mapplot, mapvector, and mapcombined plots created by psyplot.
+
+    The title includes information on variable plotted, and time/date of data.
+    This was created as an example custom formatoption, and could be improved.
+    """
 
     default = True
 

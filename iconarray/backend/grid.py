@@ -7,6 +7,8 @@ import xarray as xr
 
 
 class WrongGridException(Exception):
+    """Indicate wrong grid provided to be merged with ICON data."""
+
     def __init__(
         self,
         grid,

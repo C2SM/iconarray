@@ -3,6 +3,11 @@ from psyplot.plotter import Formatoption
 
 
 class CustomText(Formatoption):
+    """
+    Add customized text to mapplot, mapvector, and mapcombined plots created by psyplot.
+
+    This was created as an example custom formatoption, and serves not much use. Can be improved.
+    """
 
     #: the default value for the formatoption
     default = False
