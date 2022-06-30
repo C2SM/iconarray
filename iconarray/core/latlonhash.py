@@ -74,7 +74,7 @@ class Icon2latlon:
     ... Dimensions without coordinates: cindex
 
     retrieve the ICON indices:
-    
+
     >>> icon_inds = cartgrid_ind[inds_lon, inds_lat]
     >>> icon_inds
     ... <xarray.DataArray (cindex: 2)>
