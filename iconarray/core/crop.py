@@ -1,3 +1,4 @@
+"""functionality to crop both ICON grids and datasets on any grid location."""
 from typing import Dict, List
 
 import numpy as np
@@ -211,7 +212,7 @@ class Crop:
         self.idx_subset: Dict[str, List[int]] = {}
         self.rgrid = self.crop_grid()
 
-    def reindex_neighbour_table(self, field, loc, target_grid):
+    def _reindex_neighbour_table(self, field, loc, target_grid):
         shape = field.shape
         lon_coord_name = loc[0] + "lon"
         lat_coord_name = loc[0] + "lat"
@@ -257,7 +258,7 @@ class Crop:
             data=res.data.reshape(shape), dims=field.dims, coords=field.coords
         )
 
-    def reindex_neighbour_tables(self, target_grid):
+    def _reindex_neighbour_tables(self, target_grid):
 
         fieldloc = {
             "edge_of_cell": "edge",
@@ -273,7 +274,7 @@ class Crop:
         res_grid = target_grid.copy()
 
         for field in fieldloc:
-            res_grid[field] = self.reindex_neighbour_table(
+            res_grid[field] = self._reindex_neighbour_table(
                 target_grid[field], fieldloc[field], target_grid
             )
 
@@ -308,7 +309,7 @@ class Crop:
             - 1
         )
 
-        return self.reindex_neighbour_tables(self.crop_fields())
+        return self._reindex_neighbour_tables(self.crop_fields())
 
     def crop_fields(self):
         """Crop all variables of the grid.
@@ -322,7 +323,7 @@ class Crop:
 
         See Also
         --------
-        Crop.reindex_neighbour_tables
+        Crop._reindex_neighbour_tables
 
         Returns
         -------
@@ -341,9 +342,26 @@ class Crop:
         return xr.merge(filtered_grid)
 
     def cropped_grid(self):
+        """Return a dataset of a grid cropped to the lat/lon area specified.
+
+        Returns
+        -------
+        A (new) cropped dataset with the grid information
+        """
         return self.rgrid
 
     def __call__(self, ds):
+        """Perform the crop on a dataset.
+
+        Parameters
+        ----------
+        ds: xr.Dataset
+            the dataset to be cropped
+
+        Returns
+        -------
+        a (new) cropped dataset
+        """
         res = ds
         for loc in ["cell", "edge", "vertex"]:
             if loc in ds.dims:

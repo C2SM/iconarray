@@ -1,3 +1,4 @@
+"""Functionality to locate ICON grid indices associated to lat/lon grid coordinates via hashing the indices in a Cartesian grid"""
 import math
 from typing import Tuple
 
@@ -5,12 +6,12 @@ import numpy as np
 import xarray as xr
 
 
-def check_loc(loc):
+def _check_loc(loc):
     if loc not in ["cell", "edge", "vertex"]:
         raise ValueError("Wrong location: {loc}".format(loc=loc))
 
 
-class latlon_spec:
+class _latlon_spec:
     def __init__(self, loc, lon_coords, lat_coords):
         self.lon_bnds = [np.amin(lon_coords).data, np.amax(lon_coords).data]
         self.lat_bnds = [np.amin(lat_coords).data, np.amax(lat_coords).data]
@@ -89,7 +90,7 @@ class Icon2latlon:
         for loc in ["cell", "edge", "vertex"]:
             lon_coords_name = loc[0] + "lon"
             lat_coords_name = loc[0] + "lat"
-            self.grid_spec[loc] = latlon_spec(
+            self.grid_spec[loc] = _latlon_spec(
                 loc,
                 self.grid.coords[lon_coords_name],
                 self.grid.coords[lat_coords_name],
@@ -114,7 +115,7 @@ class Icon2latlon:
         indices : Tuple[xr.DataArray, xr.DataArray]
             indices for the Cartesian lat/lon grid pointing to the element with coordinates of the parameters lons/lats.
         """
-        check_loc(loc)
+        _check_loc(loc)
         iind_clon = xr.DataArray(
             (
                 (lons.data - self.grid_spec[loc].lon_bnds[0]) / self.grid_spec[loc].dlon
@@ -157,7 +158,7 @@ class Icon2latlon:
             the original ICON grid. The values contain the indices of the corresponding
             element in the ICON grid.
         """
-        check_loc(loc)
+        _check_loc(loc)
         lon_coord_name = loc[0] + "lon"
         lat_coord_name = loc[0] + "lat"
 

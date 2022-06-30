@@ -1,10 +1,19 @@
+"""tests for crop module."""
 import xarray as xr
 
 import iconarray
 
 
 def test_crop():
+    """Test of cropping functions.
 
+    The tests do not check for exact results that the crop operation is correct but rather
+    approximation that the resulting grid is within certain bounds.
+    The consistenty check of the grid will ensure that various equivalent traversals of the topology of the grid
+    produce same results, for example c->c == c->e->c
+    The bounds for the check of the edges is a bit relaxed with respect to the selection area, since
+    the crop algorithm do consider full cell triangles and certain edges can fall out of the region
+    """
     in_cell_data = "data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_cell.nc"
     in_edge_data = "data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_edge.nc"
     in_grid = "data/icon_grid_0001_R19B08_lon:0.152-0.154_lat:0.8745-0.8755.nc"
