@@ -22,7 +22,7 @@ def test_crop():
         basedir + "/data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_edge.nc"
     )
     in_grid = (
-        basedir + "data/icon_grid_0001_R19B08_lon:0.152-0.154_lat:0.8745-0.8755.nc"
+        basedir + "/data/icon_grid_0001_R19B08_lon:0.152-0.154_lat:0.8745-0.8755.nc"
     )
 
     ds_grid = xr.open_dataset(in_grid)
