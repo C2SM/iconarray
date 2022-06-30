@@ -118,7 +118,7 @@ class Crop:
 
     open a dataset with data:
 
-    >>> ds_cell = xr.open_datasets("lfff00010000_cell.nc")
+    >>> ds_cell = xr.open_dataset("lfff00010000_cell.nc")
     >>> ds_cell
     ... Dimensions:                  (generalVerticalLayer: 80, time: 1, cell: 1043968,
     ...                               vertices: 3)
