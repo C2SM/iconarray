@@ -1,6 +1,6 @@
 """tests for crop module."""
+import os
 import xarray as xr
-
 import iconarray
 
 
@@ -14,9 +14,16 @@ def test_crop():
     The bounds for the check of the edges is a bit relaxed with respect to the selection area, since
     the crop algorithm do consider full cell triangles and certain edges can fall out of the region
     """
-    in_cell_data = "data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_cell.nc"
-    in_edge_data = "data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_edge.nc"
-    in_grid = "data/icon_grid_0001_R19B08_lon:0.152-0.154_lat:0.8745-0.8755.nc"
+    basedir = os.path.dirname(os.path.realpath(__file__))
+    in_cell_data = (
+        basedir + "/data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_cell.nc"
+    )
+    in_edge_data = (
+        basedir + "/data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_edge.nc"
+    )
+    in_grid = (
+        basedir + "data/icon_grid_0001_R19B08_lon:0.152-0.154_lat:0.8745-0.8755.nc"
+    )
 
     ds_grid = xr.open_dataset(in_grid)
     ds_cell = xr.open_dataset(in_cell_data)
