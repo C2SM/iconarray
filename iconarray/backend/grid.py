@@ -79,6 +79,13 @@ def combine_grid_information(file, grid_file):
     ds : xarray.Dataset
         dataset
 
+    Raises
+    ------
+    Exception
+        if grid or data file could not be opened to a dataset
+    WrongGridException
+        if no cell or edge dimensions are found in the grid
+
     See Also
     ----------
     iconarray.backend
