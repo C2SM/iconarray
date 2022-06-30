@@ -65,7 +65,7 @@ def add_grid_information(nc_file, grid_file):
 
 def combine_grid_information(file, grid_file):
     """
-    Combine grid information. 
+    Combine grid information.
 
     Parameters
     ----------

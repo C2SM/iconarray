@@ -197,6 +197,27 @@ class Crop:
     """
 
     def __init__(self, grid: xr.Dataset, lon_bnds: list[float], lat_bnds: list[float]):
+        grid_lon_bnds = [
+            np.amin(grid.coords["clon"].data),
+            np.amax(grid.coords["clon"].data),
+        ]
+        grid_lat_bnds = [
+            np.amin(grid.coords["clat"].data),
+            np.amax(grid.coords["clat"].data),
+        ]
+
+        if (
+            (lon_bnds[0] > grid_lon_bnds[1])
+            | (lat_bnds[0] > grid_lat_bnds[1])
+            | (lon_bnds[1] < grid_lon_bnds[0])
+            | (lat_bnds[1] < grid_lat_bnds[0])
+        ):
+            raise ValueError(
+                "region of interest not within the grid domain:",
+                grid_lon_bnds,
+                grid_lat_bnds,
+            )
+
         self.full_grid = grid
         self.lon_bnds = lon_bnds
         self.lat_bnds = lat_bnds
