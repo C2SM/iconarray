@@ -1,4 +1,4 @@
-"""Functionality to locate ICON grid indices associated to lat/lon grid coordinates via hashing the indices in a Cartesian grid"""
+"""Functionality to locate ICON grid indices associated to lat/lon grid coordinates via hashing the indices in a Cartesian grid."""
 import math
 from typing import Tuple
 
