@@ -11,6 +11,21 @@ from scipy import stats
 
 
 def awhere_drop(ds, cond):
+    """
+    Drop data in xr.Dataset based on input condition.
+
+    Parameters
+    ----------
+    ds : xr.Dataset
+        Dataset such as ICON data
+    cond
+        A condition to apply to the data.
+
+    Returns
+    ----------
+    reduced_ds : xr.Dataset
+        Filtered dataset
+    """
     ret = ds.where(cond, drop=True)
     for var in ds:
         ret[var] = ret[var].astype(ds[var].dtype)
