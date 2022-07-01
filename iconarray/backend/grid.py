@@ -249,7 +249,9 @@ def get_time_coord_name(ds):
 
 def add_cell_data(ds, grid):
     """
-    Add data that could be useful when plotting/analysing cell variables from the grid file to the dataset.
+    Add clon, clat, clon_bnds, and clat_bnds coordinates from the grid file to the dataset.
+
+    These coordinates are required when plotting cell variables.
 
     Parameters
     ----------
@@ -297,7 +299,15 @@ def add_cell_data(ds, grid):
 
 def add_edge_data(ds, grid):
     """
-    Add data that could be useful when plotting/analysing edge variables from the grid file to the dataset.
+    Add elon, elat, elon_bnds, and elat_bnds and other edge related coordinates from the grid file to the dataset.
+
+    These elon, elat, elon_bnds, and elat_bnds coordinates are required when plotting edge variables. The following coordinates are also added which assist the plotting of edge vector variables:
+    - zonal_normal_primal_edge: zonal component of the normal vector at the triangle edge midpoints
+    - meridional_normal_primal_edge: meridional component of the normal vector at the triangle edge midpoints
+    - edge_system_orientation
+    - normal_edge
+    - zn: normalized zonal_normal_primal_edge
+    - mn: normalized meridional_normal_primal_edge
 
     Parameters
     ----------
