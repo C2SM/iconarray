@@ -98,6 +98,11 @@ def _create_remap_nl(
     out_grid_file : Path
         Path to new grid to interpolate data to.
         In case of interpolating to regular grid, this defaults to "".
+
+    Raises
+    ----------
+    Exception
+        gridtype must be either 'icon' or 'regular', otherwise an exception is raised.
     """
     if gridtype == "icon":
         varname_translation = ""

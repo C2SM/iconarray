@@ -402,6 +402,14 @@ def open_dataset(file):
     ----------
     ds : xarray.Dataset
 
+    Raises
+    ----------
+    ValueError
+        This may suggest that a heterogeneous GRIB file is being used as the input data. Recommendation: Open the file using cfgrib.open_datasets() (returns an array of xr.Datasets)
+                and pass in the relevent Dataset.
+    Exception
+        If it not not possible to open the data with psy.open_dataset() (NETCDF) or cfgrib (GRIB) an Exception will be raised.
+
     See Also
     ----------
     iconarray.backend
