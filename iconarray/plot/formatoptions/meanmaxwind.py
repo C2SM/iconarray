@@ -15,6 +15,14 @@ class MeanMaxWind(Formatoption):
     default = False
 
     def update(self, value):
+        """
+        Add or remove text with the mean and max wind speeds of the plotted data to the plot.
+
+        Parameters
+        ----------
+        value: bool
+            True to add wind speed information, False to remove.
+        """
         # method to update the plot
         if value is True:
             abs_mean = ((self.data[0] ** 2 + self.data[1] ** 2) ** 0.5).mean().values

@@ -12,12 +12,21 @@ class Borders(Formatoption):
     default = {"color": "black", "linewidth": 1.0}
 
     def validate(self, value):
+        """Validate and convert the input to boolean or dictionary."""  # noqa
         if type(value) is dict:
             return value
         else:
             return bool(value)
 
     def update(self, value):
+        """
+        Update plot to add (or remove) borders.
+
+        Parameters
+        ----------
+        value: bool or Dict
+            True to add black borders, False to remove, or Dict with color and linewidth properties eg. {"color": "black", "linewidth": 1.0}
+        """
         if type(value) is dict:
             self.borders = self.ax.add_feature(
                 cf.BORDERS, edgecolor=value["color"], linewidth=value["linewidth"]

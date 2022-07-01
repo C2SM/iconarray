@@ -14,11 +14,13 @@ class Rivers(Formatoption):
     name = "Display Rivers"
 
     def validate(self, value):
+        """Validate and convert the input to boolean."""  # noqa
         if not isinstance(value, bool):
             return bool(value)
         return value
 
     def initialize_plot(self, value):
+        """Initialize the plot with or without rivers."""  # noqa
         rivers10m = NaturalEarthFeature("physical", "rivers_lake_centerlines", "10m")
         self.rivers = None
         if value is True and self.rivers is None:
@@ -26,18 +28,26 @@ class Rivers(Formatoption):
                 rivers10m, linewidth=0.5, edgecolors="black", facecolors="none"
             )
         elif value is False:
-            self.remove()
+            self._remove()
 
     def update(self, value):
+        """
+        Update plot to add (or remove) rivers.
+
+        Parameters
+        ----------
+        value: bool
+            True to add rivers, and False to remove.
+        """
         rivers10m = NaturalEarthFeature("physical", "rivers_lake_centerlines", "10m")
         if value is True:
             self.rivers = self.ax.add_feature(
                 rivers10m, linewidth=0.1, edgecolors="black", facecolors="none"
             )
         elif value is False or value is None:
-            self.remove()
+            self._remove()
 
-    def remove(self):
+    def _remove(self):
         if self.rivers is None:
             return
         self.rivers.remove()

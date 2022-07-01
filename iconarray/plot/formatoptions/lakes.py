@@ -12,18 +12,27 @@ class Lakes(Formatoption):
     default = True
 
     def validate(self, value):
+        """Validate and convert the input to boolean."""  # noqa
         return bool(value)
 
     def update(self, value):
+        """
+        Update plot to add (or remove) lakes.
+
+        Parameters
+        ----------
+        value: bool
+            True to add lakes, False to remove.
+        """
         # method to update the plot
         if value is True:
             self.lakes = self.ax.add_feature(
                 GSHHSFeature(scale="high", levels=[2], alpha=0.8, linewidth=0.4)
             )
         else:
-            self.remove()
+            self._remove()
 
-    def remove(self):
+    def _remove(self):
         if hasattr(self, "lakes"):
             self.lakes.remove()
             del self.lakes

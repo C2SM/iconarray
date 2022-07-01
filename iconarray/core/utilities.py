@@ -69,7 +69,7 @@ def ind_from_latlon(lats, lons, lat, lon, verbose=False):
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
     """
     Get the position of given lat/lon coordinates in relation to the bounds of regular lat/lon grid.
-    
+
     This could be used for example to add a marker to a map plot by lat/lon coordinates.
 
     Parameters
