@@ -107,7 +107,7 @@ def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
     >>> latmin = 45.5
     >>> latmax = 48.0
     >>> pp = ds.psy.plot.mapplot(name="temp", map_extent[lonmin,lonmax,latmin,latmax])
-    >>> pos_lon, pos_lat = iconvis.add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax)
+    >>> pos_lon, pos_lat = iconarray.add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax)
     >>> fig.axes[0].plot(pos_lon, pos_lat, transform=fix.axes[0].transAxes)
     """
     llon = lonmax - lonmin
