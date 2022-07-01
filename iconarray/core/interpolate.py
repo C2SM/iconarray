@@ -131,6 +131,7 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
 
     This calls the create_ICON_to_Regulargrid_remap_nl() function to create a fieldextra
     namelist with your datafile, and subsequently runs fieldextra with this namelist.
+    The path to fieldextra executable is taken from the environment variable: FIELDEXTRA_PATH.
     The output file along with a LOG and the namelist are saved in a tmp folder.
     The function returns the file location of the output file.
 
@@ -187,7 +188,7 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
         in_grid_file,
     )
 
-    # LOG file
+    # Run fieldextra and save LOG file
     with open(output_dir / "LOG_ICON_REG_REMAP.txt", "w") as f:
         _log_fx(f, remap_namelist_path)
 
@@ -199,10 +200,11 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
 
 def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
     """
-    REMAP ICON data to another ICON grid using Fieldextra.
+    Remap ICON data to another ICON grid using Fieldextra.
 
     This calls the create_ICON_to_Regulargrid_remap_nl() function to create a fieldextra
     namelist with your datafile, and subsequently runs fieldextra with this namelist.
+    The path to fieldextra executable is taken from the environment variable: FIELDEXTRA_PATH.
     The output file along with a LOG and the namelist are saved in a tmp folder.
     The function returns the file location of the output file.
 
@@ -253,6 +255,7 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
         out_grid_file,
     )
 
+    # Run fieldextra and save LOG file
     with open(output_dir / "LOG_ICON_ICON_REMAP.txt", "w") as f:
         _log_fx(f, remap_namelist_path)
 
