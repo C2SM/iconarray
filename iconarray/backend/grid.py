@@ -435,3 +435,205 @@ def open_dataset(file):
                 raise ValueError(str(e))
         except Exception as e:
             raise Exception(str(e))
+
+
+def check_vertex2cell(ds_grid: xr.Dataset):
+    """Check consistency of the vertex->cell connectivity.
+
+    It requires an identical comparison of
+    the tables of vertex->cell and vertex->edge->cell after removing duplicates
+
+    Parameters
+    ----------
+    ds_grid: xr.Dataset
+        dataset of the grid, which contains coordinates and neighbour lookup tables
+
+    Returns
+    -------
+    True if consistency check is successful
+
+    Raises
+    ------
+    ValueError
+        if negative indices (expect for special value -1) are found in the neighbor lookup tables
+    """
+    if np.count_nonzero(ds_grid["edge_of_cell"] == -1):
+        raise ValueError("negative neighbour indices of edge_of_cell not expected")
+
+    nvertex = ds_grid.dims["vertex"]
+    mask = np.transpose(ds_grid["edges_of_vertex"].data).flatten()
+
+    # two dimensional array that will contain for each out of bound neighbor (-1) of the edge cell,
+    # the pair (-1, -1) and NaN for the rest. Later on, one of the two -1 will be removed
+    # by the algorithm that removes repetitions
+    preghost = np.where(mask == -1, mask, np.NaN)
+
+    ghost_data = np.reshape(np.concatenate((preghost, preghost)), (2, nvertex * 6))
+
+    vertex2cell = ds_grid["adjacent_cell_of_edge"][
+        :, np.transpose(ds_grid["edges_of_vertex"].data).flatten() - 1
+    ].data
+
+    def aunique(arr):
+        res = np.unique(arr)
+        # The unique is to remove repetitions, but not various -1. If so we recover them
+        return np.append(res, np.repeat(-1, 6 - len(res)))
+
+    # 6 x ncells (1D) array that contains all the cells of an iteration cell->edge->vertex
+    vertex2cell = np.where(mask == -1, ghost_data, vertex2cell)
+    vertex2cell = np.reshape(np.transpose(vertex2cell).flatten(), (nvertex, 12))
+    vertex2cell = np.apply_along_axis(aunique, -1, vertex2cell)
+
+    if vertex2cell.shape != (nvertex, 6):
+        return False
+
+    vertex2cell = np.transpose(vertex2cell)
+
+    return np.array_equal(
+        np.apply_along_axis(np.sort, 0, vertex2cell),
+        np.apply_along_axis(np.sort, 0, ds_grid["cells_of_vertex"].data),
+    )
+
+
+def check_cell2vertex(ds_grid: xr.Dataset):
+    """Check consistency of the cell->vertex connectivity.
+
+    It requires an identical comparison of
+    the tables of cell->vertex and cell->edge->vertex after removing duplicates
+
+    Parameters
+    ----------
+    ds_grid: xr.Dataset
+        dataset of the grid, which contains coordinates and neighbour lookup tables
+
+    Returns
+    -------
+    True if consistency check is successful
+
+    Raises
+    ------
+    ValueError
+        if negative indices (expect for special value -1) are found in the neighbor lookup tables
+    """
+    if np.count_nonzero(ds_grid["edge_of_cell"] == -1):
+        raise ValueError("negative neighbour indices of edge_of_cell not expected")
+
+    ncells = ds_grid.dims["cell"]
+    mask = np.transpose(ds_grid["edge_of_cell"].data).flatten()
+
+    # two dimensional array that will contain for each out of bound neighbor (-1) of the edge cell,
+    # the pair (-1, -1) and NaN for the rest. Later on, one of the two -1 will be removed
+    # by the algorithm that removes repetitions
+    preghost = np.where(mask == -1, mask, np.NaN)
+    ghost_data = np.reshape(np.concatenate((preghost, preghost)), (2, ncells * 3))
+
+    cell2vertex = ds_grid["edge_vertices"][
+        :, np.transpose(ds_grid["edge_of_cell"].data).flatten() - 1
+    ].data
+
+    # 6 x ncells (1D) array that contains all the cells of an iteration cell->edge->vertex
+    cell2vertex = np.where(mask == -1, ghost_data, cell2vertex)
+    cell2vertex = np.reshape(np.transpose(cell2vertex).flatten(), (ncells, 6))
+
+    def aunique(arr):
+        res = np.unique(arr)
+        # The unique is to remove repetitions, but not various -1. If so we recover them
+        return np.append(res, np.repeat(-1, 3 - len(res)))
+
+    cell2vertex = np.apply_along_axis(aunique, -1, cell2vertex)
+
+    if cell2vertex.shape != (ncells, 3):
+        return False
+
+    cell2vertex = np.transpose(cell2vertex)
+
+    return np.array_equal(
+        np.apply_along_axis(np.sort, 0, cell2vertex),
+        np.apply_along_axis(np.sort, 0, ds_grid["vertex_of_cell"].data),
+    )
+
+
+def check_cell2cell(ds_grid: xr.Dataset):
+    """Check consistency of the cell->cell connectivity.
+
+    It requires an identical comparison of
+    the tables of cell->cell and cell->edge->cell after removing duplicates
+
+    Parameters
+    ----------
+    ds_grid: xr.Dataset
+        dataset of the grid, which contains coordinates and neighbour lookup tables
+
+    Returns
+    -------
+    True if consistency check is successful
+    """
+    ncells = ds_grid.dims["cell"]
+    mask = np.transpose(ds_grid["edge_of_cell"].data).flatten()
+
+    # two dimensional array that will contain for each out of bound neighbor (-1) of the edge cell,
+    # the pair (-1, cell_index) and NaN for the rest. We will use this pair to replace the
+    # (cell of edge) for the -1 edge. Out of the pair (-1, cell_index) the cell_index will be later
+    # eliminated (since it is the repetition of the original cell center) by the del_ind mask and only -1
+    # will remain
+    ghost_data = np.reshape(
+        np.concatenate(
+            (
+                np.where(mask == -1, mask, np.NaN),
+                np.where(mask == -1, np.repeat(np.arange(1, ncells + 1), 3), np.NaN),
+            )
+        ),
+        (2, ncells * 3),
+    )
+
+    cell2cell = ds_grid["adjacent_cell_of_edge"][
+        :, np.transpose(ds_grid["edge_of_cell"].data).flatten() - 1
+    ].data
+
+    # 6 x ncells (1D) array that contains all the cells of an iteration cell->edge->cell
+    cell2cell = np.transpose(np.where(mask == -1, ghost_data, cell2cell)).flatten()
+
+    # The tranverse cell->edge->cell contains 3 times the origin cell center. We remove it.
+    del_ind = np.repeat(np.arange(1, ncells + 1), 6)
+    del_ind = cell2cell != del_ind
+
+    if len(cell2cell[del_ind]) != ncells * 3:
+        return False
+
+    cell2cell = np.transpose(np.reshape(cell2cell[del_ind], (ncells, 3))).flatten()
+    return np.array_equal(cell2cell.data, ds_grid["neighbor_cell_index"].data.flatten())
+
+
+def grid_consistency_check(ds_grid: xr.Dataset):
+    """Perform consistency check of the grid.
+
+    It checks various (not all) neighbor lookup tables
+
+    Parameters
+    ----------
+    ds_grid: xr.Dataset
+        dataset of the grid, which contains coordinates and neighbour lookup tables
+
+    Returns
+    -------
+    True if consistency check is successful
+    """
+    ncells = ds_grid.dims["cell"]
+    inds = np.repeat(np.arange(1, ncells + 1), 3)
+
+    # neighbor cell index table can not contain its own cell center index
+    if (inds == np.transpose(ds_grid["neighbor_cell_index"].data).flatten()).any():
+        return False
+
+    nvertex = ds_grid.dims["vertex"]
+    inds = np.repeat(np.arange(1, nvertex + 1), 6)
+
+    # neighbor vertex index table can not contain its own vertex index
+    if (inds == np.transpose(ds_grid["vertices_of_vertex"].data).flatten()).any():
+        return False
+
+    return (
+        check_cell2cell(ds_grid)
+        & check_cell2vertex(ds_grid)
+        & check_vertex2cell(ds_grid)
+    )
