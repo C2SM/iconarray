@@ -149,7 +149,7 @@ def get_cell_dim_name(ds, grid):
     Get name of dimension in ICON data xarray dataset which identifies the cell dimension.
 
     Compares the length of the cell dimension in the grid dataset and compares with the ICON ouptut dataset, looking for a match.
-    This assumes the dimension name for edge in the grid data is 'cell'.
+    This assumes the dimension name for cells in the grid data is 'cell'.
 
     Parameters
     ----------
