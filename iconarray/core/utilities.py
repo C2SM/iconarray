@@ -4,6 +4,14 @@ import xarray
 from scipy import stats
 
 
+def awhere_drop(ds, cond):
+    ret = ds.where(cond, drop=True)
+    for var in ds:
+        ret[var] = ret[var].astype(ds[var].dtype)
+
+    return ret
+
+
 def ind_from_latlon(lats, lons, lat, lon, verbose=False):
     """
     Find the nearest neighbouring index to given location.
