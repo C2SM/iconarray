@@ -63,7 +63,7 @@ iconremap_namelist = """
 """
 
 
-def create_remap_nl(
+def _create_remap_nl(
     gridtype,
     remap_namelist_path,
     data_file,
@@ -129,7 +129,7 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
     """
     REMAP ICON data to regular grid using Fieldextra.
 
-    This calls the create_ICON_to_Regulargrid_remap_nl() function to create a fieldextra
+    This calls the _create_remap_nl() function to create a fieldextra
     namelist with your datafile, and subsequently runs fieldextra with this namelist.
     The path to fieldextra executable is taken from the environment variable: FIELDEXTRA_PATH.
     The output file along with a LOG and the namelist are saved in a tmp folder.
@@ -178,7 +178,7 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
         out_regrid_options = "geolatlon,5500000,45500000,11000000,48000000,55000,25000"
 
     # Create namelist
-    create_remap_nl(
+    _create_remap_nl(
         "regular",
         remap_namelist_path,
         data_file,
@@ -202,7 +202,7 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
     """
     Remap ICON data to another ICON grid using Fieldextra.
 
-    This calls the create_ICON_to_Regulargrid_remap_nl() function to create a fieldextra
+    This calls the _create_remap_nl() function to create a fieldextra
     namelist with your datafile, and subsequently runs fieldextra with this namelist.
     The path to fieldextra executable is taken from the environment variable: FIELDEXTRA_PATH.
     The output file along with a LOG and the namelist are saved in a tmp folder.
@@ -244,7 +244,7 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Create namelist
-    create_remap_nl(
+    _create_remap_nl(
         "icon",
         remap_namelist_path,
         data_file,
