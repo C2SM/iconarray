@@ -52,8 +52,8 @@ def check_grid_information(file):
 
     Parameters
     ----------
-    file : file or ds
-        data file
+    file : str or xr.Dataset
+        ICON data path or ICON data as xarray Dataset
 
     Returns
     ----------
@@ -160,7 +160,7 @@ def get_cell_dim_name(ds, grid):
 
     Returns
     ----------
-    coord : string
+    coord : str
         Name of the cell dimension. Defaults to None if not found.
 
     See Also
@@ -195,7 +195,7 @@ def get_edge_dim_name(ds, grid):
 
     Returns
     ----------
-    coord : string
+    coord : str
         Name of the edge dimension. Defaults to None if not found.
 
     See Also
@@ -225,7 +225,7 @@ def get_time_coord_name(ds):
 
     Returns
     ----------
-    coord : string
+    coord : str
         Time coordinate. Defaults to 'time'.
 
     See Also
@@ -260,7 +260,7 @@ def add_cell_data(ds, grid):
 
     Returns
     ----------
-    ds : xarray.Dataset
+    merged_ds : xarray.Dataset
 
     See Also
     ----------
@@ -308,7 +308,7 @@ def add_edge_data(ds, grid):
 
     Returns
     ----------
-    ds : xarray.Dataset
+    merged_ds : xarray.Dataset
 
     See Also
     ----------

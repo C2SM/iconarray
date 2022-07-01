@@ -81,7 +81,7 @@ def create_remap_nl(
 
     Parameters
     ----------
-    gridtype : string
+    gridtype : str
         'icon' or 'regular'
     remap_namelist_path : Path
         Output path to save namelist file.
@@ -91,7 +91,7 @@ def create_remap_nl(
         Output path for interpolated ICON data.
     num_dates : integer
         Number of time steps in data.
-    out_regrid_options : string
+    out_regrid_options : str
         Information on output grid. See fieldextra documentation.
     in_grid_file : Path
         Path to original grid of ICON data.
@@ -147,7 +147,7 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
         Number of time steps in data.
     in_grid_file : Path
         Path to original grid file of the ICON data.
-    region : string
+    region : str
         Switzerland or Europe. Defaults to Swizerland.
 
     Returns
