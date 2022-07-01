@@ -29,7 +29,6 @@ Core functions
    utilities.ind_from_latlon
    utilities.show_data_vars
    interpolate
-   interpolate.create_remap_nl
    interpolate.remap_ICON_to_regulargrid
    interpolate.remap_ICON_to_ICON
 
