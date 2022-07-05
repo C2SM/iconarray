@@ -11,4 +11,4 @@ fieldextra.diagnostic
 dist/
 *.egg-info
 doc/_build
-*/generated/*
+*/generated/*.rst
