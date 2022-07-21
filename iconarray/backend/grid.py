@@ -4,7 +4,8 @@ import numpy as np
 import psyplot.project as psy
 import six
 import xarray as xr
-
+import codecs
+import cfgrib
 
 class WrongGridException(Exception):
     def __init__(
@@ -269,7 +270,7 @@ def add_edge_data(ds, grid):
     return ds
 
 
-def open_dataset(file):
+def old_open_dataset(file):
     try:
         return psy.open_dataset(file)
     except Exception:
@@ -290,6 +291,58 @@ def open_dataset(file):
                 raise ValueError(str(e))
         except Exception as e:
             raise Exception(str(e))
+
+
+def open_dataset(file):
+    datatype = _identify_datatype()
+    if datatype == 'nc':
+        return _open_NC(file)
+    elif datatype == 'grib': 
+        dss = _open_GRIB(file)
+        if len(dss) == 1:
+            return dss[0]
+        else:
+            return dss
+    else: 
+        raise TypeError('Data is neither GRIB nor NETCDF.')
+
+def _identify_datatype(file):
+    if _identifyNC(file):
+        return 'nc'
+    elif _identifyGRIB(file):
+        return 'grib'
+    else:
+        return False
+
+def _identifyNC(file):
+    """ Identifies if NETCDF data and return True or False """
+    msg = True
+    with codecs.open(file, 'r', encoding='utf-8', errors='ignore') as fdata:
+        fd = fdata.read(3)
+    if fd != "CDF":
+        msg = False
+    return msg
+
+def _identifyGRIB(file):
+    # TODO: FILL IN function which identifies if GRIB data and return true or false
+    return True
+    
+def _open_NC(file):
+    # TODO: FILL IN function which returns xarray dataset from NETCDF
+    ds = psy.open_dataset(
+            file,
+            # SOMETHING ELSE GOES HERE RE ENCODING
+            )
+    return ds
+
+def _open_GRIB(file):
+    # TODO: FILL IN function which returns ARRAY OF XARRAY DATASETS from GRIB
+    dss = cfgrib.open_datasets(
+                file,
+                backend_kwargs={"indexpath": "", "errors": "ignore"},
+                # SOMETHING ELSE GOES HERE RE ENCODING
+            )
+    return dss
 
 
 def check_vertex2cell(ds_grid: xr.Dataset):
