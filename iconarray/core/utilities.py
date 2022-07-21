@@ -12,8 +12,9 @@ from scipy import stats
 
 def awhere_drop(ds, cond):
     """
-        xarray.Dataset.where equivalent that preserves the dtype of the array. 
-        The xarray.Dataset.where in general will not preserve the value type of the array. In case of drop=False, elements of the array that do not satisfy the condition are set to np.NaN, which can only be stored on a float type. Therefore the return of xarray.Dataset.where will be of dtype float64. This function computes a where with drop=True, ensuring the dtype of the input xarray is preserved.
+    xarray.Dataset.where equivalent that preserves the dtype of the array.
+
+    The xarray.Dataset.where in general will not preserve the value type of the array. In case of drop=False, elements of the array that do not satisfy the condition are set to np.NaN, which can only be stored on a float type. Therefore the return of xarray.Dataset.where will be of dtype float64. This function computes a where with drop=True, ensuring the dtype of the input xarray is preserved.
 
     Parameters
     ----------
