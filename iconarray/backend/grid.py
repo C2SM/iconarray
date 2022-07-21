@@ -325,10 +325,8 @@ def _identifyNC(file):
 
 def _identifyGRIB(file):
     """ Identifies if GRIB data and return True or False """
-    # TODO: FILL IN function which identifies if GRIB data and return true or false
-    with codecs.open(file, encoding='utf-8') as file:
+    with codecs.open(file, 'r', encoding='utf-8', errors='ignore') as file:
         type = file.read(4)
-        print(file.read(100))
         if type.lower() == 'grib':
             return True
         else:
@@ -337,8 +335,7 @@ def _identifyGRIB(file):
 def _open_NC(file):
     # TODO: FILL IN function which returns xarray dataset from NETCDF
     ds = psy.open_dataset(
-            file,
-            # SOMETHING ELSE GOES HERE RE ENCODING
+            file
             )
     return ds
 
@@ -347,7 +344,7 @@ def _open_GRIB(file):
     dss = cfgrib.open_datasets(
                 file,
                 backend_kwargs={"indexpath": "", "errors": "ignore"},
-                # SOMETHING ELSE GOES HERE RE ENCODING
+                encode_cf=("time", "geography", "vertical")
             )
     return dss
 
