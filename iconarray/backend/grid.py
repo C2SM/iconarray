@@ -1,11 +1,12 @@
+import codecs
 import pathlib
 
+import cfgrib
 import numpy as np
 import psyplot.project as psy
 import six
 import xarray as xr
-import codecs
-import cfgrib
+
 
 class WrongGridException(Exception):
     def __init__(
@@ -295,57 +296,58 @@ def old_open_dataset(file):
 
 def open_dataset(file):
     datatype = _identify_datatype()
-    if datatype == 'nc':
+    if datatype == "nc":
         return _open_NC(file)
-    elif datatype == 'grib': 
+    elif datatype == "grib":
         dss = _open_GRIB(file)
         if len(dss) == 1:
             return dss[0]
         else:
             return dss
-    else: 
-        raise TypeError('Data is neither GRIB nor NETCDF.')
+    else:
+        raise TypeError("Data is neither GRIB nor NETCDF.")
+
 
 def _identify_datatype(file):
     if _identifyNC(file):
-        return 'nc'
+        return "nc"
     elif _identifyGRIB(file):
-        return 'grib'
+        return "grib"
     else:
         return False
 
+
 def _identifyNC(file):
-    """ Identifies if NETCDF data and return True or False """
+    # Identifies if NETCDF data and return True or False.
     msg = True
-    with codecs.open(file, 'r', encoding='utf-8', errors='ignore') as fdata:
+    with codecs.open(file, "r", encoding="utf-8", errors="ignore") as fdata:
         fd = fdata.read(3)
     if fd != "CDF":
         msg = False
     return msg
 
+
 def _identifyGRIB(file):
-    """ Identifies if GRIB data and return True or False """
-    with codecs.open(file, 'r', encoding='utf-8', errors='ignore') as file:
-        type = file.read(4)
-        if type.lower() == 'grib':
+    # Identifies if GRIB data and return True or False.
+    with codecs.open(file, "r", encoding="utf-8", errors="ignore") as file:
+        file_type = file.read(4)
+        if file_type.lower() == "grib":
             return True
         else:
             return False
-    
+
+
 def _open_NC(file):
-    # TODO: FILL IN function which returns xarray dataset from NETCDF
-    ds = psy.open_dataset(
-            file
-            )
-    return ds
+    return psy.open_dataset(file)
+
 
 def _open_GRIB(file):
-    # TODO: FILL IN function which returns ARRAY OF XARRAY DATASETS from GRIB
+    #  Returns an array of xarray.Datasets.
     dss = cfgrib.open_datasets(
-                file,
-                backend_kwargs={"indexpath": "", "errors": "ignore"},
-                encode_cf=("time", "geography", "vertical")
-            )
+        file,
+        backend_kwargs={"indexpath": "", "errors": "ignore"},
+        encode_cf=("time", "geography", "vertical"),
+    )
     return dss
 
 
