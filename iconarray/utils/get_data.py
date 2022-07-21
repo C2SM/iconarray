@@ -1,3 +1,9 @@
+"""
+This script/module contains the function get_example_data which downloads example ICON data from FTP server (NETCDF, GRIB and Grid files).
+
+If using as a script, you can simply run: `python get_data.py`.
+"""
+
 import ftplib
 import os
 import urllib.request
@@ -6,6 +12,17 @@ from urllib.parse import urlparse
 
 
 def get_example_data():
+    """
+    Download example ICON data from FTP server (NETCDF, GRIB and Grid files) to current directory.
+
+    If using icon-vis repository, the data is downloaded to a data folder under icon-vis root directory.
+
+    Raises
+    ----------
+    Exception
+        If data download from FTP server fails.
+
+    """
     cwd = Path(os.getcwd()).resolve()
 
     # If in icon-vis directory, get icon-vis root path,

@@ -1,13 +1,28 @@
+"""Formatoption that adds text containing mean and maximum wind within plotted data."""
 import psyplot.project as psy
 from psyplot.plotter import Formatoption
 
 
 class MeanMaxWind(Formatoption):
+    """
+    Add text containing mean and maximum wind within plotted data.
+
+    Add text containing mean and maximum wind within plotted data to in mapvector, and mapcombined plots created by psyplot.
+    Warning: this has not been tested for validity.
+    """
 
     #: the default value for the formatoption
     default = False
 
     def update(self, value):
+        """
+        Add or remove text with the mean and max wind speeds of the plotted data to the plot.
+
+        Parameters
+        ----------
+        value: bool
+            True to add wind speed information, False to remove.
+        """
         # method to update the plot
         if value is True:
             abs_mean = ((self.data[0] ** 2 + self.data[1] ** 2) ** 0.5).mean().values

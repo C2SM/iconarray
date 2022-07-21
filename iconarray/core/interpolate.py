@@ -1,3 +1,5 @@
+"""The functions in interpolate.py are used to facilitate the interpolation of ICON vector data to a regular grid, or a coarser ICON grid, for the purpose of vectorplots, e.g., wind plots. For psyplot we recommend to plot wind data on the regular grid as you can then scale the density of arrows in a vector plot as desired."""
+
 import os
 import subprocess
 from pathlib import Path
@@ -61,7 +63,7 @@ iconremap_namelist = """
 """
 
 
-def create_remap_nl(
+def _create_remap_nl(
     gridtype,
     remap_namelist_path,
     data_file,
@@ -71,7 +73,37 @@ def create_remap_nl(
     in_grid_file,
     out_grid_file="",
 ):
+    """
+    Create REMAP namelist for Fieldextra remapping.
 
+    See fieldextra documentation for more information on the namelists.
+    https://github.com/COSMO-ORG/fieldextra
+
+    Parameters
+    ----------
+    gridtype : str
+        'icon' or 'regular'
+    remap_namelist_path : Path
+        Output path to save namelist file.
+    data_file : Path
+        Path to ICON data.
+    file_out : Path
+        Output path for interpolated ICON data.
+    num_dates : integer
+        Number of time steps in data.
+    out_regrid_options : str
+        Information on output grid. See fieldextra documentation.
+    in_grid_file : Path
+        Path to original grid of ICON data.
+    out_grid_file : Path
+        Path to new grid to interpolate data to.
+        In case of interpolating to regular grid, this defaults to "".
+
+    Raises
+    ----------
+    Exception
+        gridtype must be either 'icon' or 'regular', otherwise an exception is raised.
+    """
     if gridtype == "icon":
         varname_translation = ""
         gridtype = "another (coarser) ICON Grid."
@@ -98,7 +130,36 @@ def create_remap_nl(
     print("\nFieldextra Namelist saved to:" + os.path.abspath(remap_namelist_path))
 
 
-def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="Swizerland"):
+def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
+    """
+    REMAP ICON data to regular grid using Fieldextra.
+
+    This calls the _create_remap_nl() function to create a fieldextra
+    namelist with your datafile, and subsequently runs fieldextra with this namelist.
+    The path to fieldextra executable is taken from the environment variable: FIELDEXTRA_PATH.
+    The output file along with a LOG and the namelist are saved in a tmp folder.
+    The function returns the file location of the output file.
+
+    See fieldextra documentation for more information on fieldextra.
+    https://github.com/COSMO-ORG/fieldextra
+
+
+    Parameters
+    ----------
+    data_file : Path
+        Path to ICON data.
+    num_dates : integer
+        Number of time steps in data.
+    in_grid_file : Path
+        Path to original grid file of the ICON data.
+    region : str
+        Switzerland or Europe. Defaults to Swizerland.
+
+    Returns
+    ----------
+    file_out : Path
+        Path to resulting interpolated data.
+    """
     remap_namelist_fname = "NAMELIST_ICON_REG_REMAP"
     output_dir = Path(os.path.abspath(Path("./tmp/fieldextra")))
     remap_namelist_path = output_dir / remap_namelist_fname
@@ -122,7 +183,7 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="Swizer
         out_regrid_options = "geolatlon,5500000,45500000,11000000,48000000,55000,25000"
 
     # Create namelist
-    create_remap_nl(
+    _create_remap_nl(
         "regular",
         remap_namelist_path,
         data_file,
@@ -132,18 +193,47 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="Swizer
         in_grid_file,
     )
 
-    # LOG file
+    # Run fieldextra and save LOG file
     with open(output_dir / "LOG_ICON_REG_REMAP.txt", "w") as f:
-        log_fx(f, remap_namelist_path)
+        _log_fx(f, remap_namelist_path)
 
     with open(output_dir / "LOG_ICON_REG_REMAP.txt", "r") as f:
-        print_status(f, output_dir, file_out)
+        _print_status(f, output_dir, file_out)
 
     return file_out
 
 
 def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
+    """
+    Remap ICON data to another ICON grid using Fieldextra.
 
+    This calls the _create_remap_nl() function to create a fieldextra
+    namelist with your datafile, and subsequently runs fieldextra with this namelist.
+    The path to fieldextra executable is taken from the environment variable: FIELDEXTRA_PATH.
+    The output file along with a LOG and the namelist are saved in a tmp folder.
+    The function returns the file location of the output file.
+
+    See fieldextra documentation for more information on fieldextra.
+    https://github.com/COSMO-ORG/fieldextra
+
+
+    Parameters
+    ----------
+    data_file : Path
+        Path to ICON data.
+    num_dates : integer
+        Number of time steps in data.
+    in_grid_file : Path
+        Path to original grid file of the ICON data.
+    out_grid_file : Path
+        Path to new grid to interpolate data to.
+        In case of interpolating to regular grid, this defaults to "".
+
+    Returns
+    ----------
+    file_out : Path
+        Path to resulting interpolated data.
+    """
     remap_namelist_fname = "NAMELIST_ICON_ICON_REMAP"
     output_dir = Path("./tmp/fieldextra")
     remap_namelist_path = output_dir / remap_namelist_fname
@@ -159,7 +249,7 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Create namelist
-    create_remap_nl(
+    _create_remap_nl(
         "icon",
         remap_namelist_path,
         data_file,
@@ -170,16 +260,17 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
         out_grid_file,
     )
 
+    # Run fieldextra and save LOG file
     with open(output_dir / "LOG_ICON_ICON_REMAP.txt", "w") as f:
-        log_fx(f, remap_namelist_path)
+        _log_fx(f, remap_namelist_path)
 
     with open(output_dir / "LOG_ICON_ICON_REMAP.txt", "r") as f:
-        print_status(f, output_dir, file_out)
+        _print_status(f, output_dir, file_out)
 
     return file_out
 
 
-def log_fx(f, remap_namelist_path):
+def _log_fx(f, remap_namelist_path):
     try:
         fieldextra_exe = os.environ["FIELDEXTRA_PATH"]
         fxcommand = f"ulimit -s unlimited;  export OMP_STACKSIZE=500M; {fieldextra_exe} {remap_namelist_path};"
@@ -200,7 +291,7 @@ def log_fx(f, remap_namelist_path):
         )
 
 
-def print_status(f, output_dir, file_out):
+def _print_status(f, output_dir, file_out):
     for line in reversed(f.readlines()):
         line = line.rstrip()
         if len(line) > 1:

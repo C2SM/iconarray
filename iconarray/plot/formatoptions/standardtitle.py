@@ -1,17 +1,26 @@
+"""Formatoption that adds a title to mapplot, mapvector, and mapcombined plots created by psyplot."""
+
 import psyplot.project as psy
 from psy_simple.base import TextBase
 from psyplot.plotter import Formatoption
 
 
 class StandardTitle(TextBase, Formatoption):
+    """
+    Add title to mapplot, mapvector, and mapcombined plots created by psyplot.
+
+    The title includes information on variable plotted, and time/date of data.
+    This was created as an example custom formatoption, and could be improved.
+    """
 
     default = True
 
     @property
-    def enhanced_attrs(self):
+    def enhanced_attrs(self):  # noqa
         return self.get_fig_data_attrs()
 
     def validate(self, s):
+        """Validate and convert the plot attributes to required format for update function."""  # noqa
         if s:
             try:
                 zname = self.get_enhanced_attrs(self.data)["zname"]
@@ -27,6 +36,14 @@ class StandardTitle(TextBase, Formatoption):
             return False
 
     def update(self, s):
+        r"""
+        Update plot to add (or remove) title.
+
+        Parameters
+        ----------
+        s: Dict
+            eg { "time": "%A %e %b %Y\n %d.%m.%Y %H:%M:%S", "details": 2m Temperature on Height level 10") }
+        """
         if type(s) is dict:
             self.standardtitle = [
                 self.ax.set_title(
@@ -38,14 +55,14 @@ class StandardTitle(TextBase, Formatoption):
                     loc="left",
                 ),
             ]
-            self.clear_other_texts()
+            self._clear_other_texts()
         else:
             self.standardtitle = [
                 self.ax.set_title("", loc="right"),
                 self.ax.set_title("", loc="left"),
             ]
 
-    def clear_other_texts(self, remove=False):
+    def _clear_other_texts(self, remove=False):
         fig = self.ax.get_figure()
         # don't do anything if our figtitle is the only Text instance
         if len(fig.texts) == 1:
