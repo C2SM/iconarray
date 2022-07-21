@@ -324,8 +324,15 @@ def _identifyNC(file):
     return msg
 
 def _identifyGRIB(file):
+    """ Identifies if GRIB data and return True or False """
     # TODO: FILL IN function which identifies if GRIB data and return true or false
-    return True
+    with codecs.open(file, encoding='utf-8') as file:
+        type = file.read(4)
+        print(file.read(100))
+        if type.lower() == 'grib':
+            return True
+        else:
+            return False
     
 def _open_NC(file):
     # TODO: FILL IN function which returns xarray dataset from NETCDF
