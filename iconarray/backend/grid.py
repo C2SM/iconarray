@@ -295,7 +295,7 @@ def old_open_dataset(file):
 
 
 def open_dataset(file):
-    datatype = _identify_datatype()
+    datatype = _identify_datatype(file)
     if datatype == "nc":
         return _open_NC(file)
     elif datatype == "grib":
