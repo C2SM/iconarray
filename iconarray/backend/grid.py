@@ -405,6 +405,11 @@ def open_dataset(file):
     ----------
     ds : xarray.Dataset
 
+    Raises
+    ----------
+    TypeError
+        If datatype is neither identified as GRIB or NETCDF.
+
     See Also
     ----------
     iconarray.backend
@@ -434,11 +439,11 @@ def _identify_datatype(file):
 
 def _identifyNC(file):
     # Identifies if NETCDF data and return True or False.
-    msg = True
+    msg = False
     with codecs.open(file, "r", encoding="utf-8", errors="ignore") as fdata:
         fd = fdata.read(3)
-    if fd != "CDF":
-        msg = False
+    if fd == "CDF":
+        msg = True
     return msg
 
 
