@@ -130,7 +130,7 @@ def combine_grid_information(file, grid_file):
         ds = ds.rename(
             {"time": ds.coords["time"].attrs["standard_name"], time_coord: "time"}
         ).expand_dims("time")
-    if hasattr(ds, 'time'):
+    if hasattr(ds, "time"):
         ds.time.attrs["axis"] = "T"
 
     if "cell" in ds.dims:
