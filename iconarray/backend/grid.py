@@ -1,3 +1,5 @@
+"""The grid module contains functions relating to the grid information for ICON data, such as merging ICON data with the grid data to provide one merged dataset."""
+
 import codecs
 import pathlib
 
@@ -9,6 +11,8 @@ import xarray as xr
 
 
 class WrongGridException(Exception):
+    """Indicate wrong grid provided to be merged with ICON data."""
+
     def __init__(
         self,
         grid,
@@ -24,7 +28,7 @@ class WrongGridException(Exception):
         )
 
 
-def add_cell_encoding(obj):
+def _add_cell_encoding(obj):
     try:
         if "clat" not in obj.encoding["coordinates"]:
             obj.encoding["coordinates"] += " clat"
@@ -34,7 +38,7 @@ def add_cell_encoding(obj):
         obj.encoding["coordinates"] = "clon clat"
 
 
-def add_edge_encoding(obj):
+def _add_edge_encoding(obj):
     try:
         if "elat" not in obj.encoding["coordinates"]:
             obj.encoding["coordinates"] += " elat"
@@ -45,24 +49,28 @@ def add_edge_encoding(obj):
 
 
 def check_grid_information(file):
+    """
+    Check if grid information is available in file.
+
+    Parameters
+    ----------
+    file : str or xr.Dataset
+        ICON data path or ICON data as xarray Dataset
+
+    Returns
+    ----------
+    boolean
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
         data = open_dataset(file)
     else:
         data = file
     return "clon_bnds" in data.keys()
-
-
-# Make sure that clon_bnds exists afterwards
-def add_grid_information(nc_file, grid_file):
-    grid_ds = psy.open_dataset(grid_file)
-    if isinstance(nc_file, pathlib.PurePath) or isinstance(nc_file, str):
-        icon_ds = psy.open_dataset(nc_file).squeeze()
-    else:
-        icon_ds = nc_file.squeeze()
-    data = icon_ds.rename({"ncells": "cell"}).merge(grid_ds)
-    for _k, v in six.iteritems(data.data_vars):
-        add_cell_encoding(v)
-    return data
 
 
 def combine_grid_information(file, grid_file):
@@ -82,11 +90,11 @@ def combine_grid_information(file, grid_file):
         dataset
 
     Raises
-    ------
-    Exception
-        if grid or data file could not be opened to a dataset
+    ----------
+    TypeError
+        Grid or data file cannot be opened to xr.core.dataset.Dataset
     WrongGridException
-        if no cell or edge dimensions are found in the grid
+        Cell dimension and grid dimension are none
 
     See Also
     ----------
@@ -102,7 +110,7 @@ def combine_grid_information(file, grid_file):
 
     datasetType = xr.core.dataset.Dataset
     if type(ds) != datasetType or type(grid) != datasetType:
-        raise Exception(
+        raise TypeError(
             """Grid or data file could not be opened to xr.core.dataset.Dataset."""
         )
 
@@ -131,14 +139,37 @@ def combine_grid_information(file, grid_file):
 
     for _k, v in six.iteritems(ds.data_vars):
         if "cell" in ds.data_vars[v.name].dims:
-            add_cell_encoding(v)
+            _add_cell_encoding(v)
         if "edge" in ds.data_vars[v.name].dims:
-            add_edge_encoding(v)
+            _add_edge_encoding(v)
 
     return ds
 
 
 def get_cell_dim_name(ds, grid):
+    """
+    Get name of dimension in ICON data xarray dataset which identifies the cell dimension.
+
+    Compares the length of the cell dimension in the grid dataset and compares with the ICON ouptut dataset, looking for a match.
+    This assumes the dimension name for cells in the grid data is 'cell'.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+        xarray.Dataset of ICON data.
+    grid : xarray.Dataset
+        xarray.Dataset of grid data.
+
+    Returns
+    ----------
+    coord : str
+        Name of the cell dimension. Defaults to None if not found.
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     cell_dim = None
     dims = [key for key in ds.dims]
     for dim in dims:
@@ -151,6 +182,29 @@ def get_cell_dim_name(ds, grid):
 
 
 def get_edge_dim_name(ds, grid):
+    """
+    Get name of dimension in ICON data xarray dataset which identifies the edge dimension.
+
+    Compares the length of the edge dimension in the grid dataset and compares with the ICON ouptut dataset, looking for a match.
+    This assumes the dimension name for edge in the grid data is 'edge'.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+        xarray.Dataset of ICON data.
+    grid : xarray.Dataset
+        xarray.Dataset of grid data.
+
+    Returns
+    ----------
+    coord : str
+        Name of the edge dimension. Defaults to None if not found.
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     edge_dim = None
     dims = [key for key in ds.dims]
     for dim in dims:
@@ -163,6 +217,24 @@ def get_edge_dim_name(ds, grid):
 
 
 def get_time_coord_name(ds):
+    """
+    Get name of time coordinate in xarray dataset which has attribute standard_name = 'time' and datatype of datetime.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+        xarray.Dataset of ICON data.
+
+    Returns
+    ----------
+    coord : str
+        Time coordinate. Defaults to 'time'.
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     try:
         if ds.coords["time"].attrs["standard_name"] != "time":
             coords = [key for key in ds.coords]
@@ -178,6 +250,27 @@ def get_time_coord_name(ds):
 
 
 def add_cell_data(ds, grid):
+    """
+    Add clon, clat, clon_bnds, and clat_bnds coordinates from the grid file to the dataset.
+
+    These coordinates are required when plotting cell variables.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+        xarray.Dataset of ICON data.
+    grid : xarray.Dataset
+        xarray.Dataset of grid data.
+
+    Returns
+    ----------
+    merged_ds : xarray.Dataset
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     ds = (
         ds.assign_coords(clon=("cell", np.float32(grid.coords["clon"].values)))
         .assign_coords(clat=("cell", np.float32(grid.coords["clat"].values)))
@@ -207,6 +300,33 @@ def add_cell_data(ds, grid):
 
 
 def add_edge_data(ds, grid):
+    """
+    Add elon, elat, elon_bnds, and elat_bnds and other edge related coordinates from the grid file to the dataset.
+
+    These elon, elat, elon_bnds, and elat_bnds coordinates are required when plotting edge variables. The following coordinates are also added which assist the plotting of edge vector variables:
+    - zonal_normal_primal_edge: zonal component of the normal vector at the triangle edge midpoints
+    - meridional_normal_primal_edge: meridional component of the normal vector at the triangle edge midpoints
+    - edge_system_orientation
+    - normal_edge
+    - zn: normalized zonal_normal_primal_edge
+    - mn: normalized meridional_normal_primal_edge
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+        xarray.Dataset of ICON data.
+    grid : xarray.Dataset
+        xarray.Dataset of grid data.
+
+    Returns
+    ----------
+    merged_ds : xarray.Dataset
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     ds = (
         ds.assign_coords(elon=("edge", np.float32(grid.coords["elon"].values)))
         .assign_coords(elat=("edge", np.float32(grid.coords["elat"].values)))
@@ -272,6 +392,23 @@ def add_edge_data(ds, grid):
 
 
 def open_dataset(file):
+    """
+    Open either NETCDF or GRIB file, returning xarray.Dataset.
+
+    Parameters
+    ----------
+    file : Path
+        Path to ICON data file, either NETCDF of GRIB format.
+
+    Returns
+    ----------
+    ds : xarray.Dataset
+
+    See Also
+    ----------
+    iconarray.backend
+
+    """
     datatype = _identify_datatype(file)
     if datatype == "nc":
         return _open_NC(file)

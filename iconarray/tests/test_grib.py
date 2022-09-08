@@ -1,3 +1,9 @@
+"""
+This module contains tests for the function combine_grid_information on grib data.
+
+Contains tests: test_grid_edge, test_grid_cell
+"""
+
 import cfgrib
 
 import iconarray
@@ -7,7 +13,7 @@ f_alldata = "data/example_data/grib/lfff00010000_edgeplots"  # VN, VT AND cell c
 f_grid = "data/example_data/grids/icon_grid_0001_R19B08_mch.nc"  # GRID file
 
 
-def open_file(data):
+def _open_file(data):
     dss = cfgrib.open_datasets(
         data,
         engine="cfgrib",
@@ -25,8 +31,12 @@ def open_file(data):
 
 
 def test_grid_edge():
+    """
+    Test the combine_grid_information function with a GRIB file containing both edge and cell center variables.
 
-    _ds_cell, ds_edge = open_file(f_alldata)
+    Ensure that edge varialbes are extracted to ds_edge and grid information is correctly added.
+    """
+    _ds_cell, ds_edge = _open_file(f_alldata)
 
     ds_edgevars = iconarray.combine_grid_information(ds_edge, f_grid)
 
@@ -53,8 +63,12 @@ def test_grid_edge():
 
 
 def test_grid_cell():
+    """
+    Test the combine_grid_information function with a GRIB file containing both edge and cell center variables.
 
-    ds_cell, _ds_edge = open_file(f_alldata)
+    Ensure that cell varialbes are extracted to ds_cell and grid information is correctly added.
+    """
+    ds_cell, _ds_edge = _open_file(f_alldata)
 
     ds_cellvars = iconarray.combine_grid_information(ds_cell, f_grid)
 

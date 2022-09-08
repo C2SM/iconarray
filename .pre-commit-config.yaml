@@ -39,7 +39,7 @@ repos:
   - id: mypy
     exclude: |-
       (?x)^(
-      docs/gt4py/conf.py |
+      doc/conf.py |
       )$
 
 - repo: https://gitlab.com/PyCQA/flake8

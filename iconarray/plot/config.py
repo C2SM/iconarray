@@ -1,4 +1,6 @@
-# Load modules
+"""This module config.py contains the public function read_config which parses configuration file for plotting scripts in icon-vis."""
+
+
 import configparser
 import sys
 from pathlib import Path
@@ -6,7 +8,7 @@ from pathlib import Path
 import numpy as np
 
 
-def get_several_input(config, sect, opt, f=False, i=False):
+def _get_several_input(config, sect, opt, f=False, i=False):
     var = config.get(sect, opt)
     var = var.replace(", ", ",")
     var = var.split(",")
@@ -18,6 +20,22 @@ def get_several_input(config, sect, opt, f=False, i=False):
 
 
 def read_config(config_path):
+    """
+    Parse configuration file for plotting scripts in icon-vis.
+
+    ICON-vis contains some plotting scripts that make use of configuration files: https://github.com/C2SM/icon-vis
+    This function reads the config files and returns an array of settings for plotting.
+
+    Parameters
+    ---------
+    config_path: Path
+        Path of configuration file.
+
+    Returns
+    ---------
+    [var, map_cfg, coord, plot]: array
+        Configuration information relating to the variable to be plotted, the map, coordinates and the plot.
+    """
     # Check if config_path is a file
     configPath = Path(config_path)
     if not configPath.is_file():
@@ -41,15 +59,15 @@ def read_config(config_path):
     else:
         var["zname"] = "height"
     if config.has_option("var", "varlim"):
-        var["varlim"] = get_several_input(config, "var", "varlim", f=True)
+        var["varlim"] = _get_several_input(config, "var", "varlim", f=True)
     if config.has_option("var", "grid_file"):
         var["grid_file"] = config.get("var", "grid_file")
     if config.has_option("var", "time"):
-        var["time"] = get_several_input(config, "var", "time", i=True)
+        var["time"] = _get_several_input(config, "var", "time", i=True)
     else:
         var["time"] = [0]
     if config.has_option("var", "height"):
-        var["height"] = get_several_input(config, "var", "height", i=True)
+        var["height"] = _get_several_input(config, "var", "height", i=True)
     else:
         var["height"] = [0]
     if config.has_option("var", "unc"):
@@ -112,19 +130,19 @@ def read_config(config_path):
     coord = {}
     if config.has_section("coord"):
         if config.has_option("coord", "name"):
-            coord["name"] = get_several_input(config, "coord", "name")
+            coord["name"] = _get_several_input(config, "coord", "name")
         if config.has_option("coord", "lon"):
-            coord["lon"] = get_several_input(config, "coord", "lon", f=True)
+            coord["lon"] = _get_several_input(config, "coord", "lon", f=True)
         if config.has_option("coord", "lat"):
-            coord["lat"] = get_several_input(config, "coord", "lat", f=True)
+            coord["lat"] = _get_several_input(config, "coord", "lat", f=True)
         if config.has_option("coord", "marker"):
-            coord["marker"] = get_several_input(config, "coord", "marker")
+            coord["marker"] = _get_several_input(config, "coord", "marker")
         else:
             coord["marker"] = ["*"]
         if len(coord["marker"]) < len(coord["lon"]):
             coord["marker"] = np.repeat(coord["marker"][0], len(coord["lon"]))
         if config.has_option("coord", "marker_size"):
-            coord["marker_size"] = get_several_input(
+            coord["marker_size"] = _get_several_input(
                 config, "coord", "marker_size", f=True
             )
         else:
@@ -132,13 +150,13 @@ def read_config(config_path):
         if len(coord["marker_size"]) < len(coord["lon"]):
             coord["marker_size"] = np.repeat(coord["marker_size"][0], len(coord["lon"]))
         if config.has_option("coord", "col"):
-            coord["col"] = get_several_input(config, "coord", "col")
+            coord["col"] = _get_several_input(config, "coord", "col")
         else:
             coord["col"] = ["r"]
         if len(coord["col"]) < len(coord["lon"]):
             coord["col"] = np.repeat(coord["col"][0], len(coord["lon"]))
         if config.has_option("coord", "name"):
-            coord["name"] = get_several_input(config, "coord", "name")
+            coord["name"] = _get_several_input(config, "coord", "name")
             if len(coord["name"]) < len(coord["lon"]):
                 coord["name"] = np.repeat(coord["name"][0], len(coord["lon"]))
 
@@ -149,9 +167,9 @@ def read_config(config_path):
     if config.has_option("plot", "ylabel"):
         plot["ylabel"] = config.get("plot", "ylabel")
     if config.has_option("plot", "xlim"):
-        plot["xlim"] = get_several_input(config, "plot", "xlim", f=True)
+        plot["xlim"] = _get_several_input(config, "plot", "xlim", f=True)
     if config.has_option("plot", "ylim"):
-        plot["ylim"] = get_several_input(config, "plot", "ylim", f=True)
+        plot["ylim"] = _get_several_input(config, "plot", "ylim", f=True)
     if config.has_option("plot", "title"):
         plot["title"] = config.get("plot", "title")
     if config.has_option("plot", "date_format"):
