@@ -271,29 +271,6 @@ def add_edge_data(ds, grid):
     return ds
 
 
-def old_open_dataset(file):
-    try:
-        return psy.open_dataset(file)
-    except Exception:
-        try:
-            return psy.open_dataset(
-                file,
-                engine="cfgrib",
-                backend_kwargs={"indexpath": "", "errors": "ignore"},
-            )
-        except ValueError as e:
-            if "conflicting sizes for dimension" in str(e):
-                raise ValueError(
-                    """It appears you have a heterogeneous GRIB file.
-                Recommendation: Open the file using cfgrib.open_datasets() (returns an array of xr.Datasets)
-                and pass in the relevent Dataset."""
-                )
-            else:
-                raise ValueError(str(e))
-        except Exception as e:
-            raise Exception(str(e))
-
-
 def open_dataset(file):
     datatype = _identify_datatype(file)
     if datatype == "nc":
