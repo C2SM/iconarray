@@ -442,7 +442,7 @@ def _identifyNC(file):
     msg = False
     with codecs.open(file, "r", encoding="utf-8", errors="ignore") as fdata:
         fd = fdata.read(3)
-    if fd == "CDF":
+    if fd in ["CDF", "HDF"]:
         msg = True
     return msg
 
