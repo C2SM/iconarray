@@ -8,6 +8,7 @@ import numpy as np
 import psyplot.project as psy
 import six
 import xarray as xr
+import os
 
 
 class WrongGridException(Exception):
@@ -101,6 +102,9 @@ def combine_grid_information(file, grid_file):
     iconarray.backend
 
     """
+    if not os.path.isfile(grid_file):
+        raise FileNotFoundError(f"Grid file {grid_file} not found.")
+
     if isinstance(grid_file, pathlib.PurePath) or isinstance(grid_file, str):
         grid = psy.open_dataset(grid_file)
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
@@ -394,7 +398,11 @@ def add_edge_data(ds, grid):
 
 def open_dataset(file):
     """
-    Open either NETCDF or GRIB file, returning xarray.Dataset.
+    Open either NETCDF or GRIB file.
+
+    Returning either an xarray.Dataset, or a list of xarray.Datasets if the
+    data in the GRIB file cannot be represented as a single hypercube (see
+    https://github.com/ecmwf/cfgrib for more info)
 
     Parameters
     ----------
@@ -403,7 +411,7 @@ def open_dataset(file):
 
     Returns
     ----------
-    ds : xarray.Dataset
+    ds : xarray.Dataset or List(xarray.Datasets)
 
     Raises
     ----------

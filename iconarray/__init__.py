@@ -10,8 +10,11 @@ from .core.utilities import (
     add_coordinates,
     get_stats,
     ind_from_latlon,
-    show_data_vars,
     wilks,
+)
+from .core.data_explorer import (
+    data_inspect,
+    show_data_vars,
 )
 from .plot.config import read_config
 from .utils.get_data import get_example_data
