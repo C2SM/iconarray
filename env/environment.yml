@@ -5,8 +5,8 @@ dependencies:
 - python=3.9.7
 - git=2.34.1
 - pip
-- cfgrib
-- eccodes=2.19.0
+- cfgrib>=0.9.9.1
+- eccodes
 - numpy
 - xarray
 - pytest
