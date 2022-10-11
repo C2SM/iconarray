@@ -8,7 +8,8 @@ import numpy as np
 import psyplot.project as psy
 import six
 import xarray as xr
-import os
+import sys
+import logging
 
 
 class WrongGridException(Exception):
@@ -102,15 +103,20 @@ def combine_grid_information(file, grid_file):
     iconarray.backend
 
     """
-    if not os.path.isfile(grid_file):
-        raise FileNotFoundError(f"Grid file {grid_file} not found.")
-
     if isinstance(grid_file, pathlib.PurePath) or isinstance(grid_file, str):
-        grid = psy.open_dataset(grid_file)
+        try:
+            grid = psy.open_dataset(grid_file)
+        except ValueError:
+            logging.error(f"The grid file {grid_file} was not found.")
+            sys.exit()
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
         ds = open_dataset(file).squeeze()
     else:
-        ds = file.squeeze()
+        try:
+            ds = file.squeeze()
+        except AttributeError:
+            logging.error("Provide data containing one hypercube only.")
+            sys.exit()
 
     datasetType = xr.core.dataset.Dataset
     if type(ds) != datasetType or type(grid) != datasetType:
@@ -396,6 +402,72 @@ def add_edge_data(ds, grid):
     return ds
 
 
+def select_data(file, vars, grid_file=None):
+    """
+    Select variables from data and store in dictionary for easy access to underlying data.
+
+    Provides a dictionary mapping the variable names to the xarray.Datasets
+    holding the variables. This is especially helpful if the input file contains
+    data that cannot be represented as a single hypercube (see
+    https://github.com/ecmwf/cfgrib for more info).
+
+    Parameters
+    ----------
+    file : file or ds
+        data file
+    vars : List(str)
+        list of variable names to select, empty list for all variables
+    grid_file : grid file or ds
+        grid file. If variables from different hypercubes are selected, the grid
+        might not fit all data and combine_grid_information() could fail
+
+    Returns
+    -------
+    ds_dict : dictionary
+        dictionary mapping variable names to xarray.Datasets
+
+    """
+    if not isinstance(vars, list):
+        vars = [vars]
+    if len(vars) == 0:
+        logging.info("Selecting all available variables can take a long time! "
+                     "Maybe choose a few by specifing them in the vars argument.")
+
+    # get data
+    if isinstance(file, pathlib.PurePath) or isinstance(file, str):
+        ds = open_dataset(file)
+    else:
+        ds = file
+    # make sure it is iterable
+    if not isinstance(ds, list):
+        ds = [ds]
+
+    ds_dict = {}
+
+    # loop through hypercubes to find the data
+    for s_ds in ds:
+        s_ds = s_ds.squeeze()
+        if len(vars) != 0:
+            if any(var in s_ds.data_vars for var in vars):
+                sel_vars = list(set(vars).intersection(s_ds.data_vars))
+                s_ds = s_ds[sel_vars]
+            else:
+                continue
+        # combine grid
+        if grid_file:
+            s_ds = combine_grid_information(s_ds, grid_file)
+        # add varibales to dictionary
+        for v in s_ds.keys():
+            # data set
+            ds_dict[v] = s_ds[[v]]
+
+    missing_vars = list(set(vars) - set(ds_dict.keys()))
+    if len(missing_vars) != 0:
+        logging.info(f"Did not find {missing_vars} in the data.")
+
+    return ds_dict
+
+
 def open_dataset(file):
     """
     Open either NETCDF or GRIB file.
@@ -473,7 +545,9 @@ def _open_GRIB(file):
     #  Returns an array of xarray.Datasets.
     dss = cfgrib.open_datasets(
         file,
-        backend_kwargs={"indexpath": "", "errors": "ignore"},
+        backend_kwargs={
+            "indexpath": "",
+            "errors": "ignore",},
         encode_cf=("time", "geography", "vertical"),
     )
     return dss

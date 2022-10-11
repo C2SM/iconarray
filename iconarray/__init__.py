@@ -1,6 +1,7 @@
 from .backend.grid import (
     check_grid_information,
     combine_grid_information,
+    select_data,
     grid_consistency_check,
     open_dataset,
 )

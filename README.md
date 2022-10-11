@@ -35,6 +35,8 @@ iconarray.get_example_data()
 
 **`open_dataset()`** Reads model data fron NetCDF or GRIB files into xarray.Datasets.
 
+**`select_data()`** Get model variable data from NetCDF or GRIB files into a dictionary form that allows easy access to the data using the variables shortName.
+
 **`combine_grid_information()`** This adds the required grid information from a provided grid file to your dataset if not present. It also adds coordinates encoding to each variable, which is needed to plot using psyplot.
 
 **`check_grid_information()`** Checks whether or not the grid data needs to be added. eg:

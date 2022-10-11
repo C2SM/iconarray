@@ -54,6 +54,7 @@ Backend functions
    grid.add_cell_data
    grid.add_edge_data
    grid.open_dataset
+   grid.select_data
 
 Plotting functions
 ------------------
