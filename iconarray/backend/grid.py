@@ -402,7 +402,7 @@ def add_edge_data(ds, grid):
     return ds
 
 
-def select_data(file, vars, grid_file=None):
+def select_data(file_or_obj, vars, grid_file=None):
     """
     Select variables from data and store in dictionary for easy access to underlying data.
 
@@ -413,7 +413,7 @@ def select_data(file, vars, grid_file=None):
 
     Parameters
     ----------
-    file : file, ds or List(ds)
+    file_or_obj : file, ds or List(ds)
         data file
     vars : List(str)
         list of variable names to select, empty list for all variables
@@ -434,10 +434,10 @@ def select_data(file, vars, grid_file=None):
                      "Maybe choose a few by specifing them in the vars argument.")
 
     # get data
-    if isinstance(file, pathlib.PurePath) or isinstance(file, str):
-        ds = open_dataset(file)
+    if isinstance(file_or_obj, pathlib.PurePath) or isinstance(file_or_obj, str):
+        ds = open_dataset(file_or_obj)
     else:
-        ds = file
+        ds = file_or_obj
     # make sure it is iterable
     if not isinstance(ds, list):
         ds = [ds]
