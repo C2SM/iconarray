@@ -455,7 +455,11 @@ def select_data(file, vars, grid_file=None):
                 continue
         # combine grid
         if grid_file:
-            s_ds = combine_grid_information(s_ds, grid_file)
+            try:
+                s_ds = combine_grid_information(s_ds, grid_file)
+            except WrongGridException as e:
+                logging.error("The grid file does not fit all selected data.")
+                sys.exit(e)
         # add varibales to dictionary
         for v in s_ds.keys():
             # data set
