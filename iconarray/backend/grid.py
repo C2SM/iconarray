@@ -413,7 +413,7 @@ def select_data(file, vars, grid_file=None):
 
     Parameters
     ----------
-    file : file or ds
+    file : file, ds or List(ds)
         data file
     vars : List(str)
         list of variable names to select, empty list for all variables
