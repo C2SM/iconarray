@@ -402,7 +402,7 @@ def add_edge_data(ds, grid):
     return ds
 
 
-def select_data(file_or_obj, vars, grid_file=None):
+def select_data(file_or_obj, variables, grid_file=None):
     """
     Select variables from data and store in dictionary for easy access to underlying data.
 
@@ -415,7 +415,7 @@ def select_data(file_or_obj, vars, grid_file=None):
     ----------
     file_or_obj : file, ds or List(ds)
         data file
-    vars : List(str)
+    variables : List(str)
         list of variable names to select, empty list for all variables
     grid_file : grid file or ds
         grid file. If variables from different hypercubes are selected, the grid
@@ -427,11 +427,11 @@ def select_data(file_or_obj, vars, grid_file=None):
         dictionary mapping variable names to xarray.Datasets
 
     """
-    if not isinstance(vars, list):
-        vars = [vars]
-    if len(vars) == 0:
+    if not isinstance(variables, list):
+        variables = [variables]
+    if len(variables) == 0:
         logging.info("Selecting all available variables can take a long time! "
-                     "Maybe choose a few by specifing them in the vars argument.")
+                     "Maybe choose a few by specifing them in the variables argument.")
 
     # get data
     if isinstance(file_or_obj, pathlib.PurePath) or isinstance(file_or_obj, str):
@@ -447,9 +447,9 @@ def select_data(file_or_obj, vars, grid_file=None):
     # loop through hypercubes to find the data
     for s_ds in ds:
         s_ds = s_ds.squeeze()
-        if len(vars) != 0:
-            if any(var in s_ds.data_vars for var in vars):
-                sel_vars = list(set(vars).intersection(s_ds.data_vars))
+        if len(variables) != 0:
+            if any(var in s_ds.data_vars for var in variables):
+                sel_vars = list(set(variables).intersection(s_ds.data_vars))
                 s_ds = s_ds[sel_vars]
             else:
                 continue
@@ -465,7 +465,7 @@ def select_data(file_or_obj, vars, grid_file=None):
             # data set
             ds_dict[v] = s_ds[[v]]
 
-    missing_vars = list(set(vars) - set(ds_dict.keys()))
+    missing_vars = list(set(variables) - set(ds_dict.keys()))
     if len(missing_vars) != 0:
         logging.info(f"Did not find {missing_vars} in the data.")
 

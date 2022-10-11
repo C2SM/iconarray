@@ -8,6 +8,7 @@ import logging
 import six
 import xarray
 import pandas as pd
+import sys
 
 
 # show_data_vars can be used in python scripts to find out which variable name psyplot will need to plot that variable.
@@ -87,11 +88,16 @@ def data_inspect(ds):
                 _print_nc_info(single_ds)
             except KeyError as e:
                 logging.error("Unknown data structure.")
-                raise SystemExit(e)
+                sys.exit(e)
 
 
 def _print_grib_info(ds):
-    """Print hypercube and variable infos for data from a GRIB file."""
+    """Print hypercube and variable infos for data from a GRIB file.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+    """
     for i, (vname, vdata) in enumerate(ds.data_vars.items()):
 
         # variable independent info of the hypercube
@@ -124,11 +130,16 @@ def _print_grib_info(ds):
             print(f"   {vname[:10]:<10} {cf_n[:40]:<40} {cf_vn[:10]:<10} {name[:50]:<50} {units}")
         except KeyError as e:
             logging.error("Missing variable info in the data.")
-            raise KeyError(e)
+            sys.exit(e)
 
 
 def _print_nc_info(ds):
-    """Print hypercube and variable infos for data from a netCDF file."""
+    """Print hypercube and variable infos for data from a netCDF file.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+    """
     for i, (vname, vdata) in enumerate(ds.data_vars.items()):
 
         # variable independent info of the hypercube
@@ -158,4 +169,4 @@ def _print_nc_info(ds):
             print(f"   {vname[:10]:<10} {std_n[:40]:<40} {name[:50]:<50} {units}")
         except KeyError as e:
             logging.error("Missing variable info in the data.")
-            raise KeyError(e)
+            sys.exit(e)

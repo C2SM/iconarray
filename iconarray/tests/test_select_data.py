@@ -20,8 +20,8 @@ def test_file():
     file paths as input for select_data().
     """
     # grib unstructured grid
-    vars = ["T", "CLAT", "CLON", "BLUE"]
-    ds_dict = iconarray.select_data(file_native, vars)
+    variables = ["T", "CLAT", "CLON", "BLUE"]
+    ds_dict = iconarray.select_data(file_native, variables)
     assert sorted(list(ds_dict.keys())) == [
         "CLAT",
         "CLON",
@@ -30,8 +30,8 @@ def test_file():
     assert type(ds_dict["T"]).__name__ == "Dataset", "type name of ds_dict['T'] should be Dataset"
 
     # grib latlon grid
-    vars = ["T", "CAPE_ML", "CIN_ML", "BLUE"]
-    ds_dict = iconarray.select_data(file_latlon, vars)
+    variables = ["T", "CAPE_ML", "CIN_ML", "BLUE"]
+    ds_dict = iconarray.select_data(file_latlon, variables)
     assert sorted(list(ds_dict.keys())) == [
         "CAPE_ML",
         "CIN_ML",
@@ -40,8 +40,8 @@ def test_file():
     assert type(ds_dict["T"]).__name__ == "Dataset", "type name of ds_dict['T'] should be Dataset"
 
     # netcdf unstructured grid
-    vars = ["temp", "t_so", "BLUE"]
-    ds_dict = iconarray.select_data(file_nc, vars)
+    variables = ["temp", "t_so", "BLUE"]
+    ds_dict = iconarray.select_data(file_nc, variables)
     assert sorted(list(ds_dict.keys())) == [
         "t_so",
         "temp",
@@ -58,9 +58,9 @@ def test_ds():
     output.
     """
     # grib unstructured grid
-    vars = ["T", "CLAT", "CLON", "BLUE"]
+    variables = ["T", "CLAT", "CLON", "BLUE"]
     ds = iconarray.open_dataset(file_native)
-    ds_dict = iconarray.select_data(ds, vars)
+    ds_dict = iconarray.select_data(ds, variables)
     assert sorted(list(ds_dict.keys())) == [
         "CLAT",
         "CLON",
@@ -69,9 +69,9 @@ def test_ds():
     assert type(ds_dict["T"]).__name__ == "Dataset", "type name of ds_dict['T'] should be Dataset"
 
     # grib latlon grid
-    vars = ["T", "CAPE_ML", "CIN_ML", "BLUE"]
+    variables = ["T", "CAPE_ML", "CIN_ML", "BLUE"]
     ds = iconarray.open_dataset(file_latlon)
-    ds_dict = iconarray.select_data(ds, vars)
+    ds_dict = iconarray.select_data(ds, variables)
     assert sorted(list(ds_dict.keys())) == [
         "CAPE_ML",
         "CIN_ML",
@@ -80,9 +80,9 @@ def test_ds():
     assert type(ds_dict["T"]).__name__ == "Dataset", "type name of ds_dict['T'] should be Dataset"
 
     # netcdf unstructured grid
-    vars = ["temp", "t_so", "BLUE"]
+    variables = ["temp", "t_so", "BLUE"]
     ds = iconarray.open_dataset(file_nc)
-    ds_dict = iconarray.select_data(ds, vars)
+    ds_dict = iconarray.select_data(ds, variables)
     assert sorted(list(ds_dict.keys())) == [
         "t_so",
         "temp",
@@ -95,8 +95,8 @@ def test_getall():
     Test the the select_data() function to select all variables in the file.
     """
     # grib unstructured grid
-    vars = []
-    ds_dict = iconarray.select_data(file_native, vars)
+    variables = []
+    ds_dict = iconarray.select_data(file_native, variables)
     assert sorted(list(ds_dict.keys())) == [
         "CLAT",
         "CLON",
@@ -117,8 +117,8 @@ def test_with_grid():
     The test also tests if the specify variable can be a string.
     """
     # grib unstructured grid
-    vars = "T"
-    ds_dict = iconarray.select_data(file_native, vars, grid_file=file_grid)
+    variables = "T"
+    ds_dict = iconarray.select_data(file_native, variables, grid_file=file_grid)
     assert (
         sum(
             [
