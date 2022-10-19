@@ -463,7 +463,7 @@ def select_data(file_or_obj, variables, grid_file=None):
         # add varibales to dictionary
         for v in s_ds.keys():
             # data set
-            ds_dict[v] = s_ds[[v]]
+            ds_dict[v] = s_ds[v]
 
     missing_vars = list(set(variables) - set(ds_dict.keys()))
     if len(missing_vars) != 0:
