@@ -1,7 +1,7 @@
 """
 This module contains tests for the function select_data().
 
-Contains tests: test_file, test_ds, , test_getall, test_with_grid
+Contains tests: test_file, test_ds, test_getall, test_with_grid
 """
 
 import iconarray
@@ -14,7 +14,7 @@ file_grid = "./data/example_data/grids/domain1_DOM01_r19b07.nc"
 
 def test_file():
     """
-    Test the the select_data() function with existing and non-existing variables.
+    Test the select_data() function with existing and non-existing variables.
 
     The variables are selected from different hypercubes. Tests are performed using
     file paths as input for select_data().
@@ -51,7 +51,7 @@ def test_file():
 
 def test_ds():
     """
-    Test the the select_data() function with existing and non-existing variables.
+    Test the select_data() function with existing and non-existing variables.
 
     The variables are selected from different hypercubes. Tests are performed using
     the open_dataset() to first read the data and calling select_data() on the
@@ -92,7 +92,7 @@ def test_ds():
 
 def test_getall():
     """
-    Test the the select_data() function to select all variables in the file.
+    Test the select_data() function to select all variables in the file.
     """
     # grib unstructured grid
     variables = []
@@ -112,7 +112,7 @@ def test_getall():
 
 def test_with_grid():
     """
-    Test the the select_data() function with specification of a grid file.
+    Test the select_data() function with specification of a grid file.
 
     The test also tests if the specify variable can be a string.
     """

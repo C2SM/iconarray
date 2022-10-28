@@ -1,7 +1,7 @@
 """
 The data_explorer.py module contains various functions useful for inspecting (ICON) data.
 
-Contains public functions: show_data_vars, data_inspect
+Contains public functions: show_data_vars, inspect_data
 """
 
 import logging
@@ -61,7 +61,7 @@ def show_data_vars(ds):
             )
 
 
-def data_inspect(ds):
+def inspect_data(ds):
     """
     Print an inventory of all hypercubes obtained from iconarray.open_datasets().
 

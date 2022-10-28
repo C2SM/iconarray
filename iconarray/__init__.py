@@ -14,7 +14,7 @@ from .core.utilities import (
     wilks,
 )
 from .core.data_explorer import (
-    data_inspect,
+    inspect_data,
     show_data_vars,
 )
 from .plot.config import read_config

@@ -31,7 +31,7 @@ Core functions
    latlonhash.Icon2latlon
    utilities
    utilities.ind_from_latlon
-   data_explorer.data_inspect
+   data_explorer.inspect_data
    data_explorer.show_data_vars
    interpolate
    interpolate.remap_ICON_to_regulargrid
