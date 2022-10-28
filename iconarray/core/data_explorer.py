@@ -105,7 +105,12 @@ def _print_grib_info(ds):
             try:
                 lt = vdata.attrs["GRIB_typeOfLevel"]
                 vt = vdata.coords["valid_time"].values
-                vt_str = pd.to_datetime(str(vt)).strftime("%Y-%m-%d %H:%M:%S")
+                try:
+                    vt_str = [
+                        pd.to_datetime(str(vt_s)).strftime("%Y-%m-%d %H:%M:%S") for vt_s in vt
+                    ]
+                except TypeError:
+                    vt_str = pd.to_datetime(str(vt)).strftime("%Y-%m-%d %H:%M:%S")
                 dt = vdata.attrs["GRIB_dataType"]
                 gt = vdata.attrs["GRIB_gridType"]
                 # print hypercube infos
