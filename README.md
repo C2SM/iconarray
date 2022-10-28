@@ -65,7 +65,7 @@ else:
 **`show_data_vars()`** Returns a table with variables in your data. The first column shows the variable name psyplot will need to plot that variable.
 This is useful if you plot GRIB data, because if `GRIB_cfVarName` is defined, cfgrib will set this as the variable name, as opposed to `GRIB_shortName` which you might expect.
 
-**`data_inspect()`** Returns an inventory of usefull information about the fields in tht dataset.
+**`data_inspect()`** Returns an inventory of useful information about the fields in tht dataset.
 
 #### interpolate.py - [modules/interpolate.py](modules/interpolate.py)
 
