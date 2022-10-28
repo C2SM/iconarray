@@ -150,8 +150,13 @@ def _print_nc_info(ds):
         # variable independent info of the hypercube
         if i == 0:
             try:
-                vt = vdata.coords["time"].values[0]
-                vt_str = pd.to_datetime(str(vt)).strftime("%Y-%m-%d %H:%M:%S")
+                vt = vdata.coords["time"].values
+                try:
+                    vt_str = [
+                        pd.to_datetime(str(vt_s)).strftime("%Y-%m-%d %H:%M:%S") for vt_s in vt
+                    ]
+                except TypeError:
+                    vt_str = pd.to_datetime(str(vt)).strftime("%Y-%m-%d %H:%M:%S")
                 gt = vdata.attrs["CDI_grid_type"]
                 # print hypercube infos
                 print(f"gridType         : {gt}")
