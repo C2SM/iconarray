@@ -25,9 +25,11 @@ def test_file():
     assert sorted(list(ds_dict.keys())) == [
         "CLAT",
         "CLON",
-        "T"
+        "T",
     ], "ds_dict should have the variables ['CLAT', 'CLON', 'T']"
-    assert type(ds_dict["T"]).__name__ == "Dataset", "type name of ds_dict['T'] should be Dataset"
+    assert (
+        type(ds_dict["T"]).__name__ == "DataArray"
+    ), "type name of ds_dict['T'] should be DataArray"
 
     # grib latlon grid
     variables = ["T", "CAPE_ML", "CIN_ML", "BLUE"]
@@ -37,7 +39,9 @@ def test_file():
         "CIN_ML",
         "T",
     ], "ds_dict should have the variables ['CAPE_ML', 'CIN_ML', 'T']"
-    assert type(ds_dict["T"]).__name__ == "Dataset", "type name of ds_dict['T'] should be Dataset"
+    assert (
+        type(ds_dict["T"]).__name__ == "DataArray"
+    ), "type name of ds_dict['T'] should be DataArray"
 
     # netcdf unstructured grid
     variables = ["temp", "t_so", "BLUE"]
@@ -46,7 +50,9 @@ def test_file():
         "t_so",
         "temp",
     ], "ds_dict should have the variables ['t_so', 'temp']"
-    assert type(ds_dict["temp"]).__name__ == "Dataset", "type name of ds_dict['temp'] should be Dataset"
+    assert (
+        type(ds_dict["temp"]).__name__ == "DataArray"
+    ), "type name of ds_dict['temp'] should be DataArray"
 
 
 def test_ds():
@@ -64,9 +70,11 @@ def test_ds():
     assert sorted(list(ds_dict.keys())) == [
         "CLAT",
         "CLON",
-        "T"
+        "T",
     ], "ds_dict should have the variables ['CLAT', 'CLON', 'T']"
-    assert type(ds_dict["T"]).__name__ == "Dataset", "type name of ds_dict['T'] should be Dataset"
+    assert (
+        type(ds_dict["T"]).__name__ == "DataArray"
+    ), "type name of ds_dict['T'] should be DataArray"
 
     # grib latlon grid
     variables = ["T", "CAPE_ML", "CIN_ML", "BLUE"]
@@ -77,7 +85,9 @@ def test_ds():
         "CIN_ML",
         "T",
     ], "ds_dict should have the variables ['CAPE_ML', 'CIN_ML', 'T']"
-    assert type(ds_dict["T"]).__name__ == "Dataset", "type name of ds_dict['T'] should be Dataset"
+    assert (
+        type(ds_dict["T"]).__name__ == "DataArray"
+    ), "type name of ds_dict['T'] should be DataArray"
 
     # netcdf unstructured grid
     variables = ["temp", "t_so", "BLUE"]
@@ -87,13 +97,13 @@ def test_ds():
         "t_so",
         "temp",
     ], "ds_dict should have the variables ['t_so', 'temp']"
-    assert type(ds_dict["temp"]).__name__ == "Dataset", "type name of ds_dict['temp'] should be Dataset"
+    assert (
+        type(ds_dict["temp"]).__name__ == "DataArray"
+    ), "type name of ds_dict['temp'] should be DataArray"
 
 
 def test_getall():
-    """
-    Test the select_data() function to select all variables in the file.
-    """
+    """Test the select_data() function to select all variables in the file."""
     # grib unstructured grid
     variables = []
     ds_dict = iconarray.select_data(file_native, variables)
@@ -120,12 +130,5 @@ def test_with_grid():
     variables = "T"
     ds_dict = iconarray.select_data(file_native, variables, grid_file=file_grid)
     assert (
-        sum(
-            [
-                1
-                for coord in ["clon", "clat"]
-                if coord in ds_dict["T"].coords
-            ]
-        )
-        == 2
+        sum([1 for coord in ["clon", "clat"] if coord in ds_dict["T"].coords]) == 2
     ), "ds_dict should have coordinates 'clon', 'clat'"

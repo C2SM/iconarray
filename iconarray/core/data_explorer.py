@@ -5,10 +5,11 @@ Contains public functions: show_data_vars, inspect_data
 """
 
 import logging
+import sys
+
+import pandas as pd
 import six
 import xarray
-import pandas as pd
-import sys
 
 
 # show_data_vars can be used in python scripts to find out which variable name psyplot will need to plot that variable.
@@ -70,6 +71,7 @@ def inspect_data(ds):
     Parameters
     ----------
     ds : xarray.Dataset or List(xarray.Datasets)
+        xarray.Dataset of ICON data.
 
     """
     # make sure input is iterable
@@ -92,11 +94,14 @@ def inspect_data(ds):
 
 
 def _print_grib_info(ds):
-    """Print hypercube and variable infos for data from a GRIB file.
+    """
+    Print hypercube and variable infos for data from a GRIB file.
 
     Parameters
     ----------
     ds : xarray.Dataset
+        xarray.Dataset of ICON data.
+
     """
     for i, (vname, vdata) in enumerate(ds.data_vars.items()):
 
@@ -107,7 +112,8 @@ def _print_grib_info(ds):
                 vt = vdata.coords["valid_time"].values
                 try:
                     vt_str = [
-                        pd.to_datetime(str(vt_s)).strftime("%Y-%m-%d %H:%M:%S") for vt_s in vt
+                        pd.to_datetime(str(vt_s)).strftime("%Y-%m-%d %H:%M:%S")
+                        for vt_s in vt
                     ]
                 except TypeError:
                     vt_str = pd.to_datetime(str(vt)).strftime("%Y-%m-%d %H:%M:%S")
@@ -132,18 +138,23 @@ def _print_grib_info(ds):
             name = vdata.attrs["GRIB_name"]
             units = vdata.attrs["GRIB_units"]
             # print variables infos
-            print(f"   {vname[:10]:<10} {cf_n[:40]:<40} {cf_vn[:10]:<10} {name[:50]:<50} {units}")
+            print(
+                f"   {vname[:10]:<10} {cf_n[:40]:<40} {cf_vn[:10]:<10} {name[:50]:<50} {units}"
+            )
         except KeyError as e:
             logging.error("Missing variable info in the data.")
             sys.exit(e)
 
 
 def _print_nc_info(ds):
-    """Print hypercube and variable infos for data from a netCDF file.
+    """
+    Print hypercube and variable infos for data from a netCDF file.
 
     Parameters
     ----------
     ds : xarray.Dataset
+        xarray.Dataset of ICON data.
+
     """
     for i, (vname, vdata) in enumerate(ds.data_vars.items()):
 
@@ -153,7 +164,8 @@ def _print_nc_info(ds):
                 vt = vdata.coords["time"].values
                 try:
                     vt_str = [
-                        pd.to_datetime(str(vt_s)).strftime("%Y-%m-%d %H:%M:%S") for vt_s in vt
+                        pd.to_datetime(str(vt_s)).strftime("%Y-%m-%d %H:%M:%S")
+                        for vt_s in vt
                     ]
                 except TypeError:
                     vt_str = pd.to_datetime(str(vt)).strftime("%Y-%m-%d %H:%M:%S")

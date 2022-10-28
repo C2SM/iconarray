@@ -1,15 +1,15 @@
 """The grid module contains functions relating to the grid information for ICON data, such as merging ICON data with the grid data to provide one merged dataset."""
 
 import codecs
+import logging
 import pathlib
+import sys
 
 import cfgrib
 import numpy as np
 import psyplot.project as psy
 import six
 import xarray as xr
-import sys
-import logging
 
 
 class WrongGridException(Exception):
@@ -430,8 +430,10 @@ def select_data(file_or_obj, variables, grid_file=None):
     if not isinstance(variables, list):
         variables = [variables]
     if len(variables) == 0:
-        logging.info("Selecting all available variables can take a long time! "
-                     "Maybe choose a few by specifing them in the variables argument.")
+        logging.info(
+            "Selecting all available variables can take a long time! "
+            "Maybe choose a few by specifing them in the variables argument."
+        )
 
     # get data
     if isinstance(file_or_obj, pathlib.PurePath) or isinstance(file_or_obj, str):
@@ -551,7 +553,8 @@ def _open_GRIB(file):
         file,
         backend_kwargs={
             "indexpath": "",
-            "errors": "ignore",},
+            "errors": "ignore",
+        },
         encode_cf=("time", "geography", "vertical"),
     )
     return dss
