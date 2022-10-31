@@ -110,17 +110,15 @@ def combine_grid_information(file, grid_file):
             logging.error(f"The grid file {grid_file} was not found.")
             sys.exit()
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
-        try:
-            ds = open_dataset(file).squeeze()
-        except AttributeError:
-            logging.error("Provided data file contains more than one hypercube.")
-            sys.exit()
+        ds = open_dataset(file)
     else:
-        try:
-            ds = file.squeeze()
-        except AttributeError:
-            logging.error("Provided xarray.Dataset contains more than one hypercube.")
-            sys.exit()
+        ds = file
+
+    try:
+        ds = ds.squeeze()
+    except AttributeError:
+        logging.error("Model data contains more than one hypercube.")
+        sys.exit()
 
     datasetType = xr.core.dataset.Dataset
     if type(ds) != datasetType or type(grid) != datasetType:
