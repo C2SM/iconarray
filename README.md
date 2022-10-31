@@ -9,14 +9,31 @@
 
 The iconarray python package contains various modules to facilitate working with ICON data with xarray or other xarray based tools (such as psyplot - a plotting package). iconarray was developed together with [icon-vis](https://github.com/C2SM/icon-vis).
 
-# Table of contents
+### Table of contents
 1. [Introduction](#introduction)
-2. [Modules](#modules)
-3. [Formatoptions](#formatoptions)
-6. [Contacts](#contacts)
-7. [Acknowledgments](#acknowledgments)
+2. [Installation/Usage](#installation)
+3. [Modules](#modules)
+4. [Formatoptions](#formatoptions)
+5. [Contacts](#contacts)
 
-### Modules
+## Installation
+
+Iconarray and the packages it depends on are installable with conda. Some of these dependencies, eg eccodes and cartopy are not easily installable with pip, but easily installable with conda. If you are using iconarray in your own conda environment, you should add the packages in [env/environment.yml](env/environment.yml) to your environment.
+
+Create a conda environment (eg. called iconarray) and install requirements:
+```
+conda env create -n iconarray -f env/environment.yml
+```
+Activate environment:
+```
+conda activate iconarray
+```
+#### ICON GRIB Definitions:
+If you are using the conda setup and want to use GRIB data, you will need to set the `GRIB_DEFINITION_PATH`. This can be done on Tsa/Daint (CSCS) by sourcing the script setup-conda-env.sh. It only needs to be run a single time, as it will save the `GRIB_DEFINITION_PATH` environment variable to the conda environment. You will need to deactivate and reactivate the conda environment after doing this. You can check it has been correctly set by `conda env config vars list`. This script also sets the Fieldextra path, which is used for data interpolation.
+```
+source env/setup-conda-env.sh
+```
+## Modules
 
 There are a number of [modules](/iconarray) which are part of the `iconarray` package (installed by conda (see [env/environment.yml](env/environment.yml)), which you can import like a normal python package into your scripts. To work with the modules from iconarray, you can add this code block to the start of your script / notebook. You will see many examples of the modules being used within the scripts in this repo.
 
@@ -71,7 +88,7 @@ The functions in interpolate.py are used to facilitate the interpolation of ICON
 
 Descriptions of the formatoption modules and data modules can be found in [Example Data](#example-data) and [Formatoptions](#formatoptions) sections.
 
-### Formatoptions
+## Formatoptions
 
 Psyplot has a large number of ‘formatoptions’ which can be used to customize the look of visualizations. For example, the descriptions of the formatoptions associated with the MapPlotter class of psyplot can be found in the [psyplot documentation](https://psyplot.github.io/psy-maps/api/psy_maps.plotters.html#psy_maps.plotters.MapPlotter). The documentation for using formatoptions is also all on the psyplot documentation, or seen in the [examples](https://psyplot.github.io/examples/index.html).
 
