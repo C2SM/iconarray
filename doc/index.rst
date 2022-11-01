@@ -31,7 +31,8 @@ Core functions
    latlonhash.Icon2latlon
    utilities
    utilities.ind_from_latlon
-   utilities.show_data_vars
+   data_explorer.inspect_data
+   data_explorer.show_data_vars
    interpolate
    interpolate.remap_ICON_to_regulargrid
    interpolate.remap_ICON_to_ICON
@@ -53,6 +54,7 @@ Backend functions
    grid.add_cell_data
    grid.add_edge_data
    grid.open_dataset
+   grid.select_data
 
 Plotting functions
 ------------------

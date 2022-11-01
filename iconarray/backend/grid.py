@@ -1,7 +1,9 @@
 """The grid module contains functions relating to the grid information for ICON data, such as merging ICON data with the grid data to provide one merged dataset."""
 
 import codecs
+import logging
 import pathlib
+import sys
 
 import cfgrib
 import numpy as np
@@ -102,11 +104,21 @@ def combine_grid_information(file, grid_file):
 
     """
     if isinstance(grid_file, pathlib.PurePath) or isinstance(grid_file, str):
-        grid = psy.open_dataset(grid_file)
+        try:
+            grid = psy.open_dataset(grid_file)
+        except ValueError:
+            logging.error(f"The grid file {grid_file} was not found.")
+            sys.exit()
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
-        ds = open_dataset(file).squeeze()
+        ds = open_dataset(file)
     else:
-        ds = file.squeeze()
+        ds = file
+
+    try:
+        ds = ds.squeeze()
+    except AttributeError:
+        logging.error("Model data contains more than one hypercube.")
+        sys.exit()
 
     datasetType = xr.core.dataset.Dataset
     if type(ds) != datasetType or type(grid) != datasetType:
@@ -392,9 +404,85 @@ def add_edge_data(ds, grid):
     return ds
 
 
+def select_data(file_or_obj, variables, grid_file=None):
+    """
+    Select variables from data and store in dictionary for easy access to underlying data.
+
+    Provides a dictionary mapping the variable names to the xarray.Datasets
+    holding the variables. This is especially helpful if the input file contains
+    data that cannot be represented as a single hypercube (see
+    https://github.com/ecmwf/cfgrib for more info).
+
+    Parameters
+    ----------
+    file_or_obj : file, ds or List(ds)
+        data file
+    variables : List(str)
+        list of variable names to select, empty list for all variables
+    grid_file : grid file or ds
+        grid file. If variables from different hypercubes are selected, the grid
+        might not fit all data and combine_grid_information() could fail
+
+    Returns
+    -------
+    ds_dict : dictionary
+        dictionary mapping variable names to xarray.Datasets
+
+    """
+    if not isinstance(variables, list):
+        variables = [variables]
+    if len(variables) == 0:
+        logging.info(
+            "Selecting all available variables can take a long time! "
+            "Maybe choose a few by specifing them in the variables argument."
+        )
+
+    # get data
+    if isinstance(file_or_obj, pathlib.PurePath) or isinstance(file_or_obj, str):
+        ds = open_dataset(file_or_obj)
+    else:
+        ds = file_or_obj
+    # make sure it is iterable
+    if not isinstance(ds, list):
+        ds = [ds]
+
+    ds_dict = {}
+
+    # loop through hypercubes to find the data
+    for s_ds in ds:
+        s_ds = s_ds.squeeze()
+        if len(variables) != 0:
+            if any(var in s_ds.data_vars for var in variables):
+                sel_vars = list(set(variables).intersection(s_ds.data_vars))
+                s_ds = s_ds[sel_vars]
+            else:
+                continue
+        # combine grid
+        if grid_file:
+            try:
+                s_ds = combine_grid_information(s_ds, grid_file)
+            except WrongGridException as e:
+                logging.error("The grid file does not fit all selected data.")
+                sys.exit(e)
+        # add varibales to dictionary
+        for v in s_ds.keys():
+            # data set
+            ds_dict[v] = s_ds[v]
+
+    missing_vars = list(set(variables) - set(ds_dict.keys()))
+    if len(missing_vars) != 0:
+        logging.info(f"Did not find {missing_vars} in the data.")
+
+    return ds_dict
+
+
 def open_dataset(file):
     """
-    Open either NETCDF or GRIB file, returning xarray.Dataset.
+    Open either NETCDF or GRIB file.
+
+    Returning either an xarray.Dataset, or a list of xarray.Datasets if the
+    data in the GRIB file cannot be represented as a single hypercube (see
+    https://github.com/ecmwf/cfgrib for more info)
 
     Parameters
     ----------
@@ -403,7 +491,7 @@ def open_dataset(file):
 
     Returns
     ----------
-    ds : xarray.Dataset
+    ds : xarray.Dataset or List(xarray.Datasets)
 
     Raises
     ----------
@@ -465,7 +553,10 @@ def _open_GRIB(file):
     #  Returns an array of xarray.Datasets.
     dss = cfgrib.open_datasets(
         file,
-        backend_kwargs={"indexpath": "", "errors": "ignore"},
+        backend_kwargs={
+            "indexpath": "",
+            "errors": "ignore",
+        },
         encode_cf=("time", "geography", "vertical"),
     )
     return dss

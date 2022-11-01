@@ -33,6 +33,10 @@ iconarray.get_example_data()
 
 #### grid - [modules/grid.py](modules/grid.py)
 
+**`open_dataset()`** Reads model data fron NetCDF or GRIB files into xarray.Datasets.
+
+**`select_data()`** Get model variable data from NetCDF or GRIB files into a dictionary form that allows easy access to the data using the variables shortName.
+
 **`combine_grid_information()`** This adds the required grid information from a provided grid file to your dataset if not present. It also adds coordinates encoding to each variable, which is needed to plot using psyplot.
 
 **`check_grid_information()`** Checks whether or not the grid data needs to be added. eg:
@@ -56,8 +60,12 @@ else:
 
 **`wilks()`** Returns a value for which differences are significant when data point dependencies are accounted for (based on [Wilks 2016](https://journals.ametsoc.org/view/journals/bams/97/12/bams-d-15-00267.1.xml)).
 
+#### data_explorer.py
+
 **`show_data_vars()`** Returns a table with variables in your data. The first column shows the variable name psyplot will need to plot that variable.
 This is useful if you plot GRIB data, because if `GRIB_cfVarName` is defined, cfgrib will set this as the variable name, as opposed to `GRIB_shortName` which you might expect.
+
+**`inspect_data()`** Returns an inventory of useful information about the fields in tht dataset.
 
 #### interpolate.py - [modules/interpolate.py](modules/interpolate.py)
 
