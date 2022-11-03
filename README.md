@@ -7,18 +7,39 @@
 
 ## Introduction
 
-The iconarray python package contains various modules to facilitate working with ICON data with xarray or other xarray based tools (such as psyplot - a plotting package). iconarray was developed together with [icon-vis](https://github.com/C2SM/icon-vis).
+The iconarray python package contains various modules to facilitate working with ICON data with xarray or other xarray based tools (such as psyplot - a plotting package). The package was developed together with [icon-vis](https://github.com/C2SM/icon-vis).
 
-# Table of contents
+### Table of contents
 1. [Introduction](#introduction)
-2. [Modules](#modules)
-3. [Formatoptions](#formatoptions)
-6. [Contacts](#contacts)
-7. [Acknowledgments](#acknowledgments)
+2. [Installation and Setup](#installation-and-setup)
+3. [Modules](#modules)
+4. [Formatoptions](#formatoptions)
+5. [Contacts](#contacts)
 
-### Modules
+## Installation and Setup
 
-There are a number of [modules](/iconarray) which are part of the `iconarray` package (installed by conda (see [env/environment.yml](env/environment.yml)), which you can import like a normal python package into your scripts. To work with the modules from iconarray, you can add this code block to the start of your script / notebook. You will see many examples of the modules being used within the scripts in this repo.
+Iconarray and the packages it depends on are installable with conda. Some of these dependencies, e.g. eccodes and cartopy are not easily installable with pip, but easily installable with conda. If you are adding iconarray to your own/existing conda environment, you should add the packages to your environment as in [env/environment.yml](env/environment.yml).
+
+Create a conda environment (e.g. called iconarray) and install requirements:
+```
+conda env create -n iconarray -f env/environment.yml
+```
+Activate environment:
+```
+conda activate iconarray
+```
+#### ICON GRIB Definitions:
+If you are using the conda setup and want to use GRIB data, you probably need to set the `GRIB_DEFINITION_PATH`. The GRIB_DEFINITION_PATH environment variable can be configured in order to use local definition files (text files defining the decoding rules) instead of the default definition files provided with eccodes. This can be done on Tsa/Daint (CSCS) by sourcing the script setup-conda-env.sh. It only needs to be run a single time, as it will save the `GRIB_DEFINITION_PATH` environment variable to the conda environment. You will need to deactivate and reactivate the conda environment after doing this. You can check it has been correctly set by conda env config vars list.
+
+```
+source env/setup-conda-env.sh
+```
+
+The above script also sets the Fieldextra installation path (`FIELDEXTRA_PATH`). Fieldextra is a tool which can be used for interpolating data to another grid (lon/lat or another ICON grid). The use of this specific installation of Fieldextra depends on your CSCS access rights, so you may need to change `FIELDEXTRA_PATH` if you have problems interpolating.
+
+## Modules
+
+There are a number of [modules](/iconarray) which are part of the `iconarray` package (installed by conda using [env/environment.yml](env/environment.yml)), which you can import like a normal python package into your scripts. To work with the modules from iconarray, you can add this code block to the start of your script / notebook. You will see many examples of the modules being used within the scripts in this repo.
 
 ```python
 import iconarray # import iconarray modules
@@ -31,7 +52,7 @@ Then you can use the functions or modules as needed, eg:
 iconarray.get_example_data()
 ```
 
-#### grid - [modules/grid.py](modules/grid.py)
+#### Grid - [backend/grid.py](/iconarray/backend/grid.py)
 
 **`combine_grid_information()`** This adds the required grid information from a provided grid file to your dataset if not present. It also adds coordinates encoding to each variable, which is needed to plot using psyplot.
 
@@ -46,7 +67,7 @@ else:
     data = combine_grid_information(nc_file,grid_file)
 ```
 
-#### utils - [modules/utils.py](modules/utils.py)
+#### Utilities - [core/utilities.py](/iconarray/core/utilities.py)
 
 **`ind_from_latlon()`** Returns the nearest neighbouring index of lat-lon within given lats-lons.
 
@@ -59,7 +80,7 @@ else:
 **`show_data_vars()`** Returns a table with variables in your data. The first column shows the variable name psyplot will need to plot that variable.
 This is useful if you plot GRIB data, because if `GRIB_cfVarName` is defined, cfgrib will set this as the variable name, as opposed to `GRIB_shortName` which you might expect.
 
-#### interpolate.py - [modules/interpolate.py](modules/interpolate.py)
+#### Interpolate - [core/interpolate.py](/iconarray/core/interpolate.py)
 
 The functions in interpolate.py are used to facilitate the interpolation of ICON vector data to a regular grid, or a coarser ICON grid, for the purpose of vectorplots, eg wind plots. For psyplot we recommend to plot wind data on the regular grid as you can then scale the density of arrows in a vector plot as desired.
 
@@ -67,11 +88,7 @@ The functions in interpolate.py are used to facilitate the interpolation of ICON
 
 **`remap_ICON_to_regulargrid()`** This calls the `_create_remap_nl()` function to create a fieldextra namelist with your datafile, and subsequently runs fieldextra with this namelist. The output file along with a LOG and the namelist are saved in a `tmp` folder. The function returns the file location of the output file.
 
-<hr>
-
-Descriptions of the formatoption modules and data modules can be found in [Example Data](#example-data) and [Formatoptions](#formatoptions) sections.
-
-### Formatoptions
+## Formatoptions
 
 Psyplot has a large number of ‘formatoptions’ which can be used to customize the look of visualizations. For example, the descriptions of the formatoptions associated with the MapPlotter class of psyplot can be found in the [psyplot documentation](https://psyplot.github.io/psy-maps/api/psy_maps.plotters.html#psy_maps.plotters.MapPlotter). The documentation for using formatoptions is also all on the psyplot documentation, or seen in the [examples](https://psyplot.github.io/examples/index.html).
 
@@ -79,16 +96,17 @@ Psyplot is designed in a way that is very modular and extensible, allowing users
 
 This repository includes various custom formatoptions, that are not included in psyplot. For example:
 
-* [Borders](/modules/formatoptions/borders.py) - Adds internal land borders to mapplot, vectorplots, and combinedplots.
-* [Rivers](/modules/formatoptions/rivers.py) - Adds rivers to mapplot, vectorplots, and combinedplots.
-* [Lakes](/modules/formatoptions/lakes.py) - Adds lakes to mapplot, vectorplots, and combinedplots.
-* [Standard Title](/modules/formatoptions/standardtitle.py) - Adds a descriptive title based on your data to your mapplot.
-* [Mean Max Wind](/modules/formatoptions/meanmaxwind.py) - Work In Progress.
-* [Custom Text](/modules/formatoptions/customtext.py) - Work In Progress.
+* [Borders](/iconarray/plot/formatoptions/borders.py) - Adds internal land borders to mapplot, vectorplots, and combinedplots.
+* [Rivers](/iconarray/plot/formatoptions/rivers.py) - Adds rivers to mapplot, vectorplots, and combinedplots.
+* [Lakes](/iconarray/plot/formatoptions/lakes.py) - Adds lakes to mapplot, vectorplots, and combinedplots.
+* [Standard Title](/iconarray/plot/formatoptions/standardtitle.py) - Adds a descriptive title based on your data to your mapplot.
+* [Mean Max Wind](/iconarray/plot/formatoptions/meanmaxwind.py) - Work In Progress.
+* [Custom Text](/iconarray/plot/formatoptions/customtext.py) - Work In Progress.
 
 We encourage you to create your own formatoptions and contribute to this repository if they would be useful for others.
 
-Once registered to a plotter class, the formatoptions can be used as seen in many of the scripts, for example in [mapplot.py](/mapplot/mapplot.py)
+Once registered to a plotter class, the formatoptions can be used as seen in many of the icon-vis scripts, for example in [mapplot.py](https://github.com/C2SM/icon-vis/blob/master/mapplot/mapplot.py).
+
 # Contacts
 
 This repo has been developed by:

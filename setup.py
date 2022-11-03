@@ -32,5 +32,18 @@ setup(
         exclude=["tests"],
     ),  # Required
     python_requires=">=3.7, <4",
-    install_requires=[],  # Optional
+    install_requires=[
+        "cfgrib>=0.9.9.1",
+        "xarray>=0.15",
+        "psyplot",
+        "psy-reg",
+        "psy-simple",
+        "psy-maps",
+        "numpy",
+        "six",
+        "cartopy",
+    ],  # Optional
+    extras_require={
+        "tests": ["flake8", "pytest"],
+    },
 )
