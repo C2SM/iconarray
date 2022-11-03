@@ -29,8 +29,23 @@ Activate environment:
 
 ICON GRIB Definitions
 ----------------------------
-If you are using the conda setup and want to use GRIB data, you will need to set the ```GRIB_DEFINITION_PATH```. This can be done on Tsa/Daint (CSCS) by sourcing the script setup-conda-env.sh. It only needs to be run a single time, as it will save the ```GRIB_DEFINITION_PATH``` environment variable to the conda environment. You will need to deactivate and reactivate the conda environment after doing this. You can check it has been correctly set by `conda env config vars list`. This script also sets the Fieldextra path, which is used for data interpolation.
+If you are using the conda setup and want to use GRIB data, 
+you probably need to set the ```GRIB_DEFINITION_PATH```. 
+The GRIB_DEFINITION_PATH environment variable can
+be configured in order to use local definition files (text files defining the decoding rules) 
+instead of the default definition files provided with eccodes.
+This can be done on Tsa/Daint (CSCS) by sourcing the script setup-conda-env.sh. 
+It only needs to be run a single time, as it will save the 
+```GRIB_DEFINITION_PATH``` environment variable to the conda environment. 
+You will need to deactivate and reactivate the conda environment after doing this. 
+You can check it has been correctly set by `conda env config vars list`. 
 
 .. code::
 
    source env/setup-conda-env.sh
+
+The above script also sets the Fieldextra installation path (```FIELDEXTRA_PATH```).
+Fieldextra is a tool which can be used for interpolating data to another grid 
+(lon/lat or another ICON grid).
+The use of this specific installation of Fieldextra depends on your CSCS access rights, 
+so you may need to change ```FIELDEXTRA_PATH``` if you have problems interpolating.
