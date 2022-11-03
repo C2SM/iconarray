@@ -41,11 +41,11 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
-    'sphinx_copybutton',
+    "sphinx_copybutton",
     "sphinx_design",
 ]
 
-toc_object_entries_show_parents = 'domain'
+toc_object_entries_show_parents = "domain"
 
 numpydoc_show_class_members = False
 
