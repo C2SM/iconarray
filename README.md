@@ -11,7 +11,7 @@ The iconarray python package contains various modules to facilitate working with
 
 ### Table of contents
 1. [Introduction](#introduction)
-2. [Installation/Setup](#installation-and-setup)
+2. [Installation and Setup](#installation-and-setup)
 3. [Modules](#modules)
 4. [Formatoptions](#formatoptions)
 5. [Contacts](#contacts)
