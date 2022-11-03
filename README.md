@@ -52,7 +52,7 @@ Then you can use the functions or modules as needed, eg:
 iconarray.get_example_data()
 ```
 
-#### grid - [modules/grid.py](modules/grid.py)
+#### Grid - [backend/grid.py](/iconarray/backend/grid.py)
 
 **`combine_grid_information()`** This adds the required grid information from a provided grid file to your dataset if not present. It also adds coordinates encoding to each variable, which is needed to plot using psyplot.
 
@@ -67,7 +67,7 @@ else:
     data = combine_grid_information(nc_file,grid_file)
 ```
 
-#### utils - [modules/utils.py](modules/utils.py)
+#### Utilities - [core/utilities.py](/iconarray/core/utilities.py)
 
 **`ind_from_latlon()`** Returns the nearest neighbouring index of lat-lon within given lats-lons.
 
@@ -80,7 +80,7 @@ else:
 **`show_data_vars()`** Returns a table with variables in your data. The first column shows the variable name psyplot will need to plot that variable.
 This is useful if you plot GRIB data, because if `GRIB_cfVarName` is defined, cfgrib will set this as the variable name, as opposed to `GRIB_shortName` which you might expect.
 
-#### interpolate.py - [modules/interpolate.py](modules/interpolate.py)
+#### Interpolate - [core/interpolate.py](/iconarray/core/interpolate.py)
 
 The functions in interpolate.py are used to facilitate the interpolation of ICON vector data to a regular grid, or a coarser ICON grid, for the purpose of vectorplots, eg wind plots. For psyplot we recommend to plot wind data on the regular grid as you can then scale the density of arrows in a vector plot as desired.
 
