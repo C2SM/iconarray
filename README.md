@@ -20,7 +20,7 @@ The iconarray python package contains various modules to facilitate working with
 
 Iconarray and the packages it depends on are installable with conda. Some of these dependencies, e.g. eccodes and cartopy are not easily installable with pip, but easily installable with conda. If you are using iconarray in your own conda environment, you should add the packages in [env/environment.yml](env/environment.yml) to your environment.
 
-Create a conda environment (eg. called iconarray) and install requirements:
+Create a conda environment (e.g. called iconarray) and install requirements:
 ```
 conda env create -n iconarray -f env/environment.yml
 ```
