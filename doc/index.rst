@@ -6,9 +6,12 @@
 Welcome to iconarray's documentation!
 =====================================
 
-The iconarray python package contains various modules to facilitate working with ICON data with xarray or other xarray based tools (such as psyplot - a plotting package). iconarray was developed together with  `icon-vis <https://github.com/C2SM/icon-vis>`__.
+The iconarray python package contains various modules to facilitate working with ICON data with xarray 
+or other xarray based tools (such as `psyplot <https://psyplot.github.io/>`__ - a plotting package). 
+iconarray was developed together with  `icon-vis <https://github.com/C2SM/icon-vis>`__.
 
 .. toctree::
+   :glob:
    :hidden:
    :maxdepth: 1
 

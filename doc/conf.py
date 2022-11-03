@@ -45,6 +45,8 @@ extensions = [
     "sphinx_design",
 ]
 
+toc_object_entries_show_parents = 'domain'
+
 numpydoc_show_class_members = False
 
 autosummary_generate = True
