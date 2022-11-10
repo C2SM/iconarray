@@ -1,24 +1,37 @@
 #!/bin/bash
 
-if [[ $HOST == *'tsa'* ]]; then
+if [[ $(hostname -s) == *'tsa'* ]]; then
     echo 'Setting GRIB_DEFINITION_PATH for cfgrib engine'
-    module load python
+    errormessage=$(module load python)
+    if [ -z "$errormessage" ]; then
+        echo 'EasyBuild loaded the python module successfully.'
+    else
+        echo 'EasyBuild was not able to load the python module.'
+        return $1
+    fi
     source /project/g110/spack/user/admin-tsa/spack/share/spack/setup-env.sh
 
-    cosmo_eccodes=`spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1`
-    eccodes=`spack find --format "{prefix}" eccodes@2.19.0%gcc ~aec | head -n1`
+    cosmo_eccodes=$(spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1)
+    eccodes=$(spack find --format "{prefix}" eccodes@2.19.0%gcc \~aec | head -n1)
     export GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
     export OMPI_MCA_pml="ucx"
     export OMPI_MCA_osc="ucx"
     echo 'GRIB_DEFINITION_PATH: '${GRIB_DEFINITION_PATH}
     conda env config vars set GRIB_DEFINITION_PATH=${GRIB_DEFINITION_PATH}
-elif [[ $HOST == *'daint'* ]]; then
+
+elif [[ $(hostname -s) == *'daint'* ]]; then
     echo 'Setting GRIB_DEFINITION_PATH for cfgrib engine'
-    module load cray-python
+    errormessage=$(module load cray-python)
+    if [ -z "$errormessage"]; then
+        echo 'EasyBuild loaded the python module successfully.'
+    else
+        echo 'EasyBuild was not able to load the python module.'
+        return $1
+    fi
     source /project/g110/spack/user/admin-daint/spack/share/spack/setup-env.sh
 
-    cosmo_eccodes=`spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1`
-    eccodes=`spack find --format "{prefix}" eccodes@2.19.0%gcc ~aec | head -n1`
+    cosmo_eccodes=$(spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1)
+    eccodes=$(spack find --format "{prefix}" eccodes@2.19.0%gcc ~aec | head -n1)
     export GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
     export OMPI_MCA_pml="ucx"
     export OMPI_MCA_osc="ucx"
@@ -28,12 +41,12 @@ fi
 
 # ---- required for fieldextra ------
 
-if [[ $HOST == *'tsa'* ]]; then
+if [[ $(hostname -s) == *'tsa'* ]]; then
 
     echo 'Setting FIELDEXTRA_PATH for tsa'
     conda env config vars set FIELDEXTRA_PATH=/project/s83c/fieldextra/tsa/bin/fieldextra_gnu_opt_omp
 
-elif [[ $HOST == *'daint'* ]]; then
+elif [[ $(hostname -s) == *'daint'* ]]; then
 
     echo 'Setting FIELDEXTRA_PATH for daint'
     conda env config vars set FIELDEXTRA_PATH=/project/s83c/fieldextra/daint/bin/fieldextra_gnu_opt_omp
@@ -42,7 +55,12 @@ fi
 
 # ---- required for cartopy ------
 
-echo 'Make sure to deactivate your environment completely before reactivating (i.e., you should not be in a base environment). To make sure, you can run conda deactivate twice'
-echo 'Enable cartopy to modify cartopy.config by placing siteconfig.py in cartopy package'
-vpython=$(ls --color=never -d $CONDA_PREFIX/lib/python*);
-cp env/siteconfig.py ${vpython}/site-packages/cartopy
+python_version=$(python --version | tr '[:upper:]' '[:lower:]' | sed 's/ //g' | sed 's/\.[^.]*$//')
+vpython=$(ls --color=never -d $CONDA_PREFIX/lib/$python_version)
+if cp env/siteconfig.py ${vpython}/site-packages/cartopy; then
+    echo -e 'The setup script completed successfully! \n' \
+        'Make sure to deactivate your environment completely before reactivating it by running "conda deactivate" twice.'
+else
+    echo -e 'Enable cartopy to modify cartopy.config by placing the env/siteconfig.py file into cartopy package source folder. \n' \
+        'Please make sure that you are in the parent directory of the iconarray folder while executing this setup script.'
+fi
