@@ -109,6 +109,8 @@ def combine_grid_information(file, grid_file):
         except ValueError:
             logging.error(f"The grid file {grid_file} was not found.")
             sys.exit()
+    else:
+        grid = grid_file
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
         ds = open_dataset(file)
     else:
