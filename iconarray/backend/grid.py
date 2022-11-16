@@ -2,6 +2,8 @@
 
 import codecs
 import pathlib
+import logging
+import sys
 
 import cfgrib
 import numpy as np
@@ -102,11 +104,21 @@ def combine_grid_information(file, grid_file):
 
     """
     if isinstance(grid_file, pathlib.PurePath) or isinstance(grid_file, str):
-        grid = psy.open_dataset(grid_file)
+        try:
+            grid = psy.open_dataset(grid_file)
+        except ValueError:
+            logging.error(f"The grid file {grid_file} was not found.")
+            sys.exit()
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
-        ds = open_dataset(file).squeeze()
+        ds = open_dataset(file)
     else:
-        ds = file.squeeze()
+        ds = file
+
+    try:
+        ds = ds.squeeze()
+    except AttributeError:
+        logging.error("Model data contains more than one hypercube.")
+        sys.exit()
 
     datasetType = xr.core.dataset.Dataset
     if type(ds) != datasetType or type(grid) != datasetType:
@@ -394,7 +406,10 @@ def add_edge_data(ds, grid):
 
 def open_dataset(file):
     """
-    Open either NETCDF or GRIB file, returning xarray.Dataset.
+    Open either NETCDF or GRIB file.
+    Returning either an xarray.Dataset, or a list of xarray.Datasets if the
+    data in the GRIB file cannot be represented as a single hypercube (see
+    https://github.com/ecmwf/cfgrib for more info)
 
     Parameters
     ----------
@@ -403,7 +418,7 @@ def open_dataset(file):
 
     Returns
     ----------
-    ds : xarray.Dataset
+    ds : xarray.Dataset or List(xarray.Datasets)
 
     Raises
     ----------
@@ -465,7 +480,10 @@ def _open_GRIB(file):
     #  Returns an array of xarray.Datasets.
     dss = cfgrib.open_datasets(
         file,
-        backend_kwargs={"indexpath": "", "errors": "ignore"},
+        backend_kwargs={
+            "indexpath": "",
+            "errors": "ignore",
+        },
         encode_cf=("time", "geography", "vertical"),
     )
     return dss
