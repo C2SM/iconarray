@@ -407,6 +407,7 @@ def add_edge_data(ds, grid):
 def open_dataset(file):
     """
     Open either NETCDF or GRIB file.
+
     Returning either an xarray.Dataset, or a list of xarray.Datasets if the
     data in the GRIB file cannot be represented as a single hypercube (see
     https://github.com/ecmwf/cfgrib for more info)
