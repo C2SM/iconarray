@@ -1,64 +1,59 @@
 #!/bin/bash
 
-if [[ $(hostname -s) == *'tsa'* ]]; then
-    echo 'Setting GRIB_DEFINITION_PATH for cfgrib engine'
-    if module load python; then
-        echo '"module load python" was successful.'
+function check_python {
+    python_version=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+    python_version_l=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
+    python_lib=$(python --version | tr '[:upper:]' '[:lower:]' | sed 's/ //g' | sed 's/\.[^.]*$//')
+    min_required_version=3.5
+    if [ $(echo $python_version'>'$min_required_version | bc -l) == 1 ]; then
+        echo "Python version: $python_version_l"
     else
-        echo '"module load python" was NOT successful. Please contact your system admin.'
-        return $1
+        echo -e "\e[31mPython version: $python_version_l\e[0m"
+        echo -e "\e[31mPlease check your Python version >= 3.6 and make sure that the appropriate Conda env is activated.\e[0m"
+        exit $1
     fi
-    source /project/g110/spack/user/admin-tsa/spack/share/spack/setup-env.sh
+    if [ -d "$CONDA_PREFIX/lib/$python_lib" ]; then
+        echo "Found $python_lib within Conda environment."
+    else
+        echo -e "\e[31mPlease check your Python binary path and make sure that the appropriate Conda environment is activated.\e[0m"
+        exit $1
+    fi
+}
+
+function set_grib_definition_path {
 
     if cosmo_eccodes=$(spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1); then
-        echo 'Cosmo eccodes-definitions were set successfully.'
+        echo 'Cosmo eccodes-definitions were successfully retrieved.'
     else
-        echo 'Cosmo eccodes-definitions could not be set properly. Please check your Spack setup.'
+        echo -e "\e[31mCosmo eccodes-definitions could not be set properly. Please check your Spack setup.\e[0m"
         return $1
     fi
 
     if eccodes=$(spack find --format "{prefix}" eccodes@2.19.0%gcc \~aec | head -n1); then
-        echo 'Eccodes were successfully retrieved.'
+        echo 'Eccodes definitions were successfully retrieved.'
     else
-        echo 'Eccodes retrieval failed. Please check your Spack setup.'
+        echo -e "\e[31mEccodes retrieval failed. Please check your Spack setup.\e[0m"
         return $1
     fi
 
     export GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
     export OMPI_MCA_pml="ucx"
     export OMPI_MCA_osc="ucx"
-    echo 'GRIB_DEFINITION_PATH: '${GRIB_DEFINITION_PATH}
-    conda env config vars set GRIB_DEFINITION_PATH=${GRIB_DEFINITION_PATH}
+    conda env config vars set GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
+}
+
+
+if [[ $(hostname -s) == *'tsa'* ]]; then
+
+    check_python
+    source /project/g110/spack/user/admin-tsa/spack/share/spack/setup-env.sh
+    set_grib_definition_path
 
 elif [[ $(hostname -s) == *'daint'* ]]; then
-    echo 'Setting GRIB_DEFINITION_PATH for cfgrib engine'
-    if module load cray-python; then
-        echo '"module load cray-python" was successful.'
-    else
-        echo '"module load cray-python" was NOT successful. Please contact your system admin.'
-        return $1
-    fi
+
+    check_python
     source /project/g110/spack/user/admin-daint/spack/share/spack/setup-env.sh
-
-    if cosmo_eccodes=$(spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1); then
-        echo 'Cosmo eccodes-definitions were set successfully.'
-    else
-        echo 'Cosmo eccodes-definitions could not be set properly. Please check your Spack setup.'
-        return $1
-    fi
-
-    if eccodes=$(spack find --format "{prefix}" eccodes@2.19.0%gcc \~aec | head -n1); then
-        echo 'Eccodes were successfully retrieved.'
-    else
-        echo 'Eccodes retrieval failed. Please check your Spack setup.'
-        return $1
-    fi
-
-    export GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
-    export OMPI_MCA_pml="ucx"
-    export OMPI_MCA_osc="ucx"
-    echo 'GRIB_DEFINITION_PATH: ' ${GRIB_DEFINITION_PATH}
-    conda env config vars set GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
+    set_grib_definition_path
 fi
 
 # ---- required for fieldextra ------
@@ -77,25 +72,24 @@ fi
 
 # ---- required for cartopy ------
 
-if python_version=$(python --version | tr '[:upper:]' '[:lower:]' | sed 's/ //g' | sed 's/\.[^.]*$//'); then
-    echo $python_version
-else
-    echo "Please check your Python version and make sure that the appropriate Conda env is activated."
-    return $1
-fi
-if vpython=$(ls --color=never -d $CONDA_PREFIX/lib/$python_version); then
-    echo $vpython
-else
-    echo "Please check your Python binary path and make sure that the appropriate Conda env is activated."
-    return $1
-fi
-if cp env/siteconfig.py ${vpython}/site-packages/cartopy; then
+if cp env/siteconfig.py $CONDA_PREFIX/lib/$python_lib/site-packages/cartopy; then
     echo 'Cartopy configuration completed successfully.'
 else
-    echo -e 'Enable cartopy to modify cartopy.config by placing the env/siteconfig.py file into cartopy package source folder. \n' \
-        'Please make sure that you are in the parent directory of the iconarray folder while executing this setup script.'
-    return $1
+    echo -e "\e[31mEnable cartopy to modify cartopy.config by placing the env/siteconfig.py file into cartopy package source folder.\n\e[0m"\
+        "\e[31mPlease make sure that you are in the parent directory of the iconarray folder while executing this setup script.\e[0m"
+    exit $1
 fi
 
-echo -e 'The setup script completed successfully! \n' \
-    'Make sure to deactivate your environment completely before reactivating it by running "conda deactivate" twice.'
+echo -e "\n "\
+ "Variables saved to environment: \n "\
+ " "
+
+conda env config vars list
+
+echo -e "\n "\
+    "\e[32mThe setup script completed successfully! \n \e[0m" \
+    "\e[32mMake sure to deactivate your environment completely before reactivating it by running conda deactivate twice: \n \e[0m" \
+    "\n "\
+    "\e[32m            conda deactivate  \n \e[0m"\
+    " "
+
