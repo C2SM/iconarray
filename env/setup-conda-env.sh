@@ -5,14 +5,14 @@ function check_python {
     python_version_l=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
     python_lib=$(python --version | tr '[:upper:]' '[:lower:]' | sed 's/ //g' | sed 's/\.[^.]*$//')
     min_required_version=3.5
-    if [ $(echo $python_version'>'$min_required_version | bc -l) == 1 ]; then
+    if [[ $(echo $python_version'>'$min_required_version | bc -l) == 1 ]]; then
         echo "Python version: $python_version_l"
     else
         echo -e "\e[31mPython version: $python_version_l\e[0m"
         echo -e "\e[31mPlease check your Python version >= 3.6 and make sure that the appropriate Conda env is activated.\e[0m"
         exit $1
     fi
-    if [ -d "$CONDA_PREFIX/lib/$python_lib" ]; then
+    if [[ -d "$CONDA_PREFIX/lib/$python_lib" ]]; then
         echo "Found $python_lib within Conda environment."
     else
         echo -e "\e[31mPlease check your Python binary path and make sure that the appropriate Conda environment is activated.\e[0m"
@@ -22,18 +22,20 @@ function check_python {
 
 function set_grib_definition_path {
 
-    if cosmo_eccodes=$(spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1); then
+    cosmo_eccodes=$(spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1)
+    if ! [[ -z "$cosmo_eccodes" ]]; then
         echo 'Cosmo eccodes-definitions were successfully retrieved.'
     else
         echo -e "\e[31mCosmo eccodes-definitions could not be set properly. Please check your Spack setup.\e[0m"
-        return $1
+        exit $1
     fi
 
-    if eccodes=$(spack find --format "{prefix}" eccodes@2.19.0%gcc \~aec | head -n1); then
+    eccodes=$(spack find --format "{prefix}" eccodes@2.19.0%gcc \~aec | head -n1)
+    if ! [[ -z "$eccodes" ]]; then
         echo 'Eccodes definitions were successfully retrieved.'
     else
         echo -e "\e[31mEccodes retrieval failed. Please check your Spack setup.\e[0m"
-        return $1
+        exit $1
     fi
 
     export GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
