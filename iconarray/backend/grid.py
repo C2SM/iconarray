@@ -1,8 +1,8 @@
 """The grid module contains functions relating to the grid information for ICON data, such as merging ICON data with the grid data to provide one merged dataset."""
 
 import codecs
-import pathlib
 import logging
+import pathlib
 import sys
 
 import cfgrib
