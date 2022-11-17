@@ -20,7 +20,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="iconarray",  # Required
-    version="v0.1.22",  # Required
+    version="v0.1.23",  # Required
     description="A package of modules for processing and plotting ICON data.",  # Optional
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional
@@ -32,5 +32,18 @@ setup(
         exclude=["tests"],
     ),  # Required
     python_requires=">=3.7, <4",
-    install_requires=[],  # Optional
+    install_requires=[
+        "cfgrib>=0.9.9.1",
+        "xarray>=0.15",
+        "psyplot",
+        "psy-reg",
+        "psy-simple",
+        "psy-maps",
+        "numpy",
+        "six",
+        "cartopy",
+    ],  # Optional
+    extras_require={
+        "tests": ["flake8", "pytest"],
+    },
 )
