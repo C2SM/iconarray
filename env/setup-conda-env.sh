@@ -1,39 +1,71 @@
 #!/bin/bash
 
-if [[ $HOST == *'tsa'* ]]; then
-    echo 'Setting GRIB_DEFINITION_PATH for cfgrib engine'
-    module load python
-    source /project/g110/spack/user/admin-tsa/spack/share/spack/setup-env.sh
+function check_python {
+    python_version=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
+    python_version_l=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
+    python_lib=$(python --version | tr '[:upper:]' '[:lower:]' | sed 's/ //g' | sed 's/\.[^.]*$//')
+    min_required_version=3.5
+    if [[ $(echo $python_version'>'$min_required_version | bc -l) == 1 ]]; then
+        echo "Python version: $python_version_l"
+    else
+        echo -e "\e[31mPython version: $python_version_l\e[0m"
+        echo -e "\e[31mPlease check your Python version >= 3.6 and make sure that the appropriate Conda env is activated.\e[0m"
+        exit $1
+    fi
+    if [[ -d "$CONDA_PREFIX/lib/$python_lib" ]]; then
+        echo "Found $python_lib within Conda environment."
+    else
+        echo -e "\e[31mPlease check your Python binary path and make sure that the appropriate Conda environment is activated.\e[0m"
+        exit $1
+    fi
+}
 
-    cosmo_eccodes=`spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1`
-    eccodes=`spack find --format "{prefix}" eccodes@2.19.0%gcc ~aec | head -n1`
+function set_grib_definition_path {
+
+    cosmo_eccodes=$(spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1)
+    if ! [[ -z "$cosmo_eccodes" ]]; then
+        echo 'Cosmo eccodes-definitions were successfully retrieved.'
+    else
+        echo -e "\e[31mCosmo eccodes-definitions could not be set properly. Please check your Spack setup.\e[0m"
+        exit $1
+    fi
+
+    eccodes=$(spack find --format "{prefix}" eccodes@2.19.0%gcc \~aec | head -n1)
+    if ! [[ -z "$eccodes" ]]; then
+        echo 'Eccodes definitions were successfully retrieved.'
+    else
+        echo -e "\e[31mEccodes retrieval failed. Please check your Spack setup.\e[0m"
+        exit $1
+    fi
+
     export GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
     export OMPI_MCA_pml="ucx"
     export OMPI_MCA_osc="ucx"
-    echo 'GRIB_DEFINITION_PATH: '${GRIB_DEFINITION_PATH}
-    conda env config vars set GRIB_DEFINITION_PATH=${GRIB_DEFINITION_PATH}
-elif [[ $HOST == *'daint'* ]]; then
-    echo 'Setting GRIB_DEFINITION_PATH for cfgrib engine'
-    module load cray-python
-    source /project/g110/spack/user/admin-daint/spack/share/spack/setup-env.sh
-
-    cosmo_eccodes=`spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1`
-    eccodes=`spack find --format "{prefix}" eccodes@2.19.0%gcc ~aec | head -n1`
-    export GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
-    export OMPI_MCA_pml="ucx"
-    export OMPI_MCA_osc="ucx"
-    echo 'GRIB_DEFINITION_PATH: ' ${GRIB_DEFINITION_PATH}
     conda env config vars set GRIB_DEFINITION_PATH=${cosmo_eccodes}/cosmoDefinitions/definitions/:${eccodes}/share/eccodes/definitions/
+}
+
+
+if [[ $(hostname -s) == *'tsa'* ]]; then
+
+    check_python
+    source /project/g110/spack/user/admin-tsa/spack/share/spack/setup-env.sh
+    set_grib_definition_path
+
+elif [[ $(hostname -s) == *'daint'* ]]; then
+
+    check_python
+    source /project/g110/spack/user/admin-daint/spack/share/spack/setup-env.sh
+    set_grib_definition_path
 fi
 
 # ---- required for fieldextra ------
 
-if [[ $HOST == *'tsa'* ]]; then
+if [[ $(hostname -s) == *'tsa'* ]]; then
 
     echo 'Setting FIELDEXTRA_PATH for tsa'
     conda env config vars set FIELDEXTRA_PATH=/project/s83c/fieldextra/tsa/bin/fieldextra_gnu_opt_omp
 
-elif [[ $HOST == *'daint'* ]]; then
+elif [[ $(hostname -s) == *'daint'* ]]; then
 
     echo 'Setting FIELDEXTRA_PATH for daint'
     conda env config vars set FIELDEXTRA_PATH=/project/s83c/fieldextra/daint/bin/fieldextra_gnu_opt_omp
@@ -42,7 +74,24 @@ fi
 
 # ---- required for cartopy ------
 
-echo 'Make sure to deactivate your environment completely before reactivating (i.e., you should not be in a base environment). To make sure, you can run conda deactivate twice'
-echo 'Enable cartopy to modify cartopy.config by placing siteconfig.py in cartopy package'
-vpython=$(ls --color=never -d $CONDA_PREFIX/lib/python*);
-cp env/siteconfig.py ${vpython}/site-packages/cartopy
+if cp env/siteconfig.py $CONDA_PREFIX/lib/$python_lib/site-packages/cartopy; then
+    echo 'Cartopy configuration completed successfully.'
+else
+    echo -e "\e[31mEnable cartopy to modify cartopy.config by placing the env/siteconfig.py file into cartopy package source folder.\n\e[0m"\
+        "\e[31mPlease make sure that you are in the parent directory of the iconarray folder while executing this setup script.\e[0m"
+    exit $1
+fi
+
+echo -e "\n "\
+ "Variables saved to environment: \n "\
+ " "
+
+conda env config vars list
+
+echo -e "\n "\
+    "\e[32mThe setup script completed successfully! \n \e[0m" \
+    "\e[32mMake sure to deactivate your environment completely before reactivating it by running conda deactivate twice: \n \e[0m" \
+    "\n "\
+    "\e[32m            conda deactivate  \n \e[0m"\
+    " "
+
