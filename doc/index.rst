@@ -6,14 +6,35 @@
 Welcome to iconarray's documentation!
 =====================================
 
-The iconarray python package contains various modules to facilitate working with ICON data with xarray or other xarray based tools (such as psyplot - a plotting package). iconarray was developed together with icon-vis.
+The iconarray python package contains various modules to facilitate working with ICON data with xarray 
+or other xarray based tools (such as `psyplot <https://psyplot.github.io/>`__ - a plotting package). 
+iconarray was developed together with  `icon-vis <https://github.com/C2SM/icon-vis>`__.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :glob:
+   :hidden:
+   :maxdepth: 1
+
+   gettingstarted
+
+
+
+
+.. grid:: 1
+    :margin: 5 5 0 0
+    :gutter: 0
+
+    .. grid-item-card:: Getting started
+      :columns: 6
+      :link: gettingstarted
+      :link-type: doc
+
+      New to *iconarray*? Check out the getting started guide. This instructs you 
+      how to create your conda environment, and using iconarray at CSCS.
 
 API reference
-=============
+==========================
+
 
 This page provides an auto-generated summary of iconarray's API.
 
@@ -24,6 +45,7 @@ Core functions
 
 .. autosummary::
    :toctree: generated/
+   :caption: Core
 
    crop
    crop.Crop
@@ -44,6 +66,7 @@ Backend functions
 
 .. autosummary::
    :toctree: generated/
+   :caption: Backend
 
    grid
    grid.combine_grid_information
@@ -61,6 +84,7 @@ Plotting functions
 
 .. autosummary::
    :toctree: generated/
+   :caption: Plotting
 
    formatoptions
    formatoptions.borders
@@ -75,6 +99,7 @@ Utility functions
 
 .. autosummary::
    :toctree: generated/
+   :caption: Utility
 
    get_data
    get_data.get_example_data
