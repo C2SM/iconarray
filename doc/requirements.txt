@@ -1,3 +1,5 @@
 sphinx_book_theme
 numpydoc
+sphinx-copybutton
 iconarray
+sphinx-design
