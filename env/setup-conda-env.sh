@@ -1,11 +1,14 @@
 #!/bin/bash
 
 function check_python {
-    python_version=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')
     python_version_l=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
+    python_version_maj=$(python -c 'import sys; print(".".join(map(str, sys.version_info[0:1])))')
+    python_version_min=$(python -c 'import sys; print(".".join(map(str, sys.version_info[1:2])))')
     python_lib=$(python --version | tr '[:upper:]' '[:lower:]' | sed 's/ //g' | sed 's/\.[^.]*$//')
-    min_required_version=3.5
-    if [[ $(echo $python_version'>'$min_required_version | bc -l) == 1 ]]; then
+
+    min_required_maj=3
+    min_required_min=6
+    if [[ $(echo $python_version_maj'>='$min_required_maj | bc -l) == 1  ]]  && [[ $(echo $python_version_min'>='$min_required_min | bc -l) == 1  ]] ; then
         echo "Python version: $python_version_l"
     else
         echo -e "\e[31mPython version: $python_version_l\e[0m"
