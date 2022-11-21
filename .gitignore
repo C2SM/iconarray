@@ -12,3 +12,4 @@ dist/
 *.egg-info
 doc/_build
 */generated/*.rst
+.vscode/*

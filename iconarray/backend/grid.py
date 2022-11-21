@@ -1,7 +1,11 @@
 """The grid module contains functions relating to the grid information for ICON data, such as merging ICON data with the grid data to provide one merged dataset."""
 
+import codecs
+import logging
 import pathlib
+import sys
 
+import cfgrib
 import numpy as np
 import psyplot.project as psy
 import six
@@ -100,11 +104,21 @@ def combine_grid_information(file, grid_file):
 
     """
     if isinstance(grid_file, pathlib.PurePath) or isinstance(grid_file, str):
-        grid = psy.open_dataset(grid_file)
+        try:
+            grid = psy.open_dataset(grid_file)
+        except ValueError:
+            logging.error(f"The grid file {grid_file} was not found.")
+            sys.exit()
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
-        ds = open_dataset(file).squeeze()
+        ds = open_dataset(file)
     else:
-        ds = file.squeeze()
+        ds = file
+
+    try:
+        ds = ds.squeeze()
+    except AttributeError:
+        logging.error("Model data contains more than one hypercube.")
+        sys.exit()
 
     datasetType = xr.core.dataset.Dataset
     if type(ds) != datasetType or type(grid) != datasetType:
@@ -128,7 +142,8 @@ def combine_grid_information(file, grid_file):
         ds = ds.rename(
             {"time": ds.coords["time"].attrs["standard_name"], time_coord: "time"}
         ).expand_dims("time")
-    ds.time.attrs["axis"] = "T"
+    if hasattr(ds, "time"):
+        ds.time.attrs["axis"] = "T"
 
     if "cell" in ds.dims:
         ds = add_cell_data(ds, grid)
@@ -391,7 +406,11 @@ def add_edge_data(ds, grid):
 
 def open_dataset(file):
     """
-    Open either NETCDF or GRIB file, returning xarray.Dataset.
+    Open either NETCDF or GRIB file.
+
+    Returning either an xarray.Dataset, or a list of xarray.Datasets if the
+    data in the GRIB file cannot be represented as a single hypercube (see
+    https://github.com/ecmwf/cfgrib for more info)
 
     Parameters
     ----------
@@ -400,41 +419,75 @@ def open_dataset(file):
 
     Returns
     ----------
-    ds : xarray.Dataset
+    ds : xarray.Dataset or List(xarray.Datasets)
 
     Raises
     ----------
-    ValueError
-        This may suggest that a heterogeneous GRIB file is being used as the input data. Recommendation: Open the file using cfgrib.open_datasets() (returns an array of xr.Datasets)
-                and pass in the relevent Dataset.
-    Exception
-        If it not not possible to open the data with psy.open_dataset() (NETCDF) or cfgrib (GRIB) an Exception will be raised.
+    TypeError
+        If datatype is neither identified as GRIB or NETCDF.
 
     See Also
     ----------
     iconarray.backend
 
     """
-    try:
-        return psy.open_dataset(file)
-    except Exception:
-        try:
-            return psy.open_dataset(
-                file,
-                engine="cfgrib",
-                backend_kwargs={"indexpath": "", "errors": "ignore"},
-            )
-        except ValueError as e:
-            if "conflicting sizes for dimension" in str(e):
-                raise ValueError(
-                    """It appears you have a heterogeneous GRIB file.
-                Recommendation: Open the file using cfgrib.open_datasets() (returns an array of xr.Datasets)
-                and pass in the relevent Dataset."""
-                )
-            else:
-                raise ValueError(str(e))
-        except Exception as e:
-            raise Exception(str(e))
+    datatype = _identify_datatype(file)
+    if datatype == "nc":
+        return _open_NC(file)
+    elif datatype == "grib":
+        dss = _open_GRIB(file)
+        if len(dss) == 1:
+            return dss[0]
+        else:
+            return dss
+    else:
+        raise TypeError("Data is neither GRIB nor NETCDF.")
+
+
+def _identify_datatype(file):
+    if _identifyNC(file):
+        return "nc"
+    elif _identifyGRIB(file):
+        return "grib"
+    else:
+        return False
+
+
+def _identifyNC(file):
+    # Identifies if NETCDF data and return True or False.
+    msg = False
+    with codecs.open(file, "r", encoding="utf-8", errors="ignore") as fdata:
+        fd = fdata.read(3)
+    if fd in ["CDF", "HDF"]:
+        msg = True
+    return msg
+
+
+def _identifyGRIB(file):
+    # Identifies if GRIB data and return True or False.
+    with codecs.open(file, "r", encoding="utf-8", errors="ignore") as file:
+        file_type = file.read(4)
+        if file_type.lower() == "grib":
+            return True
+        else:
+            return False
+
+
+def _open_NC(file):
+    return psy.open_dataset(file)
+
+
+def _open_GRIB(file):
+    #  Returns an array of xarray.Datasets.
+    dss = cfgrib.open_datasets(
+        file,
+        backend_kwargs={
+            "indexpath": "",
+            "errors": "ignore",
+        },
+        encode_cf=("time", "geography", "vertical"),
+    )
+    return dss
 
 
 def check_vertex2cell(ds_grid: xr.Dataset):
