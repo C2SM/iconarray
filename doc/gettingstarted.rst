@@ -7,24 +7,50 @@ Getting Started
 =====================================
 
 
-
 Iconarray and the packages it depends on are installable with conda. Some of these dependencies, 
 eg eccodes and cartopy are not easily installable with pip, but easily installable with conda. 
-If you are using iconarray in your own conda environment, you should add the packages in 
-env/environment.yml to your environment.
 
-Create a conda environment (eg. called iconarray) and install requirements:
-
+First clone the iconarray repository and ``cd`` into its parent directory:
 
 .. code::
 
-   conda env create -n iconarray -f env/environment.yml
+   git clone git@github.com:C2SM/iconarray.git
+   cd iconarray
 
-Activate environment:
+- If you are setting up a **new conda environment** for iconarray please carry out these two steps:
 
-.. code::
+   1. Create a conda environment (e.g. called iconarray) and install iconarray and its requirements:
+          .. code::
 
-   conda activate iconarray
+             conda env create -n iconarray -f env/environment.yml    
+
+   2. Activate environment:
+         .. code::
+
+            conda activate iconarray
+
+
+- If you are adding iconarray to your **own/existing conda environment** carry out these two steps instead:
+
+   1. Update your existing conda environment by executing this command. It will install iconarray and all its missing
+   dependencies into your existing conda environment:
+
+      .. code::
+         
+         conda env update -n {YOUR_ENVIRONMENT} -f env/environment.yml
+
+   2. Afterwards, you should re-export the latest ``environment.yml`` file of your environment like 
+   this (assuming you are using the 
+   `MeteoSwiss-blueprint <https://github.com/MeteoSwiss-APN/mch-python-blueprint.git>`_):
+
+      .. code::
+
+          cd {YOUR_PROJECT_DIRECTORY}
+          conda activate {YOUR_ENVIRONMENT}
+          conda env export | grep -v "^prefix: " > requirements/environment.yml
+    
+Alternatively, you can also update your own environment.yml file manually, according to the
+``env/environment.yml`` file.
 
 
 ICON GRIB Definitions
@@ -42,7 +68,7 @@ You can check it has been correctly set by `conda env config vars list`.
 
 .. code::
 
-   source env/setup-conda-env.sh
+   ./env/setup-conda-env.sh
 
 The above script also sets the Fieldextra installation path (```FIELDEXTRA_PATH```).
 Fieldextra is a tool which can be used for interpolating data to another grid 
