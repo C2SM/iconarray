@@ -17,37 +17,32 @@ First clone the iconarray repository and ``cd`` into its parent directory:
    git clone git@github.com:C2SM/iconarray.git
    cd iconarray
 
-- If you are setting up a **new conda environment** for iconarray please carry out these two steps:
+If you are setting up a **new conda environment** for iconarray, carry out these two steps:
 
-   1. Create a conda environment (e.g. called iconarray) and install iconarray and its requirements:
-          .. code::
+1. Create a conda environment (e.g. called iconarray) and install iconarray and its requirements:
+   .. code::
 
-             conda env create -n iconarray -f env/environment.yml    
+      conda env create -n iconarray -f env/environment.yml    
 
-   2. Activate environment:
-         .. code::
+2. Activate environment:
+   .. code::
 
-            conda activate iconarray
+      conda activate iconarray
 
 
-- If you are adding iconarray to your **own/existing conda environment** carry out these two steps instead:
+Alternatively if you are adding iconarray to your **existing conda environment**, carry out these two steps:
 
-   1. Update your existing conda environment by executing this command. It will install iconarray and all its missing
-   dependencies into your existing conda environment:
+1. Update your existing conda environment by executing this command. It will install iconarray and all its missing dependencies into your existing conda environment:
+   .. code::
+      
+      conda env update -n {YOUR_ENVIRONMENT} -f env/environment.yml
 
-      .. code::
-         
-         conda env update -n {YOUR_ENVIRONMENT} -f env/environment.yml
+2. You can then re-export an updated ``environment.yml`` file of your environment:
 
-   2. Afterwards, you should re-export the latest ``environment.yml`` file of your environment like 
-   this (assuming you are using the 
-   `MeteoSwiss-blueprint <https://github.com/MeteoSwiss-APN/mch-python-blueprint.git>`_):
+   .. code::
 
-      .. code::
-
-          cd {YOUR_PROJECT_DIRECTORY}
-          conda activate {YOUR_ENVIRONMENT}
-          conda env export | grep -v "^prefix: " > requirements/environment.yml
+      conda activate {YOUR_ENVIRONMENT}
+      conda env export | grep -v "^prefix: " > environment.yml
     
 Alternatively, you can also update your own environment.yml file manually, according to the
 ``env/environment.yml`` file.
