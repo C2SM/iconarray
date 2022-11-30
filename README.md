@@ -30,7 +30,7 @@ git clone git@github.com:C2SM/iconarray.git
 cd iconarray
 ```
 
-- If you are setting up a **new conda environment** for iconarray please carry out these two steps:
+- If you are setting up a **new conda environment** for iconarray, carry out these two steps:
 
     1. Create a conda environment (e.g. called iconarray) and install iconarray and its requirements:
 
@@ -44,7 +44,7 @@ cd iconarray
         conda activate iconarray
         ```
 
-- If you are adding iconarray to your **own/existing conda environment** carry out these two steps instead:
+- Alternatively if you are adding iconarray to your **existing conda environment**, carry out these two steps:
 
     1. Update your existing conda environment by executing this command. It will install all missing dependencies of iconarray into your existing conda environment:
 
@@ -52,15 +52,14 @@ cd iconarray
         conda env update -n {YOUR_ENVIRONMENT} -f env/environment.yml
         ```
 
-    2. Afterwards, you should re-export the latest `environment.yml` file of your environment like this (assuming you are using the [MeteoSwiss-blueprint](https://github.com/MeteoSwiss-APN/mch-python-blueprint.git)):
+    2. You can then re-export an updated ``environment.yml`` file of your environment:
 
         ```bash
-        cd {YOUR_PROJECT_DIRECTORY}
         conda activate {YOUR_ENVIRONMENT}
-        conda env export | grep -v "^prefix: " > requirements/environment.yml
+        conda env export | grep -v "^prefix: " > environment.yml
         ```
 
-    Alternatively, you can also update your own environment.yml file manually, according to [env/environment.yml](env/environment.yml).
+ - Alternatively, you can also update your own environment.yml file manually, according to [env/environment.yml](env/environment.yml).
 
 ### ICON GRIB Definitions
 
