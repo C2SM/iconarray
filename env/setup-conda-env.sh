@@ -26,7 +26,7 @@ function check_python {
 function set_grib_definition_path {
 
     cosmo_eccodes=$(spack find --format "{prefix}" cosmo-eccodes-definitions@2.19.0.7%gcc | head -n1)
-    if ! [[ -z "$cosmo_eccodes" ]]; then
+    if [[ -d "$cosmo_eccodes" ]]; then
         echo 'Cosmo eccodes-definitions were successfully retrieved.'
     else
         echo -e "\e[31mCosmo eccodes-definitions could not be set properly. Please check your Spack setup.\e[0m"
@@ -34,7 +34,7 @@ function set_grib_definition_path {
     fi
 
     eccodes=$(spack find --format "{prefix}" eccodes@2.19.0%gcc \~aec | head -n1)
-    if ! [[ -z "$eccodes" ]]; then
+    if [[ -d "$eccodes" ]]; then
         echo 'Eccodes definitions were successfully retrieved.'
     else
         echo -e "\e[31mEccodes retrieval failed. Please check your Spack setup.\e[0m"
@@ -59,6 +59,22 @@ elif [[ $(hostname -s) == *'daint'* ]]; then
     check_python
     source /project/g110/spack/user/admin-daint/spack/share/spack/setup-env.sh
     set_grib_definition_path
+
+elif [[ $(hostname -s) == *'nid'* ]]; then
+
+    check_python
+
+    if [[ -z $(command -v spack) ]]; then
+        echo -e "\e[31mSpack could not be found in your PATH.\e[0m"
+        echo -e "\e[31mBalfrin has no global system installation of Spack.\e[0m"
+        echo -e "\e[34mFollow the instructions below to install your own Spack instance:\e[0m"
+        echo -e "\e[34mhttps://github.com/C2SM/spack-c2sm/tree/dev_v0.18.1\e[0m"
+        echo -e "\e[34mThen install the latest eccodes and cosmo-eccodes with Spack before re-running this script:\e[0m"
+        echo -e "\e[34m$ spack install cosmo-eccodes-definitions@2.19.0.7 ^eccodes@2.19.0\e[0m"
+        exit $1
+    fi
+
+    set_grib_definition_path
 fi
 
 # ---- required for fieldextra ------
@@ -73,6 +89,10 @@ elif [[ $(hostname -s) == *'daint'* ]]; then
     echo 'Setting FIELDEXTRA_PATH for daint'
     conda env config vars set FIELDEXTRA_PATH=/project/s83c/fieldextra/daint/bin/fieldextra_gnu_opt_omp
 
+elif [[ $(hostname -s) == *'nid'* ]]; then
+
+    echo 'Setting FIELDEXTRA_PATH for balfrin'
+    conda env config vars set FIELDEXTRA_PATH=/users/oprusers/osm/bin/fieldextra
 fi
 
 # ---- required for cartopy ------
@@ -97,4 +117,3 @@ echo -e "\n "\
     "\n "\
     "\e[32m            conda deactivate  \n \e[0m"\
     " "
-
