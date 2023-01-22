@@ -1,6 +1,6 @@
 """Functionality to locate ICON grid indices associated to lat/lon grid coordinates via hashing the indices in a Cartesian grid."""
 import math
-from typing import Tuple
+from typing import Tuple, Sequence
 
 import numpy as np
 import xarray as xr
@@ -12,12 +12,12 @@ def _check_loc(loc):
 
 
 class _latlon_spec:
-    def __init__(self, loc, lon_coords, lat_coords):
+    def __init__(self, lon_coords: Sequence, lat_coords: Sequence, scale_factor: float):
         self.lon_bnds = [np.amin(lon_coords).data, np.amax(lon_coords).data]
         self.lat_bnds = [np.amin(lat_coords).data, np.amax(lat_coords).data]
         self.Dlon = self.lon_bnds[1] - self.lon_bnds[0]
         self.Dlat = self.lat_bnds[1] - self.lat_bnds[0]
-        self.cell_area = self.Dlon * self.Dlat / len(lon_coords) * 0.3
+        self.cell_area = self.Dlon * self.Dlat / len(lon_coords) * scale_factor
         self.ratio = self.Dlon / self.Dlat
         self.dlon = math.sqrt(self.cell_area)
         self.dlat = math.sqrt(self.cell_area)
@@ -33,6 +33,8 @@ class Icon2latlon:
     ----------
     grid: xr.Dataset
         the ICON grid information, it should contain the following coordinates: clon,clat,elon,elat,vlon,vlat
+    scale_factor: float
+        factor of resolution between the icon grid and an auxiliary latlon grid needed by the cropping algorithm. 
 
     Example
     -------
@@ -83,7 +85,7 @@ class Icon2latlon:
     ... Dimensions without coordinates: cindex
     """
 
-    def __init__(self, grid: xr.Dataset):
+    def __init__(self, grid: xr.Dataset, scale_factor: float = 0.3):
         self.grid = grid
         self.grid_spec = {}
 
@@ -91,9 +93,9 @@ class Icon2latlon:
             lon_coords_name = loc[0] + "lon"
             lat_coords_name = loc[0] + "lat"
             self.grid_spec[loc] = _latlon_spec(
-                loc,
                 self.grid.coords[lon_coords_name],
                 self.grid.coords[lat_coords_name],
+                scale_factor
             )
 
     def latlon_indices_of_coords(
@@ -175,7 +177,7 @@ class Icon2latlon:
             loc, self.grid.coords[lon_coord_name], self.grid.coords[lat_coord_name]
         )
 
-        clatlon = xr.DataArray(data=np.zeros([nx, ny]).astype("int"), dims=["x", "y"])
+        clatlon = xr.DataArray(data=np.zeros([nx, ny]).astype("int32"), dims=["x", "y"])
 
         # Check indices are unique, i.e. only 1 ICON cell may fall into each lat/lon cell
         # We could do this with np.unique, but since it involves a sort (NlogN) this might be faster
@@ -183,5 +185,5 @@ class Icon2latlon:
         data_check[ind_clon, ind_clat] = -1
         assert np.count_nonzero(data_check == -1) == len(ind_clon)
 
-        clatlon[ind_clon, ind_clat] = np.arange(len(ind_clon)) + 1
+        clatlon[ind_clon, ind_clat] = np.arange(len(ind_clon),dtype=np.int32) + 1
         return clatlon
