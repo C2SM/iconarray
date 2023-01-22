@@ -109,22 +109,23 @@ def combine_grid_information(file, grid_file):
         except ValueError:
             logging.error(f"The grid file {grid_file} was not found.")
             sys.exit()
+    elif isinstance(grid_file, xr.core.dataset.Dataset):
+        grid = grid_file
+    else:
+        raise TypeError("""Grid file could not be opened to xr.core.dataset.Dataset.""")
+
     if isinstance(file, pathlib.PurePath) or isinstance(file, str):
         ds = open_dataset(file)
-    else:
+    elif isinstance(file, xr.core.dataset.Dataset):
         ds = file
+    else:
+        raise TypeError("""data file could not be opened to xr.core.dataset.Dataset.""")
 
     try:
         ds = ds.squeeze()
     except AttributeError:
         logging.error("Model data contains more than one hypercube.")
         sys.exit()
-
-    datasetType = xr.core.dataset.Dataset
-    if type(ds) != datasetType or type(grid) != datasetType:
-        raise TypeError(
-            """Grid or data file could not be opened to xr.core.dataset.Dataset."""
-        )
 
     cell_dim = get_cell_dim_name(ds, grid)
     if "cell" not in ds.dims and cell_dim is not None:
@@ -290,13 +291,13 @@ def add_cell_data(ds, grid):
         .assign_coords(
             clat_bnds=(
                 ("cell", "vertices"),
-                np.float32(grid.coords["clat_vertices"].values),
+                np.float32(grid.clat_vertices.values),
             )
         )
         .assign_coords(
             clon_bnds=(
                 ("cell", "vertices"),
-                np.float32(grid.coords["clon_vertices"].values),
+                np.float32(grid.clon_vertices.values),
             )
         )
     )
@@ -344,10 +345,10 @@ def add_edge_data(ds, grid):
         ds.assign_coords(elon=("edge", np.float32(grid.coords["elon"].values)))
         .assign_coords(elat=("edge", np.float32(grid.coords["elat"].values)))
         .assign_coords(
-            elat_bnds=(("edge", "no"), np.float32(grid.coords["elat_vertices"].values))
+            elat_bnds=(("edge", "no"), np.float32(grid.elat_vertices.values))
         )
         .assign_coords(
-            elon_bnds=(("edge", "no"), np.float32(grid.coords["elon_vertices"].values))
+            elon_bnds=(("edge", "no"), np.float32(grid.elon_vertices.values))
         )
         .assign_coords(zonal_normal_primal_edge=grid["zonal_normal_primal_edge"])
         .assign_coords(
