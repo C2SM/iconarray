@@ -31,7 +31,7 @@ class Crop:
         [low,high] latitude bounds of the cropped domain
 
     scale_factor: float
-        factor of resolution between the icon grid and an auxiliary latlon grid needed by the cropping algorithm. 
+        factor of resolution between the icon grid and an auxiliary latlon grid needed by the cropping algorithm.
         We recommend using the default value and decrease it only if required.
 
     Examples
@@ -194,7 +194,13 @@ class Crop:
     ...     institution:             Zurich
     """
 
-    def __init__(self, grid: xr.Dataset, lon_bnds: list[float], lat_bnds: list[float], scale_factor=0.3):
+    def __init__(
+        self,
+        grid: xr.Dataset,
+        lon_bnds: list[float],
+        lat_bnds: list[float],
+        scale_factor=0.3,
+    ):
         grid_lon_bnds = [
             np.amin(grid.coords["clon"].data),
             np.amax(grid.coords["clon"].data),
@@ -220,7 +226,7 @@ class Crop:
         self.lon_bnds = lon_bnds
         self.lat_bnds = lat_bnds
         self.idx_subset: Dict[str, List[int]] = {}
-        self.scale_factor=scale_factor
+        self.scale_factor = scale_factor
         self.rgrid = self.crop_grid()
 
     def _reindex_neighbour_table(self, field, loc, target_grid):

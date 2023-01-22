@@ -1,6 +1,6 @@
 """Functionality to locate ICON grid indices associated to lat/lon grid coordinates via hashing the indices in a Cartesian grid."""
 import math
-from typing import Tuple, Sequence
+from typing import Sequence, Tuple
 
 import numpy as np
 import xarray as xr
@@ -34,7 +34,7 @@ class Icon2latlon:
     grid: xr.Dataset
         the ICON grid information, it should contain the following coordinates: clon,clat,elon,elat,vlon,vlat
     scale_factor: float
-        factor of resolution between the icon grid and an auxiliary latlon grid needed by the cropping algorithm. 
+        factor of resolution between the icon grid and an auxiliary latlon grid needed by the cropping algorithm.
 
     Example
     -------
@@ -95,7 +95,7 @@ class Icon2latlon:
             self.grid_spec[loc] = _latlon_spec(
                 self.grid.coords[lon_coords_name],
                 self.grid.coords[lat_coords_name],
-                scale_factor
+                scale_factor,
             )
 
     def latlon_indices_of_coords(
@@ -185,5 +185,5 @@ class Icon2latlon:
         data_check[ind_clon, ind_clat] = -1
         assert np.count_nonzero(data_check == -1) == len(ind_clon)
 
-        clatlon[ind_clon, ind_clat] = np.arange(len(ind_clon),dtype=np.int32) + 1
+        clatlon[ind_clon, ind_clat] = np.arange(len(ind_clon), dtype=np.int32) + 1
         return clatlon
