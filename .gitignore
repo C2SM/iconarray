@@ -13,4 +13,3 @@ dist/
 doc/_build
 */generated/*.rst
 .vscode/*
-eccodes-cosmo-resources/
