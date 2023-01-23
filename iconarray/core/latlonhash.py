@@ -21,6 +21,7 @@ class _latlon_spec:
         self.ratio = self.Dlon / self.Dlat
         self.dlon = math.sqrt(self.cell_area)
         self.dlat = math.sqrt(self.cell_area)
+        self.scale_factor = scale_factor
 
 
 class Icon2latlon:
@@ -159,6 +160,12 @@ class Icon2latlon:
             A new DataArray with x,y dimensions and lat/lon coordinates covering
             the original ICON grid. The values contain the indices of the corresponding
             element in the ICON grid.
+
+        Raises
+        ------
+        RuntimeError
+            if algorithm to map uniquely ICON indices into a latlon grid fails
+
         """
         _check_loc(loc)
         lon_coord_name = loc[0] + "lon"
@@ -183,6 +190,12 @@ class Icon2latlon:
         # We could do this with np.unique, but since it involves a sort (NlogN) this might be faster
         data_check = clatlon.copy()
         data_check[ind_clon, ind_clat] = -1
+        if np.count_nonzero(data_check == -1) != len(ind_clon):
+            raise RuntimeError(
+                "Algorithm to map ICON grid indices into a latlon grid failed. Try to reduce the scale_factor, currently: "
+                + str(self.grid_spec[loc].scale_factor)
+            )
+
         assert np.count_nonzero(data_check == -1) == len(ind_clon)
 
         clatlon[ind_clon, ind_clat] = np.arange(len(ind_clon), dtype=np.int32) + 1
