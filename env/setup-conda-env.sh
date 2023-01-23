@@ -26,10 +26,10 @@ function check_python {
 function set_grib_definition_path {
 
     basedir=$PWD
-    git clone --depth 1 --branch v2.19.0.7 https://github.com/COSMO-ORG/eccodes-cosmo-resources.git
-    cosmo_eccodes=$basedir/eccodes-cosmo-resources
+    cosmo_eccodes=$CONDA_PREFIX/share/eccodes-cosmo-resources
+    git clone --depth 1 --branch v2.19.0.7 https://github.com/COSMO-ORG/eccodes-cosmo-resources.git $cosmo_eccodes
 
-    if [[ -d "$cosmo_eccodes" ]]; then
+    if [[ -d "$cosmo_eccodes/definitions" ]]; then
         echo 'Cosmo-eccodes-definitions were successfully retrieved.'
     else
         echo -e "\e[31mCosmo-eccodes-definitions could not be cloned.\e[0m"
@@ -38,7 +38,7 @@ function set_grib_definition_path {
 
     eccodes=$CONDA_PREFIX/share/eccodes
 
-    if [[ -d "$eccodes" ]]; then
+    if [[ -d "$eccodes/definitions" ]]; then
         echo 'Eccodes definitions were successfully retrieved.'
     else
         echo -e "\e[31mEccodes retrieval failed. \e[0m"
@@ -48,7 +48,7 @@ function set_grib_definition_path {
     export GRIB_DEFINITION_PATH=${cosmo_eccodes}/definitions/:${eccodes}/definitions/
     export OMPI_MCA_pml="ucx"
     export OMPI_MCA_osc="ucx"
-    conda env config vars set GRIB_DEFINITION_PATH=${${cosmo_eccodes}/definitions/:${eccodes}/definitions/
+    conda env config vars set GRIB_DEFINITION_PATH=${cosmo_eccodes}/definitions/:${eccodes}/definitions/
 }
 
 
