@@ -35,14 +35,13 @@ If you are setting up a **new conda environment** for iconarray, carry out these
 Alternatively if you are adding iconarray to your **existing conda environment**,
 carry out these two steps:
 
-1. Update your existing conda environment by executing this command.
-2. It will install iconarray and all its missing dependencies into your existing conda environment:
+1. Update your existing conda environment by executing this command. It will install iconarray and all its missing dependencies into your existing conda environment:
 
    .. code::
 
       conda env update -n {YOUR_ENVIRONMENT} -f env/environment.yml
 
-3. You can then re-export an updated ``environment.yml`` file of your environment:
+2. You can then re-export an updated ``environment.yml`` file of your environment:
 
    .. code::
 
