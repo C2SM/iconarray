@@ -63,7 +63,7 @@ cd iconarray
 
 ### ICON GRIB Definitions
 
-If you are using the conda setup and want to use GRIB data, you probably need to set the `GRIB_DEFINITION_PATH`. The GRIB_DEFINITION_PATH environment variable can be configured in order to use local definition files (text files defining the decoding rules) instead of the default definition files provided with eccodes. This can be done on Tsa/Daint (CSCS) by sourcing the script setup-conda-env.sh. It only needs to be run a single time, as it will save the `GRIB_DEFINITION_PATH` environment variable to the conda environment. You will need to deactivate and reactivate the conda environment after doing this. You can check it has been correctly set by running `conda env config vars list`.
+If you are using the conda setup and want to use GRIB data, you probably need to set the `GRIB_DEFINITION_PATH`. The GRIB_DEFINITION_PATH environment variable can be configured in order to use local definition files (text files defining the decoding rules) instead of the default definition files provided with eccodes. This can be done by sourcing the script setup-conda-env.sh. It only needs to be run a single time, as it will save the `GRIB_DEFINITION_PATH` environment variable to the conda environment. You will need to deactivate and reactivate the conda environment after doing this. You can check it has been correctly set by running `conda env config vars list`.
 
 ```bash
 ./env/setup-conda-env.sh
