@@ -3,10 +3,10 @@ def TestBadge = addEmbeddableBadgeConfiguration(id: "test", subject: "Test")
 
 pipeline {
     options {
-    # the variable $WORKSPACE is assigned dynamically at the beginning of every stage
-    # and might change depending on the number of concurrent builds active.
-    # We can only allow 1 concurrent build to have a consistent access to $WORKSPACE
-    # Otherwise we should use stash/unstash for the miniconda installation
+    // the variable $WORKSPACE is assigned dynamically at the beginning of every stage
+    // and might change depending on the number of concurrent builds active.
+    // We can only allow 1 concurrent build to have a consistent access to $WORKSPACE
+    // Otherwise we should use stash/unstash for the miniconda installation
         disableConcurrentBuilds()
     }
     environment {
