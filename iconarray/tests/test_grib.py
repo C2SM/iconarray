@@ -5,6 +5,7 @@ Contains tests: test_grid_edge, test_grid_cell
 """
 
 import cfgrib
+import xarray as xr
 
 import iconarray
 
@@ -97,3 +98,15 @@ def test_grid_cell():
         )
         == 4
     ), "ds_cellvars should have coordinates 'clon', 'clat', 'clon_bnds', 'clat_bnds'"
+
+
+def test_grid_dataset_cell():
+    """Test the API of combine_grid_information that passes a dataset instead of a filename."""
+    ds_cell, _ = _open_file(f_alldata)
+    grid_ds = xr.open_dataset(f_grid, engine="netcdf4")
+
+    ds_cellvars = iconarray.combine_grid_information(ds_cell, grid_ds)
+
+    assert "cell" in list(
+        ds_cellvars.P.dims
+    ), "ds_cellvars data variables should have a dimension 'cell'"

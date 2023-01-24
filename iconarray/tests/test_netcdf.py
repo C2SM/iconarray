@@ -5,6 +5,7 @@ Contains tests: test_wo_celldata, test_w_celldata, test_wrong_grid
 """
 
 import pytest
+import xarray as xr
 
 import iconarray
 from iconarray.backend import grid
@@ -73,3 +74,15 @@ def test_wrong_grid():
     """Test that combine_grid_information raises an error when trying to add the data from an incorrect grid to data from a NETCDF file."""
     with pytest.raises(grid.WrongGridException):
         iconarray.combine_grid_information(f_celldata_incomatible_w_grid, f_grid)
+
+
+def test_grid_dataset_cell():
+    """Test the API of combine_grid_information that passes a dataset instead of a filename."""
+    ds_cell = xr.open_dataset(f_wo_celldata, engine="netcdf4")
+    grid_ds = xr.open_dataset(f_grid, engine="netcdf4")
+
+    ds_cell = iconarray.combine_grid_information(ds_cell, grid_ds)
+
+    assert "cell" in list(
+        ds_cell.T.dims
+    ), "ds_cell data variables should have a dimension 'cell'"
