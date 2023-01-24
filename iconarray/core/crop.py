@@ -24,6 +24,16 @@ class Crop:
         - clon,clat,elon,elat,vlon,vlat coordinates
         - edge_of_cell, vertex_of_cell variables that provide the connectivity between edge and vertex locations to the cell
 
+    lon_bnds: list[float]
+        [low,high] longitude bounds of the cropped domain
+
+    lat_bnds: list[float]
+        [low,high] latitude bounds of the cropped domain
+
+    scale_factor: float
+        factor of resolution between the icon grid and an auxiliary latlon grid needed by the cropping algorithm.
+        We recommend using the default value and decrease it only if required.
+
     Examples
     --------
     load the grid dataset:
@@ -184,7 +194,13 @@ class Crop:
     ...     institution:             Zurich
     """
 
-    def __init__(self, grid: xr.Dataset, lon_bnds: list[float], lat_bnds: list[float]):
+    def __init__(
+        self,
+        grid: xr.Dataset,
+        lon_bnds: list[float],
+        lat_bnds: list[float],
+        scale_factor=0.3,
+    ):
         grid_lon_bnds = [
             np.amin(grid.coords["clon"].data),
             np.amax(grid.coords["clon"].data),
@@ -210,6 +226,7 @@ class Crop:
         self.lon_bnds = lon_bnds
         self.lat_bnds = lat_bnds
         self.idx_subset: Dict[str, List[int]] = {}
+        self.scale_factor = scale_factor
         self.rgrid = self.crop_grid()
 
     def _reindex_neighbour_table(self, field, loc, target_grid):
@@ -229,7 +246,7 @@ class Crop:
         # list of coordinates for the indices of the neighbors
         lon_coords = self.full_grid.coords[lon_coord_name][neighbor_flat_index]
         lat_coords = self.full_grid.coords[lat_coord_name][neighbor_flat_index]
-        i2ll = Icon2latlon(target_grid)
+        i2ll = Icon2latlon(target_grid, self.scale_factor)
 
         # compute the list of cartesian coordinates of a lat/lon grid where
         # the coordinates (of the lookup table elements) fall
