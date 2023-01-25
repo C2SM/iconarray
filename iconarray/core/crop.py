@@ -326,7 +326,7 @@ class Crop:
             self.full_grid["vertex_of_cell"][:, self.idx_sublist["cell"]].data.flatten()
             - 1
         )
-        for loc in ('cell','edge','vertex'):
+        for loc in ("cell", "edge", "vertex"):
             self.idx_subset[loc] = set(self.idx_sublist[loc])
 
         return self._reindex_neighbour_tables(self.crop_fields())
