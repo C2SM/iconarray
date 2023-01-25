@@ -27,7 +27,7 @@ function set_grib_definition_path {
 
     basedir=$PWD
     cosmo_eccodes=$CONDA_PREFIX/share/eccodes-cosmo-resources
-    git clone --depth 1 --branch v2.19.0.7 https://github.com/COSMO-ORG/eccodes-cosmo-resources.git $cosmo_eccodes
+    git clone --depth 1 --branch v2.25.0.1 https://github.com/COSMO-ORG/eccodes-cosmo-resources.git $cosmo_eccodes
 
     if [[ -d "$cosmo_eccodes/definitions" ]]; then
         echo 'Cosmo-eccodes-definitions were successfully retrieved.'
