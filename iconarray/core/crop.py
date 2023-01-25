@@ -225,7 +225,8 @@ class Crop:
         self.full_grid = grid
         self.lon_bnds = lon_bnds
         self.lat_bnds = lat_bnds
-        self.idx_subset: Dict[str, List[int]] = {}
+        self.idx_sublist: Dict[str, List[int]] = {}
+        self.idx_subset: Dict[str, set[int]] = {}
         self.scale_factor = scale_factor
         self.rgrid = self.crop_grid()
 
@@ -237,7 +238,7 @@ class Crop:
         neighbor_flat_index = field.data.flatten() - 1
 
         # the neighbor indices of a look up table might fall out of the domain of a given location,
-        # as defined by the list of indices in self.idx_subset.
+        # as defined by the list of indices in self.idx_sublist.
         # Those out of the domain are set to -1
         neighbor_flat_index = np.vectorize(
             lambda elem: elem if elem in self.idx_subset[loc] else -1
@@ -311,20 +312,22 @@ class Crop:
         -------
         A new dataset with all grid variables cropped to the target domain
         """
-        self.idx_subset["cell"] = np.argwhere(
+        self.idx_sublist["cell"] = np.argwhere(
             (self.full_grid.coords["clon"].data > self.lon_bnds[0])
             & (self.full_grid.coords["clon"].data < self.lon_bnds[1])
             & (self.full_grid.coords["clat"].data > self.lat_bnds[0])
             & (self.full_grid.coords["clat"].data < self.lat_bnds[1]),
         ).flatten()
-        self.idx_subset["edge"] = np.unique(
-            self.full_grid["edge_of_cell"][:, self.idx_subset["cell"]].data.flatten()
+        self.idx_sublist["edge"] = np.unique(
+            self.full_grid["edge_of_cell"][:, self.idx_sublist["cell"]].data.flatten()
             - 1
         )
-        self.idx_subset["vertex"] = np.unique(
-            self.full_grid["vertex_of_cell"][:, self.idx_subset["cell"]].data.flatten()
+        self.idx_sublist["vertex"] = np.unique(
+            self.full_grid["vertex_of_cell"][:, self.idx_sublist["cell"]].data.flatten()
             - 1
         )
+        for loc in ('cell','edge','vertex'):
+            self.idx_subset[loc] = set(self.idx_sublist[loc])
 
         return self._reindex_neighbour_tables(self.crop_fields())
 
@@ -353,7 +356,7 @@ class Crop:
                 for var in self.full_grid.data_vars
                 if loc in self.full_grid[var].dims
             ]
-            locgrid_filt = self.full_grid[loc_vars].loc[{loc: self.idx_subset[loc]}]
+            locgrid_filt = self.full_grid[loc_vars].loc[{loc: self.idx_sublist[loc]}]
             filtered_grid.append(locgrid_filt)
 
         return xr.merge(filtered_grid)
@@ -382,5 +385,5 @@ class Crop:
         res = ds
         for loc in ["cell", "edge", "vertex"]:
             if loc in ds.dims:
-                res = res.sel({loc: self.idx_subset[loc]})
+                res = res.sel({loc: self.idx_sublist[loc]})
         return res
