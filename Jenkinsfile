@@ -27,16 +27,7 @@ pipeline {
                         script {
                             BuildBadge.setStatus('running')
                         }
-                        sh 'wget -O ${WORKSPACE}/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh'
-                        sh 'bash miniconda.sh -b -p $WORKSPACE/miniconda_${NODE_NAME}'
-                        sh 'conda config --set always_yes yes --set changeps1 no'
-                        sh 'conda config --add channels conda-forge'
-                        sh 'conda env create --name ${CONDA_ENV_NAME}_${NODE_NAME} --file env/environment.yml'
-                        sh '''source $WORKSPACE/miniconda_${NODE_NAME}/etc/profile.d/conda.sh
-                            conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
-                            source env/setup-conda-env.sh
-                            conda deactivate
-                            rm miniconda.sh'''
+                        sh './setup.sh'
                     }
                     post {
                         failure {
@@ -54,16 +45,7 @@ pipeline {
                         script {
                             BuildBadge.setStatus('running')
                         }
-                        sh 'wget -O ${WORKSPACE}/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh'
-                        sh 'bash miniconda.sh -b -p $WORKSPACE/miniconda_${NODE_NAME}'
-                        sh 'conda config --set always_yes yes --set changeps1 no'
-                        sh 'conda config --add channels conda-forge'
-                        sh 'conda env create --name ${CONDA_ENV_NAME}_${NODE_NAME} --file env/environment.yml'
-                        sh '''source $WORKSPACE/miniconda_${NODE_NAME}/etc/profile.d/conda.sh
-                            conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
-                            source env/setup-conda-env.sh
-                            conda deactivate
-                            rm miniconda.sh'''
+                        sh './setup.sh'
                     }
                     post {
                         failure {
@@ -100,14 +82,8 @@ pipeline {
                     steps {
                         script {
                             TestBadge.setStatus('running')
-                            sh '''source $WORKSPACE/miniconda_${NODE_NAME}/etc/profile.d/conda.sh
-                            conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
-                            pip install .
-                            python -m cfgrib selfcheck
-                            python -c "import cartopy; print(cartopy.config)"
-                            python iconarray/utils/get_data.py
-                            pytest iconarray/tests'''
                         }
+                        sh './test.sh'
                     }
                     post {
                         success {
@@ -142,14 +118,8 @@ pipeline {
                     steps {
                         script {
                             TestBadge.setStatus('running')
-                            sh '''source $WORKSPACE/miniconda_${NODE_NAME}/etc/profile.d/conda.sh
-                            conda activate ${CONDA_ENV_NAME}_${NODE_NAME}
-                            pip install .
-                            python -m cfgrib selfcheck
-                            python -c "import cartopy; print(cartopy.config)"
-                            python iconarray/utils/get_data.py
-                            pytest iconarray/tests'''
                         }
+                        sh './test.sh'
                     }
                     post {
                         success {
