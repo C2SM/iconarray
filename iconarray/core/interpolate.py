@@ -23,9 +23,10 @@ class AccessError(Exception):
 def _check_fieldextra_access():
     try:
         fieldextra_exe = os.environ["FIELDEXTRA_PATH"]
+        command = f"if [[ -x {fieldextra_exe} ]]; then continue; else exit 1; fi;"
         try:
             fx = subprocess.run(
-                fieldextra_exe, capture_output=True, check=True, shell=True
+                command, capture_output=True, check=True, shell=True
             )
         except:
             raise AccessError(
