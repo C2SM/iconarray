@@ -25,9 +25,7 @@ def _check_fieldextra_access():
         fieldextra_exe = os.environ["FIELDEXTRA_PATH"]
         command = f"if [[ -x {fieldextra_exe} ]]; then continue; else exit 1; fi;"
         try:
-            fx = subprocess.run(
-                command, capture_output=True, check=True, shell=True
-            )
+            fx = subprocess.run(command, capture_output=True, check=True, shell=True)
         except:
             raise AccessError(
                 f"You do not have the correct permissions to run FIELDEXTRA_PATH:{fieldextra_exe}. Re-grid the file manually, for example with cdo."
