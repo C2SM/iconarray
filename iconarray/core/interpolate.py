@@ -11,6 +11,35 @@ from pathlib import Path
 #
 # ----------------------------------------------------------------------
 
+
+class MissingEnvironmentVariable(Exception):
+    """Indicate FIELDEXTRA_PATH is not set."""
+
+    pass
+
+
+class AccessError(Exception):
+    """Indicate user does not have access to execute FIELDEXTRA_PATH."""
+
+    pass
+
+
+def _check_fieldextra_access():
+    try:
+        fieldextra_exe = os.environ["FIELDEXTRA_PATH"]
+        command = f"if [[ -x {fieldextra_exe} ]]; then continue; else exit 1; fi;"
+        try:
+            subprocess.run(command, capture_output=True, check=True, shell=True)
+        except Exception:
+            raise AccessError(
+                f"You do not have the correct permissions to run FIELDEXTRA_PATH:{fieldextra_exe}. Re-grid the file manually, for example with cdo."
+            )
+    except KeyError:
+        raise MissingEnvironmentVariable(
+            "FIELDEXTRA_PATH environemnt variable not set."
+        )
+
+
 iconremap_namelist = """
 !*********************************************************************************************
 ! Namelist for remapping ICON grid to {gridtype}
@@ -160,6 +189,8 @@ def remap_ICON_to_regulargrid(data_file, in_grid_file, num_dates, region="CH"):
     file_out : Path
         Path to resulting interpolated data.
     """
+    _check_fieldextra_access()
+
     remap_namelist_fname = "NAMELIST_ICON_REG_REMAP"
     output_dir = Path(os.path.abspath(Path("./tmp/fieldextra")))
     remap_namelist_path = output_dir / remap_namelist_fname
@@ -234,6 +265,8 @@ def remap_ICON_to_ICON(data_file, in_grid_file, out_grid_file, num_dates):
     file_out : Path
         Path to resulting interpolated data.
     """
+    _check_fieldextra_access()
+
     remap_namelist_fname = "NAMELIST_ICON_ICON_REMAP"
     output_dir = Path("./tmp/fieldextra")
     remap_namelist_path = output_dir / remap_namelist_fname
