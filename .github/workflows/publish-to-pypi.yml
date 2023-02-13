@@ -9,7 +9,7 @@ jobs:
   build-n-publish:
     name: Publish Python distributions to PyPI and TestPyPI
     runs-on: ubuntu-latest
-    if: $GITHUB_REF == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
     - uses: actions/checkout@master
     - name: Set up Python 3.10
