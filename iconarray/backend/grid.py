@@ -405,7 +405,7 @@ def add_edge_data(ds, grid):
     return ds
 
 
-def open_dataset(file):
+def open_dataset(file, variable=None, **kwargs):
     """
     Open either NETCDF or GRIB file.
 
@@ -417,6 +417,11 @@ def open_dataset(file):
     ----------
     file : Path
         Path to ICON data file, either NETCDF of GRIB format.
+
+    variable : str, default: None
+        Name of variable to return from filtered dataset. 
+
+    kwargs : Additional keyword arguments passed on to the xarray engine open function.
 
     Returns
     ----------
@@ -434,7 +439,7 @@ def open_dataset(file):
     """
     datatype = _identify_datatype(file)
     if datatype == "nc":
-        return _open_NC(file)
+        return _open_NC(file, variable, **kwargs)
     elif datatype == "grib":
         dss = _open_GRIB(file)
         if len(dss) == 1:
@@ -474,11 +479,18 @@ def _identifyGRIB(file):
             return False
 
 
-def _open_NC(file):
-    return psy.open_dataset(file)
-
-
-def _open_GRIB(file):
+def _open_NC(file, variable=None, decode_cf=True, decode_coords='all', decode_times=True, **kwargs):
+    ds = xr.open_dataset(file, decode_cf=decode_cf,
+                         decode_coords=decode_coords, 
+                         decode_times=decode_times, **kwargs)
+    if variable:
+        try:
+            ds = ds[variable]
+        except KeyError:
+            raise KeyError("Cannot filter dataset by variable {0}. Variables in this dataset are: {1}".format(variable ,', '.join(ds.data_vars)))
+    return ds
+    
+def _open_GRIB(file, variable=None, decode_cf=True, decode_coords='all', decode_times=True, **kwargs):
     #  Returns an array of xarray.Datasets.
     dss = cfgrib.open_datasets(
         file,
@@ -488,6 +500,17 @@ def _open_GRIB(file):
         },
         encode_cf=("time", "geography", "vertical"),
     )
+    if variable:
+        found = False
+        vars_present = []
+        for ds in dss:
+            vars_present.append(', '.join(ds.data_vars))
+            if variable in ds.data_vars:
+                found = True
+                return [ds[variable]]
+        if found == False:
+            raise KeyError("Cannot filter dataset by variable {0}. Variables in this dataset are: {1}".format(variable ,', '.join(vars_present)))
+    
     return dss
 
 
