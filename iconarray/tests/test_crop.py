@@ -18,13 +18,13 @@ def test_crop():
     """
     basedir = os.path.dirname(os.path.realpath(__file__))
     in_cell_data = (
-        basedir + "/data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_cell.nc"
+        basedir + "/data/lfff00010000_lon_0.152-0.154_lat_0.8745-0.8755_cell.nc"
     )
     in_edge_data = (
-        basedir + "/data/lfff00010000_lon:0.152-0.154_lat:0.8745-0.8755_edge.nc"
+        basedir + "/data/lfff00010000_lon_0.152-0.154_lat_0.8745-0.8755_edge.nc"
     )
     in_grid = (
-        basedir + "/data/icon_grid_0001_R19B08_lon:0.152-0.154_lat:0.8745-0.8755.nc"
+        basedir + "/data/icon_grid_0001_R19B08_lon_0.152-0.154_lat_0.8745-0.8755.nc"
     )
 
     ds_grid = xr.open_dataset(in_grid)
