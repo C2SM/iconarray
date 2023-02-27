@@ -547,7 +547,7 @@ def filter_by_var(dataset, variable):
                     variable, ", ".join(dataset.data_vars)
                 )
             )
-    elif len(dataset) > 1:
+    elif type(dataset) is list:
         for ds in dataset:
             if variable in ds.data_vars:
                 return [ds[variable]]
