@@ -574,6 +574,10 @@ def _open_GRIB(file, variable, decode_coords, decode_times, backend_kwargs, **kw
     #  Returns an array of xarray.Datasets.
     backend_kwargs["indexpath"] = backend_kwargs.get("indexpath", "")
     backend_kwargs["errors"] = backend_kwargs.get("errors", "ignore")
+    if variable:
+        # filter by shortName with filter_by_keys. shortName must be present in dataset.
+        backend_kwargs['filter_by_keys'] = backend_kwargs.get('filter_by_keys', {})
+        backend_kwargs['filter_by_keys']['shortName'] = variable
     encode_cf = kwargs.get("encode_cf", ("time", "geography", "vertical"))
     dss = cfgrib.open_datasets(
         file,
@@ -582,9 +586,6 @@ def _open_GRIB(file, variable, decode_coords, decode_times, backend_kwargs, **kw
         decode_times=decode_times,
         encode_cf=encode_cf,
     )
-    if variable:
-        return filter_by_var(dss, variable)
-
     return dss
 
 
