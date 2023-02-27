@@ -6,6 +6,7 @@ Contains tests: test_wo_celldata, test_w_celldata, test_wrong_grid
 
 import pytest
 import xarray as xr
+from xarray.testing import assert_identical
 
 import iconarray
 from iconarray.backend import grid
@@ -86,3 +87,14 @@ def test_grid_dataset_cell():
     assert "cell" in list(
         ds_cell.T.dims
     ), "ds_cell data variables should have a dimension 'cell'"
+
+def test_filter():
+    """Test that we can filter a xarray.Dataset to a xarray.DataArray with a single variable."""
+    ds_t = iconarray.open_dataset(f_w_celldata, 'T')
+
+    ds = iconarray.open_dataset(f_w_celldata)
+    ds_t2 = iconarray.filter_by_var(ds, 'T')
+
+    assert_identical(ds_t, ds_t2)
+
+    assert ds_t.attrs['long_name'] == 'Temperature', "ds_t should be a xarray.DataArray with just the variable T."
