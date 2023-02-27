@@ -13,3 +13,4 @@ dist/
 doc/_build
 */generated/*.rst
 .vscode/*
+build/

@@ -405,7 +405,15 @@ def add_edge_data(ds, grid):
     return ds
 
 
-def open_dataset(file, variable=None, decode_cf=True, decode_coords='all', decode_times=True, backend_kwargs={}, **kwargs):
+def open_dataset(
+    file,
+    variable=None,
+    decode_cf=True,
+    decode_coords="all",
+    decode_times=True,
+    backend_kwargs={},
+    **kwargs,
+):
     """
     Open either NETCDF or GRIB file.
 
@@ -419,7 +427,7 @@ def open_dataset(file, variable=None, decode_cf=True, decode_coords='all', decod
         Path to ICON data file, either NETCDF of GRIB format.
 
     variable : str, default: None
-        Name of variable to return from filtered dataset. 
+        Name of variable to return from filtered dataset.
 
     kwargs : Additional keyword arguments passed on to the xarray engine open function.
 
@@ -439,11 +447,25 @@ def open_dataset(file, variable=None, decode_cf=True, decode_coords='all', decod
     """
     datatype = _identify_datatype(file)
     if datatype == "nc":
-        return _open_NC(file, variable=variable, decode_cf=decode_cf, decode_coords=decode_coords, decode_times=decode_times, **kwargs)
+        return _open_NC(
+            file,
+            variable=variable,
+            decode_cf=decode_cf,
+            decode_coords=decode_coords,
+            decode_times=decode_times,
+            **kwargs,
+        )
     elif datatype == "grib":
         # set decode_coords to True if decode_coords == 'all', since it seems to cause cfgrib.open_datasets to hang
-        decode_coords = True if decode_coords == 'all' else decode_coords
-        dss = _open_GRIB(file, variable=variable, decode_coords=decode_coords, decode_times=decode_times, backend_kwargs=backend_kwargs, **kwargs)
+        decode_coords = True if decode_coords == "all" else decode_coords
+        dss = _open_GRIB(
+            file,
+            variable=variable,
+            decode_coords=decode_coords,
+            decode_times=decode_times,
+            backend_kwargs=backend_kwargs,
+            **kwargs,
+        )
         if len(dss) == 1:
             return dss[0]
         else:
@@ -479,21 +501,22 @@ def _identifyGRIB(file):
             return True
         else:
             return False
-        
+
+
 def filter_by_var(dataset, variable):
     """Filter dataset to single variable dataset.
 
     Parameters
     ----------
     ds: xr.Dataset or [xr.Dataset]
-        dataset or array of datasets
+        Dataset or array of datasets
 
     variable: str
-        name of variable to filter dataset
+        Name of variable to filter dataset
 
     Returns
     -------
-    ds: xr.Dataset
+    ds: xr.DataArray
 
     Raises
     ------
@@ -504,33 +527,45 @@ def filter_by_var(dataset, variable):
         try:
             return dataset[variable]
         except KeyError:
-            raise KeyError("Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(variable ,', '.join(dataset.data_vars)))
+            raise KeyError(
+                "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
+                    variable, ", ".join(dataset.data_vars)
+                )
+            )
     elif len(dataset > 1):
         for ds in dataset:
             if variable in ds.data_vars:
                 return [ds[variable]]
-        raise KeyError("Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(variable , ', '.join([', '.join(ds.data_vars) for ds in dataset])))
-
+        raise KeyError(
+            "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
+                variable, ", ".join([", ".join(ds.data_vars) for ds in dataset])
+            )
+        )
 
 
 def _open_NC(file, variable, decode_cf, decode_coords, decode_times, **kwargs):
-    ds = xr.open_dataset(file, decode_cf=decode_cf,
-                         decode_coords=decode_coords, 
-                         decode_times=decode_times, **kwargs)
+    ds = xr.open_dataset(
+        file,
+        decode_cf=decode_cf,
+        decode_coords=decode_coords,
+        decode_times=decode_times,
+        **kwargs,
+    )
     if variable:
         return filter_by_var(ds, variable)
     return ds
-    
+
+
 def _open_GRIB(file, variable, decode_coords, decode_times, backend_kwargs, **kwargs):
     #  Returns an array of xarray.Datasets.
-    backend_kwargs=backend_kwargs.copy()
-    backend_kwargs['indexpath'] = ''
-    backend_kwargs['errors'] = 'ignore'
+    backend_kwargs = backend_kwargs.copy()
+    backend_kwargs["indexpath"] = ""
+    backend_kwargs["errors"] = "ignore"
     encode_cf = kwargs.get("encode_cf", ("time", "geography", "vertical"))
     dss = cfgrib.open_datasets(
         file,
         backend_kwargs=backend_kwargs,
-        decode_coords=decode_coords, 
+        decode_coords=decode_coords,
         decode_times=decode_times,
         encode_cf=encode_cf,
     )
