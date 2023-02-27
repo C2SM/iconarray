@@ -6,6 +6,7 @@ import pathlib
 import sys
 
 import cfgrib
+import cfgrib.messages as messages
 import numpy as np
 import six
 import xarray as xr
@@ -576,17 +577,58 @@ def _open_GRIB(file, variable, decode_coords, decode_times, backend_kwargs, **kw
     backend_kwargs["errors"] = backend_kwargs.get("errors", "ignore")
     if variable:
         # filter by shortName with filter_by_keys. shortName must be present in dataset.
-        backend_kwargs['filter_by_keys'] = backend_kwargs.get('filter_by_keys', {})
-        backend_kwargs['filter_by_keys']['shortName'] = variable
+        backend_kwargs["filter_by_keys"] = backend_kwargs.get("filter_by_keys", {})
+        backend_kwargs["filter_by_keys"]["shortName"] = variable
     encode_cf = kwargs.get("encode_cf", ("time", "geography", "vertical"))
-    dss = cfgrib.open_datasets(
-        file,
-        backend_kwargs=backend_kwargs,
-        decode_coords=decode_coords,
-        decode_times=decode_times,
-        encode_cf=encode_cf,
-    )
+    try:
+        dss = cfgrib.open_datasets(
+            file,
+            backend_kwargs=backend_kwargs,
+            decode_coords=decode_coords,
+            decode_times=decode_times,
+            encode_cf=encode_cf,
+        )
+    except KeyError as e:
+        if e.args[0] == "paramId":
+            raise KeyError(
+                "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
+                    variable, show_GRIB_shortnames(file)
+                )
+            )
+        else:
+            raise e
     return dss
+
+
+def show_GRIB_shortnames(file):
+    """Show available shortNames of data within a GRIB file, which can be used to filter a dataset when opening a GRIB file.
+
+    Parameters
+    ----------
+    file : str
+        Path to GRIB file
+
+    Returns
+    -------
+    shortNames: [str]
+        List of shortNames
+
+    Raises
+    ------
+    TypeError
+        If non-GRIB file is provided.
+    """
+    if _identifyGRIB(file):
+        index_keys = ["shortName"]
+        stream = messages.FileStream(file, errors="warn")
+        index = messages.FileIndex.from_indexpath_or_filestream(
+            stream, index_keys, indexpath=""
+        )
+        return index.header_values[index_keys[0]]
+    else:
+        raise TypeError(
+            "show_GRIB_shortnames only works for GRIB files. Please provide a GRIB file."
+        )
 
 
 def check_vertex2cell(ds_grid: xr.Dataset):

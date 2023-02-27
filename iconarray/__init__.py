@@ -4,6 +4,7 @@ from .backend.grid import (
     filter_by_var,
     grid_consistency_check,
     open_dataset,
+    show_GRIB_shortnames,
 )
 from .core.crop import Crop
 from .core.interpolate import remap_ICON_to_ICON, remap_ICON_to_regulargrid
