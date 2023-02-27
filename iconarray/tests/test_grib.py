@@ -112,13 +112,16 @@ def test_grid_dataset_cell():
         ds_cellvars.P.dims
     ), "ds_cellvars data variables should have a dimension 'cell'"
 
+
 def test_filter():
     """Test that we can filter a xarray.Dataset to a xarray.DataArray with a single variable."""
-    ds_cell = iconarray.open_dataset(f_alldata, 'T')
+    ds_cell = iconarray.open_dataset(f_alldata, "T")
 
     ds = iconarray.open_dataset(f_alldata)
-    ds_t2 = iconarray.filter_by_var(ds, 'T')
+    ds_t2 = iconarray.filter_by_var(ds, "T")
 
     assert_identical(ds_t, ds_t2)
 
-    assert ds_t.attrs['long_name'] == 'Temperature', "ds_t should be a xarray.DataArray with just the variable T."
+    assert (
+        ds_t.attrs["long_name"] == "Temperature"
+    ), "ds_t should be a xarray.DataArray with just the variable T."
