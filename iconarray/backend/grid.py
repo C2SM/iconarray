@@ -7,7 +7,6 @@ import sys
 
 import cfgrib
 import numpy as np
-import psyplot.project as psy
 import six
 import xarray as xr
 
@@ -411,7 +410,7 @@ def open_dataset(
     decode_cf=True,
     decode_coords="all",
     decode_times=True,
-    backend_kwargs={},
+    backend_kwargs=None,
     **kwargs,
 ):
     """
@@ -426,10 +425,23 @@ def open_dataset(
     file : Path
         Path to ICON data file, either NETCDF of GRIB format.
 
-    variable : str, default: None
-        Name of variable to return from filtered dataset.
+    variable : str, optional
+        Name of variable to return from filtered dataset. Defaults to None.
 
-    kwargs : Additional keyword arguments passed on to the xarray engine open function.
+    decode_cf : bool, optional
+        Whether to decode these variables, assuming they were saved according to CF conventions. Defaults to True.
+
+    decode_coords : bool or {"coordinates", "all"}, optional
+        Controls which variables are set as coordinate variables (see xarray documentation for open_dataset). Defaults to "all".
+
+    decode_times : bool, optional
+        If True, decode times encoded in the standard NetCDF datetime format into datetime objects. Otherwise, leave them encoded as numbers. Defaults to True.
+
+    backend_kwargs : dict, optional
+        Additional keyword arguments passed on to cfgrib.
+
+    **kwargs : dict, optional
+        Additional keyword arguments passed on to the xarray engine open function.
 
     Returns
     ----------
@@ -446,6 +458,8 @@ def open_dataset(
 
     """
     datatype = _identify_datatype(file)
+    if backend_kwargs is None:
+        backend_kwargs = {}
     if datatype == "nc":
         return _open_NC(
             file,
@@ -508,7 +522,7 @@ def filter_by_var(dataset, variable):
 
     Parameters
     ----------
-    ds: xr.Dataset or [xr.Dataset]
+    dataset : xr.Dataset or [xr.Dataset]
         Dataset or array of datasets
 
     variable: str
@@ -516,7 +530,7 @@ def filter_by_var(dataset, variable):
 
     Returns
     -------
-    ds: xr.DataArray
+    dataset: xr.DataArray
 
     Raises
     ------
@@ -558,9 +572,8 @@ def _open_NC(file, variable, decode_cf, decode_coords, decode_times, **kwargs):
 
 def _open_GRIB(file, variable, decode_coords, decode_times, backend_kwargs, **kwargs):
     #  Returns an array of xarray.Datasets.
-    backend_kwargs = backend_kwargs.copy()
-    backend_kwargs["indexpath"] = ""
-    backend_kwargs["errors"] = "ignore"
+    backend_kwargs["indexpath"] = backend_kwargs.get("indexpath", "")
+    backend_kwargs["errors"] = backend_kwargs.get("errors", "ignore")
     encode_cf = kwargs.get("encode_cf", ("time", "geography", "vertical"))
     dss = cfgrib.open_datasets(
         file,
