@@ -115,7 +115,7 @@ def test_grid_dataset_cell():
 
 def test_filter():
     """Test that we can filter a xarray.Dataset to a xarray.DataArray with a single variable."""
-    ds_cell = iconarray.open_dataset(f_alldata, "T")
+    ds_t = iconarray.open_dataset(f_alldata, "T")
 
     ds = iconarray.open_dataset(f_alldata)
     ds_t2 = iconarray.filter_by_var(ds, "T")
