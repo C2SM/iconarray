@@ -553,8 +553,8 @@ def filter_by_var(dataset, variable):
     elif type(dataset) is list:
         for ds in dataset:
             if variable in ds.data_vars:
-                attrs = dataset.attrs.copy()
-                ds_filtered = dataset[variable].to_dataset()
+                attrs = ds.attrs.copy()
+                ds_filtered = ds[variable].to_dataset()
                 ds_filtered.attrs.update(attrs)
                 return ds_filtered
         raise KeyError(
