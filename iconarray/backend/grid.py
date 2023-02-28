@@ -550,7 +550,7 @@ def filter_by_var(dataset, variable):
     elif type(dataset) is list:
         for ds in dataset:
             if variable in ds.data_vars:
-                return [ds[variable]]
+                return ds[variable]
         raise KeyError(
             "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
                 variable, ", ".join([", ".join(ds.data_vars) for ds in dataset])
