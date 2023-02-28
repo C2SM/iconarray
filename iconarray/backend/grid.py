@@ -531,7 +531,7 @@ def filter_by_var(dataset, variable):
 
     Returns
     -------
-    dataset: xr.DataArray
+    dataset: xr.Dataset
 
     Raises
     ------
@@ -540,7 +540,10 @@ def filter_by_var(dataset, variable):
     """
     if type(dataset) == xr.core.dataset.Dataset:
         try:
-            return dataset[variable]
+            attrs = dataset.attrs.copy()
+            ds_filtered = dataset[variable].to_dataset()
+            ds_filtered.attrs.update(attrs)
+            return ds_filtered
         except KeyError:
             raise KeyError(
                 "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
@@ -550,7 +553,10 @@ def filter_by_var(dataset, variable):
     elif type(dataset) is list:
         for ds in dataset:
             if variable in ds.data_vars:
-                return ds[variable]
+                attrs = dataset.attrs.copy()
+                ds_filtered = dataset[variable].to_dataset()
+                ds_filtered.attrs.update(attrs)
+                return ds_filtered
         raise KeyError(
             "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
                 variable, ", ".join([", ".join(ds.data_vars) for ds in dataset])
