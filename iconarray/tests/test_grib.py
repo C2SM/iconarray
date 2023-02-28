@@ -122,6 +122,5 @@ def test_filter():
 
     assert_identical(ds_t, ds_t2)
 
-    assert (
-        ds_t.attrs["long_name"] == "Temperature"
-    ), "ds_t should be a xarray.DataArray with just the variable T."
+    assert len(list(ds_t.data_vars)) == 1
+    assert list(ds_t.data_vars)[0] == "T"
