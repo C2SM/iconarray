@@ -100,3 +100,12 @@ def test_filter():
 
     assert len(list(ds_t.data_vars)) == 1
     assert list(ds_t.data_vars)[0] == "T"
+
+
+def test_var_not_found():
+    """Test the output of vars available in the file if the requested var is not found."""
+    ds = iconarray.open_dataset(f_wo_celldata)
+    try:
+        _ = iconarray.open_dataset(f_wo_celldata, "T_MISSING")
+    except KeyError as e:
+        assert ", ".join(ds.data_vars) in str(e), "list of variables in files incorrect"
