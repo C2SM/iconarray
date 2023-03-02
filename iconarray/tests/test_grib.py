@@ -4,6 +4,8 @@ This module contains tests for the function combine_grid_information on grib dat
 Contains tests: test_grid_edge, test_grid_cell
 """
 
+import itertools
+
 import cfgrib
 import xarray as xr
 from xarray.testing import assert_identical
@@ -128,10 +130,11 @@ def test_filter():
 
 def test_var_not_found():
     """Test the output of vars available in the file if the requested var is not found."""
-    ds = iconarray.open_dataset(f_vt_vn)
+    ds = iconarray.open_dataset(f_alldata)
+    var_list = list(itertools.chain.from_iterable([list(sds.keys()) for sds in ds]))
     try:
-        _ = iconarray.open_dataset(f_vt_vn, "T_MISSING")
+        _ = iconarray.open_dataset(f_alldata, "T_MISSING")
     except KeyError as e:
-        assert "', '".join(ds.data_vars) in str(
-            e
+        assert all(
+            [x in str(e) for x in var_list]
         ), "list of variables in files incorrect"
