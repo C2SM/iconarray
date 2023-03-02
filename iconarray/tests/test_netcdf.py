@@ -108,4 +108,6 @@ def test_var_not_found():
     try:
         _ = iconarray.open_dataset(f_wo_celldata, "T_MISSING")
     except KeyError as e:
-        assert ", ".join(ds.data_vars) in str(e), "list of variables in files incorrect"
+        assert all(
+            [x in str(e) for x in ds.data_vars]
+        ), "list of variables in files incorrect"
