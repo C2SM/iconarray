@@ -6,8 +6,8 @@ import pathlib
 import sys
 
 import cfgrib
+import cfgrib.messages as messages
 import numpy as np
-import psyplot.project as psy
 import six
 import xarray as xr
 
@@ -105,7 +105,7 @@ def combine_grid_information(file, grid_file):
     """
     if isinstance(grid_file, pathlib.PurePath) or isinstance(grid_file, str):
         try:
-            grid = psy.open_dataset(grid_file)
+            grid = xr.open_dataset(grid_file)
         except ValueError:
             logging.error(f"The grid file {grid_file} was not found.")
             sys.exit()
@@ -124,7 +124,9 @@ def combine_grid_information(file, grid_file):
     try:
         ds = ds.squeeze()
     except AttributeError:
-        logging.error("Model data contains more than one hypercube.")
+        logging.error(
+            "Model data contains more than one hypercube. To solve this, provide a single xarray Dataset to iconarray.combine_grid_information(ds, gridfile), if iconarray.open_dataset(grib_file) returns an array of datasets."
+        )
         sys.exit()
 
     cell_dim = get_cell_dim_name(ds, grid)
@@ -405,7 +407,15 @@ def add_edge_data(ds, grid):
     return ds
 
 
-def open_dataset(file):
+def open_dataset(
+    file,
+    variable=None,
+    decode_cf=True,
+    decode_coords="all",
+    decode_times=True,
+    backend_kwargs=None,
+    **kwargs,
+):
     """
     Open either NETCDF or GRIB file.
 
@@ -417,6 +427,24 @@ def open_dataset(file):
     ----------
     file : Path
         Path to ICON data file, either NETCDF of GRIB format.
+
+    variable : str, optional
+        Name of variable to return from filtered dataset. Defaults to None.
+
+    decode_cf : bool, optional
+        Whether to decode these variables, assuming they were saved according to CF conventions. Defaults to True.
+
+    decode_coords : bool or {"coordinates", "all"}, optional
+        Controls which variables are set as coordinate variables (see xarray documentation for open_dataset). Defaults to "all".
+
+    decode_times : bool, optional
+        If True, decode times encoded in the standard NetCDF datetime format into datetime objects. Otherwise, leave them encoded as numbers. Defaults to True.
+
+    backend_kwargs : dict, optional
+        Additional keyword arguments passed on to cfgrib.
+
+    **kwargs : dict, optional
+        Additional keyword arguments passed on to the xarray engine open function.
 
     Returns
     ----------
@@ -433,10 +461,28 @@ def open_dataset(file):
 
     """
     datatype = _identify_datatype(file)
+    if backend_kwargs is None:
+        backend_kwargs = {}
     if datatype == "nc":
-        return _open_NC(file)
+        return _open_NC(
+            file,
+            variable=variable,
+            decode_cf=decode_cf,
+            decode_coords=decode_coords,
+            decode_times=decode_times,
+            **kwargs,
+        )
     elif datatype == "grib":
-        dss = _open_GRIB(file)
+        # set decode_coords to True if decode_coords == 'all', since it seems to cause cfgrib.open_datasets to hang
+        decode_coords = True if decode_coords == "all" else decode_coords
+        dss = _open_GRIB(
+            file,
+            variable=variable,
+            decode_coords=decode_coords,
+            decode_times=decode_times,
+            backend_kwargs=backend_kwargs,
+            **kwargs,
+        )
         if len(dss) == 1:
             return dss[0]
         else:
@@ -474,21 +520,123 @@ def _identifyGRIB(file):
             return False
 
 
-def _open_NC(file):
-    return psy.open_dataset(file)
+def filter_by_var(dataset, variable):
+    """Filter dataset to single variable dataset.
+
+    Parameters
+    ----------
+    dataset : xr.Dataset or [xr.Dataset]
+        Dataset or array of datasets
+
+    variable: str
+        Name of variable to filter dataset
+
+    Returns
+    -------
+    dataset: xr.Dataset
+
+    Raises
+    ------
+    KeyError
+        If variable cannot be found in the dataset.
+    """
+    if type(dataset) == xr.core.dataset.Dataset:
+        try:
+            attrs = dataset.attrs.copy()
+            ds_filtered = dataset[variable].to_dataset()
+            ds_filtered.attrs.update(attrs)
+            return ds_filtered
+        except KeyError:
+            raise KeyError(
+                "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
+                    variable, ", ".join(dataset.data_vars)
+                )
+            )
+    elif type(dataset) is list:
+        for ds in dataset:
+            if variable in ds.data_vars:
+                attrs = ds.attrs.copy()
+                ds_filtered = ds[variable].to_dataset()
+                ds_filtered.attrs.update(attrs)
+                return ds_filtered
+        raise KeyError(
+            "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
+                variable, ", ".join([", ".join(ds.data_vars) for ds in dataset])
+            )
+        )
 
 
-def _open_GRIB(file):
-    #  Returns an array of xarray.Datasets.
-    dss = cfgrib.open_datasets(
+def _open_NC(file, variable, decode_cf, decode_coords, decode_times, **kwargs):
+    ds = xr.open_dataset(
         file,
-        backend_kwargs={
-            "indexpath": "",
-            "errors": "ignore",
-        },
-        encode_cf=("time", "geography", "vertical"),
+        decode_cf=decode_cf,
+        decode_coords=decode_coords,
+        decode_times=decode_times,
+        **kwargs,
     )
+    if variable:
+        return filter_by_var(ds, variable)
+    return ds
+
+
+def _open_GRIB(file, variable, decode_coords, decode_times, backend_kwargs, **kwargs):
+    #  Returns an array of xarray.Datasets.
+    backend_kwargs["indexpath"] = backend_kwargs.get("indexpath", "")
+    backend_kwargs["errors"] = backend_kwargs.get("errors", "ignore")
+    if variable:
+        # filter by shortName with filter_by_keys. shortName must be present in dataset.
+        backend_kwargs["filter_by_keys"] = backend_kwargs.get("filter_by_keys", {})
+        backend_kwargs["filter_by_keys"]["shortName"] = variable
+    encode_cf = kwargs.get("encode_cf", ("time", "geography", "vertical"))
+    try:
+        dss = cfgrib.open_datasets(
+            file,
+            backend_kwargs=backend_kwargs,
+            decode_coords=decode_coords,
+            decode_times=decode_times,
+            encode_cf=encode_cf,
+        )
+    except KeyError as e:
+        if e.args[0] == "paramId":
+            raise KeyError(
+                "Cannot filter dataset by variable '{0}'. Variables in this dataset are: {1}".format(
+                    variable, show_GRIB_shortnames(file)
+                )
+            )
+        else:
+            raise e
     return dss
+
+
+def show_GRIB_shortnames(file):
+    """Show available shortNames of data within a GRIB file, which can be used to filter a dataset when opening a GRIB file.
+
+    Parameters
+    ----------
+    file : str
+        Path to GRIB file
+
+    Returns
+    -------
+    shortNames: [str]
+        List of shortNames
+
+    Raises
+    ------
+    TypeError
+        If non-GRIB file is provided.
+    """
+    if _identifyGRIB(file):
+        index_keys = ["shortName"]
+        stream = messages.FileStream(file, errors="warn")
+        index = messages.FileIndex.from_indexpath_or_filestream(
+            stream, index_keys, indexpath=""
+        )
+        return index.header_values[index_keys[0]]
+    else:
+        raise TypeError(
+            "show_GRIB_shortnames only works for GRIB files. Please provide a GRIB file."
+        )
 
 
 def check_vertex2cell(ds_grid: xr.Dataset):
