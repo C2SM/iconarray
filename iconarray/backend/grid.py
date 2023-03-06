@@ -124,7 +124,9 @@ def combine_grid_information(file, grid_file):
     try:
         ds = ds.squeeze()
     except AttributeError:
-        logging.error("Model data contains more than one hypercube.")
+        logging.error(
+            "Model data contains more than one hypercube. To solve this, provide a single xarray Dataset to iconarray.combine_grid_information(ds, gridfile), if iconarray.open_dataset(grib_file) returns an array of datasets."
+        )
         sys.exit()
 
     cell_dim = get_cell_dim_name(ds, grid)
