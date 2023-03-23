@@ -7,7 +7,9 @@ Contains public functions: ind_from_latlon, add_coordinates, get_stats wilks, sh
 import numpy as np
 import six
 import xarray
-from scipy import stats
+from scipy import stats, cKDTree
+
+from typing import List
 
 
 def awhere_drop(ds, cond):
@@ -18,14 +20,14 @@ def awhere_drop(ds, cond):
 
     Parameters
     ----------
-    ds : xr.Dataset
+    ds : xarray.Dataset
         Dataset such as ICON data
     cond
         A condition to apply to the data.
 
     Returns
     ----------
-    reduced_ds : xr.Dataset
+    reduced_ds : xarray.Dataset
         Filtered dataset
     """
     ret = ds.where(cond, drop=True)
@@ -35,60 +37,54 @@ def awhere_drop(ds, cond):
     return ret
 
 
-def ind_from_latlon(lats, lons, lat, lon, verbose=False):
+def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
+                       lon_point: float, lat_point: float, n: int = 1) -> List[int]:
     """
-    Find the nearest neighbouring index to given location.
+    Find the indices of the n closest points in two 1D xarrays of longitude and latitude values
+    to a given point specified by its own longitude and latitude values.
 
     Parameters
     ----------
-    lats : 2d array
-        Latitude grid
-    lons : 2d array
-        Longitude grid
-    lat : float
-        Latitude of location
-    lon : float
-        Longitude of location
-    verbose : bool
-        Print information. Defaults to False.
+    lon_array : xarray.DataArray
+        A 1D xarray of longitude values.
+    lat_array : xarray.DataArray
+        A 1D xarray of latitude values.
+    lon_point : float
+        The longitude value of the point to find the closest point(s) to.
+    lat_point : float
+        The latitude value of the point to find the closest point(s) to.
+    n : int, optional
+        The number of closest points to return. Default is 1.
 
     Returns
-    ----------
-    index : int
-        Index of nearest grid point.
+    -------
+    List[int]
+        The indices of the closest n points to the given point.
+        
+    Implementaion
+    -------------
+    The function builds a KDTree from the 2D array of longitude and latitude coordinates,
+    and queries it to find the n nearest neighbors to the given point.
 
-    See Also
+    Limitation
     ----------
-    iconarray.core.utilities
-
-    Examples
-    ----------
-    >>> # Get values of grid cell closest to coordinate
-    >>> # E.g. Zürich:
-    >>> lon = 8.54
-    >>> lat = 47.38
-    >>> lats = np.rad2deg(ds.clat.values[:])
-    >>> lons = np.rad2deg(ds.clon.values[:])
-    >>> ind = iconarray.ind_from_latlon(
-    ...         lats,lons,lat,lon,verbose=True
-    ...         )
-
-    >>> ind
-    3352
-    # Closest ind: 3352
-    #  Given lat: 47.380 vs found lat: 47.372
-    #  Given lon: 8.540 vs found lon: 8.527
+    This function assumes a flat earth, which is a reasonable approximation for small regions
+    and high-resolution simulations. However, it may not be accurate for large distances or global data.
 
     """
-    dist = [
-        np.sqrt((lats[i] - lat) ** 2 + (lons[i] - lon) ** 2) for i in range(len(lats))
-    ]
-    ind = np.where(dist == np.min(dist))[0][0]
-    if verbose:
-        print(f"Closest ind: {ind}")
-        print(f" Given lat: {lat:.3f} vs found lat: {lats[ind]:.3f}")
-        print(f" Given lon: {lon:.3f} vs found lon: {lons[ind]:.3f}")
-    return ind
+
+    # Create a 2D array of lon and lat coordinates
+    lon_lat_array = np.column_stack((lon_array.values, lat_array.values))
+
+    # Build a cKDTree from the 2D array
+    tree = cKDTree(lon_lat_array)
+
+    # Find the index of the nearest neighbor of the given point
+    points = np.array([lon_point, lat_point])
+    _, indices = tree.query(points, k=n)
+
+    return indices.tolist()
+
 
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
