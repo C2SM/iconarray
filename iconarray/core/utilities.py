@@ -38,32 +38,34 @@ def awhere_drop(ds, cond):
 
 
 def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
-                       lon_point: float, lat_point: float, n: int = 1) -> List[int]:
+                    lon_point: float, lat_point: float, n: int = 1, verbose: bool = False) -> List[int]:
     """
-    Find the indices of the n closest points in two 1D xarrays of longitude and latitude values
+    Find the indices of the n closest points in two xarrays of longitude and latitude values
     to a given point specified by its own longitude and latitude values.
 
     Parameters
     ----------
     lon_array : xarray.DataArray
-        A 1D xarray of longitude values.
+        A 1D or 2D xarray of longitude values.
     lat_array : xarray.DataArray
-        A 1D xarray of latitude values.
+        A 1D or 2D xarray of latitude values.
     lon_point : float
         The longitude value of the point to find the closest point(s) to.
     lat_point : float
         The latitude value of the point to find the closest point(s) to.
     n : int, optional
         The number of closest points to return. Default is 1.
+    verbose: bool, optional
+        Print information. Defaults to False.
 
     Returns
     -------
     List[int]
         The indices of the closest n points to the given point.
-        
-    Implementaion
-    -------------
-    The function builds a KDTree from the 2D array of longitude and latitude coordinates,
+
+    Implementation
+    --------------
+    The function builds a KDTree from the 1D or 2D array of longitude and latitude coordinates,
     and queries it to find the n nearest neighbors to the given point.
 
     Limitation
@@ -74,16 +76,32 @@ def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
     """
 
     # Create a 2D array of lon and lat coordinates
-    lon_lat_array = np.column_stack((lon_array.values, lat_array.values))
+    lon_lat_array = np.column_stack((lon_array.values.flatten(), lat_array.values.flatten()))
 
-    # Build a cKDTree from the 2D array
+    # Build a cKDTree from this 2D array
     tree = cKDTree(lon_lat_array)
 
-    # Find the index of the nearest neighbor of the given point
+    # Find the index of the nearest neighbor(s) of the given point
     points = np.array([lon_point, lat_point])
     _, indices = tree.query(points, k=n)
 
-    return indices.tolist()
+    # Convert index to 2D indices if applicable, e.g., for COSMO
+    if n == 1:
+        indices = [np.unravel_index(indices, lon_array.shape)]
+    else:
+        indices = [np.unravel_index(index, lon_array.shape) for index in indices]
+
+    # Print verbose information if requested
+    if verbose:
+        closest_lats = [lat_array.values[index] for index in indices]
+        closest_lons = [lon_array.values[index] for index in indices]
+        print(f"Closest indices: {indices}")
+        print(f"Given lat: {lat_point} vs {n} closest lats found: {closest_lats}")
+        print(f"Given lon: {lon_point} vs {n} closest lons found: {closest_lons}")
+
+    # Unpack indices list if it contains only one entry.
+    # This is done to keep the ABI stable
+    return indices[0] if len(indices) == 1 else indices
 
 
 
