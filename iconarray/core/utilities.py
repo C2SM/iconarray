@@ -40,8 +40,9 @@ def awhere_drop(ds, cond):
 def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
                     lon_point: float, lat_point: float, n: int = 1, verbose: bool = False) -> List[int]:
     """
-    Find the indices of the n closest points in two xarrays of longitude and latitude values
-    to a given point specified by its own longitude and latitude values.
+    Find the indices of the n closest points in two xarrays of longitude and latitude values.
+    
+    That is to a given point specified by its own longitude and latitude values.
 
     Parameters
     ----------
@@ -74,7 +75,6 @@ def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
     and high-resolution simulations. However, it may not be accurate for large distances or global data.
 
     """
-
     # Create a 2D array of lon and lat coordinates
     lon_lat_array = np.column_stack((lon_array.values.flatten(), lat_array.values.flatten()))
 
