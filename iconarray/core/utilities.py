@@ -6,7 +6,7 @@ Contains public functions: ind_from_latlon, add_coordinates, get_stats wilks, sh
 
 import numpy as np
 import six
-import xarray
+import xarray as xr
 from scipy import stats
 from scipy.spatial import cKDTree
 
@@ -15,20 +15,20 @@ from typing import List
 
 def awhere_drop(ds, cond):
     """
-    xarray.Dataset.where equivalent that preserves the dtype of the array.
+    xr.Dataset.where equivalent that preserves the dtype of the array.
 
-    The xarray.Dataset.where in general will not preserve the value type of the array. In case of drop=False, elements of the array that do not satisfy the condition are set to np.NaN, which can only be stored on a float type. Therefore the return of xarray.Dataset.where will be of dtype float64. This function computes a where with drop=True, ensuring the dtype of the input xarray is preserved.
+    The xr.Dataset.where in general will not preserve the value type of the array. In case of drop=False, elements of the array that do not satisfy the condition are set to np.NaN, which can only be stored on a float type. Therefore the return of xarray.Dataset.where will be of dtype float64. This function computes a where with drop=True, ensuring the dtype of the input xarray is preserved.
 
     Parameters
     ----------
-    ds : xarray.Dataset
+    ds : xr.Dataset
         Dataset such as ICON data
     cond
         A condition to apply to the data.
 
     Returns
     ----------
-    reduced_ds : xarray.Dataset
+    reduced_ds : xr.Dataset
         Filtered dataset
     """
     ret = ds.where(cond, drop=True)
@@ -38,7 +38,7 @@ def awhere_drop(ds, cond):
     return ret
 
 
-def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
+def ind_from_latlon(lon_array: xr.DataArray, lat_array: xr.DataArray,
                     lon_point: float, lat_point: float, n: int = 1, verbose: bool = False) -> List[int]:
     """
     Find the indices of the n closest points in two xarrays of longitude and latitude values.
@@ -47,10 +47,10 @@ def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
 
     Parameters
     ----------
-    lon_array : xarray.DataArray
-        A 1D or 2D xarray of longitude values.
-    lat_array : xarray.DataArray
-        A 1D or 2D xarray of latitude values.
+    lon_array : xr.DataArray
+        A 1D or 2D xr of longitude values.
+    lat_array : xr.DataArray
+        A 1D or 2D xr of latitude values.
     lon_point : float
         The longitude value of the point to find the closest point(s) to.
     lat_point : float
@@ -249,14 +249,14 @@ def show_data_vars(ds):
 
     Parameters
     ----------
-    ds : xarray.Dataset
+    ds : xr.Dataset
         Dataset of ICON GRIB data opened with cgrib engine or cfgrib.
     """
     if type(ds) is str:
         Exception(
             "Argument is not a Dataset. Please open the dataset via psy.open_dataset() and pass returned Dataset to this function."
         )
-    elif type(ds) is xarray.core.dataset.Dataset:
+    elif type(ds) is xr.core.dataset.Dataset:
         print(
             "{:<15} {:<32} {:<20} {:<20} {:<10}".format(
                 "psyplot name", "long_name", "GRIB_cfVarName", "GRIB_shortName", "units"
