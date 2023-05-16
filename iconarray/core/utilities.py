@@ -86,7 +86,7 @@ def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
     points = np.array([lon_point, lat_point])
     _, indices = tree.query(points, k=n)
 
-    # Convert index to 2D indices if applicable, e.g., for COSMO
+    # Convert index to 2D indices if applicable, e.g., when using output remapped to lat-lon grind
     if n == 1:
         indices = [np.unravel_index(indices, lon_array.shape)]
     else:
