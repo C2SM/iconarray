@@ -7,7 +7,8 @@ Contains public functions: ind_from_latlon, add_coordinates, get_stats wilks, sh
 import numpy as np
 import six
 import xarray
-from scipy import stats, cKDTree
+from scipy import stats
+from scipy.spatial import cKDTree
 
 from typing import List
 
