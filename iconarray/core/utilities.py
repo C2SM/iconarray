@@ -97,8 +97,8 @@ def ind_from_latlon(lon_array: xarray.DataArray, lat_array: xarray.DataArray,
         closest_lats = [lat_array.values[index] for index in indices]
         closest_lons = [lon_array.values[index] for index in indices]
         print(f"Closest indices: {indices}")
-        print(f"Given lat: {lat_point} vs {n} closest lats found: {closest_lats}")
-        print(f"Given lon: {lon_point} vs {n} closest lons found: {closest_lons}")
+        print(f"Given lat: {lat_point}. Closest {n} lat/s found: {closest_lats}")
+        print(f"Given lat: {lon_point}. Closest {n} lat/s found: {closest_lons}")
 
     # Unpack indices list if it contains only one entry.
     # This is done to keep the ABI stable
