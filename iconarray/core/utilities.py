@@ -4,13 +4,13 @@ The utilities.py module contains various functions useful for analysing or plott
 Contains public functions: ind_from_latlon, add_coordinates, get_stats wilks, show_data_vars
 """
 
+from typing import List
+
 import numpy as np
 import six
 import xarray as xr
 from scipy import stats
 from scipy.spatial import cKDTree
-
-from typing import List
 
 
 def awhere_drop(ds, cond):
@@ -38,11 +38,17 @@ def awhere_drop(ds, cond):
     return ret
 
 
-def ind_from_latlon(lon_array: xr.DataArray, lat_array: xr.DataArray,
-                    lon_point: float, lat_point: float, n: int = 1, verbose: bool = False) -> List[int]:
+def ind_from_latlon(
+    lon_array: xr.DataArray,
+    lat_array: xr.DataArray,
+    lon_point: float,
+    lat_point: float,
+    n: int = 1,
+    verbose: bool = False,
+) -> List[int]:
     """
     Find the indices of the n closest points in two xarrays of longitude and latitude values.
-    
+
     That is to a given point specified by its own longitude and latitude values.
 
     Parameters
@@ -75,9 +81,30 @@ def ind_from_latlon(lon_array: xr.DataArray, lat_array: xr.DataArray,
     This function assumes a flat earth, which is a reasonable approximation for small regions
     and high-resolution simulations. However, it may not be accurate for large distances or global data.
 
+    Example
+    ----------
+    >>> # Get values of grid cell closest to coordinate
+    >>> # E.g. Zürich:
+    >>> lon = 8.54
+    >>> lat = 47.38
+    >>> lats = np.rad2deg(ds.clat.values[:])
+    >>> lons = np.rad2deg(ds.clon.values[:])
+    >>> ind = iconarray.ind_from_latlon(
+    ...         lats,lons,lat,lon,
+    ...         verbose=True, n=1
+    ...         )
+
+    >>> ind
+    3352
+    # Closest ind: 3352
+    # Given lat: 47.380. Closest 1 lat/s found: 47.372
+    # Given lon: 8.540. Closest 1 lon/s found: 8.527
+
     """
     # Create a 2D array of lon and lat coordinates
-    lon_lat_array = np.column_stack((lon_array.values.flatten(), lat_array.values.flatten()))
+    lon_lat_array = np.column_stack(
+        (lon_array.values.flatten(), lat_array.values.flatten())
+    )
 
     # Build a cKDTree from this 2D array
     tree = cKDTree(lon_lat_array)
@@ -103,7 +130,6 @@ def ind_from_latlon(lon_array: xr.DataArray, lat_array: xr.DataArray,
     # Unpack indices list if it contains only one entry.
     # This is done to keep the ABI stable
     return indices[0] if len(indices) == 1 else indices
-
 
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
