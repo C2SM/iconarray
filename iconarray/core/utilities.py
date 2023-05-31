@@ -10,7 +10,7 @@ import numpy as np
 import six
 import xarray as xr
 from scipy import stats
-from scipy.spatial import cKDTree
+from sklearn.neighbors import BallTree
 
 
 def awhere_drop(ds, cond):
@@ -54,13 +54,13 @@ def ind_from_latlon(
     Parameters
     ----------
     lon_array : xr.DataArray
-        A 1D or 2D xr of longitude values.
+        A 1D or 2D xr of longitude values [radians].
     lat_array : xr.DataArray
-        A 1D or 2D xr of latitude values.
+        A 1D or 2D xr of latitude values [radians].
     lon_point : float
-        The longitude value of the point to find the closest point(s) to.
+        The longitude value [radians] of the point to find the closest point(s) to.
     lat_point : float
-        The latitude value of the point to find the closest point(s) to.
+        The latitude value [radians] of the point to find the closest point(s) to.
     n : int, optional
         The number of closest points to return. Default is 1.
     verbose: bool, optional
@@ -73,20 +73,15 @@ def ind_from_latlon(
 
     Implementation
     --------------
-    The function builds a KDTree from the 1D or 2D array of longitude and latitude coordinates,
+    The function builds a BallTree from the 1D or 2D array of longitude and latitude coordinates,
     and queries it to find the n nearest neighbors to the given point.
-
-    Limitation
-    ----------
-    This function assumes a flat earth, which is a reasonable approximation for small regions
-    and high-resolution simulations. However, it may not be accurate for large distances or global data.
 
     Example
     ----------
     >>> # Get values of grid cell closest to coordinate
     >>> # E.g. Zürich:
-    >>> lon = 8.54
-    >>> lat = 47.38
+    >>> lon = np.rad2deg(8.54)
+    >>> lat = np.rad2deg(47.38)
     >>> lats = np.rad2deg(ds.clat.values[:])
     >>> lons = np.rad2deg(ds.clon.values[:])
     >>> ind = iconarray.ind_from_latlon(
@@ -106,11 +101,11 @@ def ind_from_latlon(
         (lon_array.values.flatten(), lat_array.values.flatten())
     )
 
-    # Build a cKDTree from this 2D array
-    tree = cKDTree(lon_lat_array)
+    # Build a BallTree from this 2D array using the Haversine distance
+    tree = BallTree(lon_lat_array, metric="haversine")
 
     # Find the index of the nearest neighbor(s) of the given point
-    points = np.array([lon_point, lat_point])
+    points = np.column_stack((lon_point, lat_point))
     _, indices = tree.query(points, k=n)
 
     # Convert index to 2D indices if applicable, e.g., when using output remapped to lat-lon grind
@@ -124,12 +119,16 @@ def ind_from_latlon(
         closest_lats = [lat_array.values[index] for index in indices]
         closest_lons = [lon_array.values[index] for index in indices]
         print(f"Closest indices: {indices}")
-        print(f"Given lat: {lat_point}. Closest {n} lat/s found: {closest_lats}")
-        print(f"Given lon: {lon_point}. Closest {n} lon/s found: {closest_lons}")
+        print(
+            f"Given lat: {np.rad2deg(lat_point)}. Closest {n} lat/s found: {np.rad2deg(closest_lats)}"
+        )
+        print(
+            f"Given lon: {np.rad2deg(lon_point)}. Closest {n} lon/s found: {np.rad2deg(closest_lons)}"
+        )
 
     # Unpack indices list if it contains only one entry.
     # This is done to keep the ABI stable
-    return indices[0] if len(indices) == 1 else indices
+    return indices[0][0][0][0] if len(indices) == 1 else indices
 
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
