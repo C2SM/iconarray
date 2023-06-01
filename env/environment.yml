@@ -14,4 +14,6 @@ dependencies:
 - psy-view
 - psy-reg
 - cartopy
+- pip:
+  - git+https://github.com/C2SM/iconarray@v0.3.0
 - pre-commit
