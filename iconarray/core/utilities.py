@@ -96,9 +96,10 @@ def ind_from_latlon(
     # Given lon: 8.540 deg. Closest 1 lon/s found: 8.527
 
     """
-
     # Convert Input to radians
-    lon_array, lat_array, lon_points, lat_points = [np.deg2rad(arr) for arr in [lon_array, lat_array, lon_points, lat_points]]  
+    lon_array, lat_array, lon_points, lat_points = [
+        np.deg2rad(arr) for arr in [lon_array, lat_array, lon_points, lat_points]
+    ]
 
     # Create a 2D array of lon and lat coordinates
     lon_lat_array = np.column_stack(
