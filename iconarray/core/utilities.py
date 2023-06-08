@@ -96,6 +96,28 @@ def ind_from_latlon(
     # Given lon: 8.540 deg. Closest 1 lon/s found: 8.527
 
     """
+    # Utility function
+    def get_innermost_element(indices):
+        """
+        Recursively traverses nested lists or arrays to obtain the innermost element.
+
+        Args:
+            indices: A nested list or numpy array.
+
+        Returns:
+            The innermost element of the nested structure.
+
+        """
+        if isinstance(indices, (list, tuple, np.ndarray)):
+            if len(indices) > 0:
+                if isinstance(indices[0], (list, tuple, np.ndarray)):
+                    return get_innermost_element(indices[0])
+                else:
+                    return indices
+            else:
+                return indices
+        return [indices]
+
     # Convert Input to radians
     lon_array, lat_array, lon_points, lat_points = [
         np.deg2rad(arr) for arr in [lon_array, lat_array, lon_points, lat_points]
@@ -119,21 +141,31 @@ def ind_from_latlon(
     else:
         indices = [np.unravel_index(index, lon_array.shape) for index in indices]
 
+    # Unpack indices list
+    indices = get_innermost_element(indices)
+
     # Print verbose information if requested
     if verbose:
-        closest_lats = [lat_array.values[index] for index in indices]
-        closest_lons = [lon_array.values[index] for index in indices]
-        print(f"Closest indices: {indices}")
-        print(
-            f"Given lat: {np.rad2deg(lat_points):.4f} deg. Closest {n} lat/s found: {np.rad2deg(closest_lats)}"
+        closest_lats = " ".join(
+            f"{num:.4f}" for num in np.rad2deg(lat_array.values[indices])
         )
-        print(
-            f"Given lon: {np.rad2deg(lon_points):.4f} deg. Closest {n} lon/s found: {np.rad2deg(closest_lons)}"
+        closest_lons = " ".join(
+            f"{num:.4f}" for num in np.rad2deg(lon_array.values[indices])
         )
 
-    # Unpack indices list if it contains only one entry.
-    # This is done to keep the ABI stable
-    return indices[0][0][0][0] if len(indices) == 1 else indices
+        indices_str = " ".join(map(str, indices.tolist()))
+        given_lat_str = f"{np.rad2deg(lat_points):.4f}"
+        given_lon_str = f"{np.rad2deg(lon_points):.4f}"
+
+        print(f"Closest indices: {indices_str}")
+        print(
+            f"Given lat: {given_lat_str} deg. Closest {n} lat/s found: {closest_lats}"
+        )
+        print(
+            f"Given lon: {given_lon_str} deg. Closest {n} lon/s found: {closest_lons}"
+        )
+
+    return indices
 
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
