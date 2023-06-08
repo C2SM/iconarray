@@ -82,8 +82,8 @@ def ind_from_latlon(
     >>> # E.g. Zürich:
     >>> lon = 8.54
     >>> lat = 47.38
-    >>> lats = ds.clat.values[:]
-    >>> lons = ds.clon.values[:]
+    >>> lats = ds.clat
+    >>> lons = ds.clon
     >>> ind = iconarray.ind_from_latlon(
     ...         lats,lons,lat,lon,
     ...         verbose=True, n=1
