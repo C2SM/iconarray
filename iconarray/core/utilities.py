@@ -41,8 +41,8 @@ def awhere_drop(ds, cond):
 def ind_from_latlon(
     lon_array: xr.DataArray,
     lat_array: xr.DataArray,
-    lon_point: float,
-    lat_point: float,
+    lon_points: float,
+    lat_points: float,
     n: int = 1,
     verbose: bool = False,
 ) -> List[int]:
@@ -98,7 +98,7 @@ def ind_from_latlon(
     """
 
     # Convert Input to radians
-    lon_array, lat_array, lon_point, lat_point = [np.deg2rad(arr) for arr in [lon_array, lat_array, lon_point, lat_point]]  
+    lon_array, lat_array, lon_points, lat_points = [np.deg2rad(arr) for arr in [lon_array, lat_array, lon_points, lat_points]]  
 
     # Create a 2D array of lon and lat coordinates
     lon_lat_array = np.column_stack(
@@ -109,7 +109,7 @@ def ind_from_latlon(
     tree = BallTree(lon_lat_array, metric="haversine")
 
     # Find the index of the nearest neighbor(s) of the given point
-    points = np.column_stack((lon_point, lat_point))
+    points = np.column_stack((lon_points, lat_points))
     _, indices = tree.query(points, k=n)
 
     # Convert index to 2D indices if applicable, e.g., when using output remapped to lat-lon grind
@@ -124,10 +124,10 @@ def ind_from_latlon(
         closest_lons = [lon_array.values[index] for index in indices]
         print(f"Closest indices: {indices}")
         print(
-            f"Given lat: {np.rad2deg(lat_point):.4f} deg. Closest {n} lat/s found: {np.rad2deg(closest_lats)}"
+            f"Given lat: {np.rad2deg(lat_points):.4f} deg. Closest {n} lat/s found: {np.rad2deg(closest_lats)}"
         )
         print(
-            f"Given lon: {np.rad2deg(lon_point):.4f} deg. Closest {n} lon/s found: {np.rad2deg(closest_lons)}"
+            f"Given lon: {np.rad2deg(lon_points):.4f} deg. Closest {n} lon/s found: {np.rad2deg(closest_lons)}"
         )
 
     # Unpack indices list if it contains only one entry.
