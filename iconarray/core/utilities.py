@@ -54,13 +54,13 @@ def ind_from_latlon(
     Parameters
     ----------
     lon_array : xr.DataArray
-        A 1D or 2D xr of longitude values [radians].
+        A 1D or 2D xr of longitude values [degree].
     lat_array : xr.DataArray
-        A 1D or 2D xr of latitude values [radians].
+        A 1D or 2D xr of latitude values [degree].
     lon_point : float
-        The longitude value [radians] of the point to find the closest point(s) to.
+        The longitude value [degree] of the point to find the closest point(s) to.
     lat_point : float
-        The latitude value [radians] of the point to find the closest point(s) to.
+        The latitude value [degree] of the point to find the closest point(s) to.
     n : int, optional
         The number of closest points to return. Default is 1.
     verbose: bool, optional
@@ -80,10 +80,10 @@ def ind_from_latlon(
     ----------
     >>> # Get values of grid cell closest to coordinate
     >>> # E.g. Zürich:
-    >>> lon = np.rad2deg(8.54)
-    >>> lat = np.rad2deg(47.38)
-    >>> lats = np.rad2deg(ds.clat.values[:])
-    >>> lons = np.rad2deg(ds.clon.values[:])
+    >>> lon = 8.54
+    >>> lat = 47.38
+    >>> lats = ds.clat.values[:]
+    >>> lons = ds.clon.values[:]
     >>> ind = iconarray.ind_from_latlon(
     ...         lats,lons,lat,lon,
     ...         verbose=True, n=1
@@ -92,10 +92,14 @@ def ind_from_latlon(
     >>> ind
     3352
     # Closest ind: 3352
-    # Given lat: 47.380. Closest 1 lat/s found: 47.372
-    # Given lon: 8.540. Closest 1 lon/s found: 8.527
+    # Given lat: 47.380 deg. Closest 1 lat/s found: 47.372
+    # Given lon: 8.540 deg. Closest 1 lon/s found: 8.527
 
     """
+
+    # Convert Input to radians
+    lon_array, lat_array, lon_point, lat_point = [np.deg2rad(arr) for arr in [lon_array, lat_array, lon_point, lat_point]]  
+
     # Create a 2D array of lon and lat coordinates
     lon_lat_array = np.column_stack(
         (lon_array.values.flatten(), lat_array.values.flatten())
@@ -120,10 +124,10 @@ def ind_from_latlon(
         closest_lons = [lon_array.values[index] for index in indices]
         print(f"Closest indices: {indices}")
         print(
-            f"Given lat: {np.rad2deg(lat_point)}. Closest {n} lat/s found: {np.rad2deg(closest_lats)}"
+            f"Given lat: {np.rad2deg(lat_point):.4f} deg. Closest {n} lat/s found: {np.rad2deg(closest_lats)}"
         )
         print(
-            f"Given lon: {np.rad2deg(lon_point)}. Closest {n} lon/s found: {np.rad2deg(closest_lons)}"
+            f"Given lon: {np.rad2deg(lon_point):.4f} deg. Closest {n} lon/s found: {np.rad2deg(closest_lons)}"
         )
 
     # Unpack indices list if it contains only one entry.
