@@ -84,6 +84,9 @@ def ind_from_latlon(
     >>> lat = 47.38
     >>> lats = ds.clat
     >>> lons = ds.clon
+    >>> if ds.clat.attrs.get('units') == 'radian':
+    >>>     lats = np.rad2deg(lats)
+    >>>     lons = np.rad2deg(lons)
     >>> ind = iconarray.ind_from_latlon(
     ...         lats,lons,lat,lon,
     ...         verbose=True, n=1
