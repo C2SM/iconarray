@@ -68,7 +68,7 @@ autodoc_mock_imports = [
     "pytest",
     "urllib",
     "ftplib",
-    "sklearn"
+    "sklearn",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
