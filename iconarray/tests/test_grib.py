@@ -116,16 +116,12 @@ def test_grid_cell(alldata):
     assert "cell" in list(
         ds_cellvars.P.dims
     ), "ds_cellvars data variables should have a dimension 'cell'"
-    assert (
-        sum(
-            [
-                1
-                for coord in ["clon", "clat", "clon_bnds", "clat_bnds"]
-                if coord in ds_cellvars.coords
-            ]
-        )
-        == 4
-    ), "ds_cellvars should have coordinates 'clon', 'clat', 'clon_bnds', 'clat_bnds'"
+    assert ds_cellvars.coords.keys() >= {
+        "clon",
+        "clat",
+        "clon_bnds",
+        "clat_bnds",
+    }, "ds_cellvars should have coordinates clon', 'clat', 'clon_bnds', 'clat_bnds'"
 
 
 def test_grid_dataset_cell(alldata):
