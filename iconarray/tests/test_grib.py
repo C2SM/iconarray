@@ -5,13 +5,13 @@ Contains tests: test_grid_edge, test_grid_cell
 """
 
 import itertools
-import pytest
-import cfgrib
-import iconarray
-import xarray as xr
 
+import cfgrib
+import pytest
+import xarray as xr
 from xarray.testing import assert_identical
 
+import iconarray
 
 f_vt_vn = "data/example_data/grib/vnvt00010000"  # ONLY VN, VT variables
 f_alldata = "data/example_data/grib/lfff00010000_edgeplots"  # VN, VT AND cell center variables (P, T, U, V etc)
@@ -37,9 +37,8 @@ def _open_file(data):
 
 ds_cell, ds_edge = _open_file(f_alldata)
 
-@pytest.mark.parametrize(
-    "ds_edge", [(ds_edge)]
-)
+
+@pytest.mark.parametrize("ds_edge", [(ds_edge)])
 def test_grid_edge(ds_edge):
     """
     Test the combine_grid_information function with a GRIB file containing both edge and cell center variables.
@@ -77,9 +76,7 @@ def test_grid_edge(ds_edge):
     ), "ds_edgevars should have coordinates 'elon', 'elat', 'elon_bnds', 'elat_bnds'"
 
 
-@pytest.mark.parametrize(
-    "ds_cell", [(ds_cell)]
-)
+@pytest.mark.parametrize("ds_cell", [(ds_cell)])
 def test_grid_cell(ds_cell):
     """
     Test the combine_grid_information function with a GRIB file containing both edge and cell center variables.
@@ -122,9 +119,7 @@ def test_grid_cell(ds_cell):
     ), "ds_cellvars should have coordinates 'clon', 'clat', 'clon_bnds', 'clat_bnds'"
 
 
-@pytest.mark.parametrize(
-    "ds_cell", [(ds_cell)]
-)
+@pytest.mark.parametrize("ds_cell", [(ds_cell)])
 def test_grid_dataset_cell(ds_cell):
     """
     Test the API of combine_grid_information that passes a dataset instead of a filename.
