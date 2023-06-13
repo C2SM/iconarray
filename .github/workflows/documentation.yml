@@ -3,7 +3,7 @@ name: docs
 on:
   push:
     branches:
-    - main
+    - *
 
 jobs:
   build:
@@ -25,6 +25,7 @@ jobs:
     # Publish built docs to gh-pages branch.
     # ===============================
     - name: Commit documentation changes
+    - if: github.ref == 'refs/heads/main'
       run: |
         pwd
         ls doc
