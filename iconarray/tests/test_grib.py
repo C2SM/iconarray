@@ -7,6 +7,7 @@ Contains tests: test_grid_edge, test_grid_cell
 import itertools
 
 import cfgrib
+import pytest
 import xarray as xr
 from xarray.testing import assert_identical
 
@@ -29,52 +30,76 @@ def _open_file(data):
         },
         encode_cf=("time", "geography", "vertical"),
     )
-    ds_cell = dss[0]
-    ds_edge = dss[1]
+    ds_cell, ds_edge = dss
     return ds_cell, ds_edge
 
 
-def test_grid_edge():
+@pytest.fixture(scope="module")
+def alldata():
+    """
+    Fixture that provides tests with cell and edge datasets of GRIB file.
+
+    Returns
+    ----------
+    [ds_cell,ds_edge] : tuple[xr.Dataset,xr.Dataset]
+    """
+    ds_cell, ds_edge = _open_file(f_alldata)
+    return ds_cell, ds_edge
+
+
+def test_grid_edge(alldata):
     """
     Test the combine_grid_information function with a GRIB file containing both edge and cell center variables.
 
-    Ensure that edge varialbes are extracted to ds_edge and grid information is correctly added.
+    Ensure that edge variables are extracted to ds_edge and grid information is correctly added.
+
+    Parameters
+    ----------
+    alldata : tuple[xr.Dataset,xr.Dataset]
+        dataset containing variables defined on the grid cell and edge.
     """
-    _ds_cell, ds_edge = _open_file(f_alldata)
+    _, ds_edge = alldata
+    ds_edge = ds_edge.copy()
 
     ds_edgevars = iconarray.combine_grid_information(ds_edge, f_grid)
+
+    ds_grid = iconarray.open_dataset(f_grid)
 
     assert list(ds_edgevars.data_vars) == [
         "VN",
         "VT",
     ], "ds_edgevars should only have two data variables, ['VN', 'VT']"
     assert (
-        len(ds_edgevars.edge.values) == 1567452
-    ), "ds_edgevars should have a dimension edge, with length 1567452."
+        len(ds_edgevars.edge.values) == ds_grid.dims["edge"]
+    ), f"ds_edgevars should have a dimension edge, with length {ds_grid.dims['edge']}."
     assert "edge" in list(
         ds_edgevars.VN.dims
     ), "ds_edgevars data variables should have a dimension edge"
-    assert (
-        sum(
-            [
-                1
-                for coord in ["elon", "elat", "elon_bnds", "elat_bnds"]
-                if coord in ds_edgevars.coords
-            ]
-        )
-        == 4
-    ), "ds_edgevars should have coordinates 'elon', 'elat', 'elon_bnds', 'elat_bnds'"
+    assert ds_edgevars.coords.keys() >= {
+        "elon",
+        "elat",
+        "elon_bnds",
+        "elat_bnds",
+    }, "ds_edgevars should have coordinates 'elon', 'elat', 'elon_bnds', 'elat_bnds'"
 
 
-def test_grid_cell():
+def test_grid_cell(alldata):
     """
     Test the combine_grid_information function with a GRIB file containing both edge and cell center variables.
 
-    Ensure that cell varialbes are extracted to ds_cell and grid information is correctly added.
+    Ensure that cell variables are extracted to ds_cell and grid information is correctly added.
+
+    Parameters
+    ----------
+    alldata : tuple[xr.Dataset,xr.Dataset]
+        dataset containing variables defined on the grid cell and edge.
     """
-    ds_cell, _ds_edge = _open_file(f_alldata)
+    ds_cell, _ = alldata
+    ds_cell = ds_cell.copy()
 
     ds_cellvars = iconarray.combine_grid_information(ds_cell, f_grid)
+
+    ds_grid = iconarray.open_dataset(f_grid)
 
     assert list(ds_cellvars.data_vars) == [
         "P",
@@ -86,27 +111,32 @@ def test_grid_cell():
         "QI",
     ], "ds_cellvars should only have two data variables, ['P', 'T', 'U', 'V', 'QV', 'QC', 'QI']"
     assert (
-        len(ds_cellvars.cell.values) == 1043968
-    ), "ds_cellvars should have a dimension 'cell', with length 1043968."
+        len(ds_cellvars.cell.values) == ds_grid.dims["cell"]
+    ), f"ds_cellvars should have a dimension 'cell', with length {ds_grid.dims['cell']}."
     assert "cell" in list(
         ds_cellvars.P.dims
     ), "ds_cellvars data variables should have a dimension 'cell'"
-    assert (
-        sum(
-            [
-                1
-                for coord in ["clon", "clat", "clon_bnds", "clat_bnds"]
-                if coord in ds_cellvars.coords
-            ]
-        )
-        == 4
-    ), "ds_cellvars should have coordinates 'clon', 'clat', 'clon_bnds', 'clat_bnds'"
+    assert ds_cellvars.coords.keys() >= {
+        "clon",
+        "clat",
+        "clon_bnds",
+        "clat_bnds",
+    }, "ds_cellvars should have coordinates clon', 'clat', 'clon_bnds', 'clat_bnds'"
 
 
-def test_grid_dataset_cell():
-    """Test the API of combine_grid_information that passes a dataset instead of a filename."""
-    ds_cell, _ = _open_file(f_alldata)
+def test_grid_dataset_cell(alldata):
+    """
+    Test the API of combine_grid_information that passes a dataset instead of a filename.
+
+    Parameters
+    ----------
+    alldata : tuple[xr.Dataset,xr.Dataset]
+        dataset containing variables defined on the grid cell and edge.
+    """
     grid_ds = xr.open_dataset(f_grid, engine="netcdf4")
+
+    ds_cell, _ = alldata
+    ds_cell = ds_cell.copy()
 
     ds_cellvars = iconarray.combine_grid_information(ds_cell, grid_ds)
 
