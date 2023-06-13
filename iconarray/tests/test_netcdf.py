@@ -18,12 +18,23 @@ f_celldata_incomatible_w_grid = (
 )
 f_grid = "data/example_data/grids/ICON-1E_DOM01.nc"
 
-@pytest.mark.parametrize("file,grid_file", [(f_w_celldata1, f_grid), (f_w_celldata2, f_grid)])
-def test_w_celldata(file,grid_file):
+
+@pytest.mark.parametrize(
+    "file,grid_file", [(f_w_celldata1, f_grid), (f_w_celldata2, f_grid)]
+)
+def test_w_celldata(file, grid_file):
     """
     Test the combine_grid_information function with a NETCDF file containing cell center variables.
 
     Ensure that grid information is correctly added.
+
+    Parameters
+    ----------
+    file : str | Path
+        Path to ICON data file.
+
+    grid_file : str | Path
+        Path to grid file.
     """
     ds_cell = iconarray.combine_grid_information(file, grid_file)
 
@@ -33,7 +44,7 @@ def test_w_celldata(file,grid_file):
         ds_cell.T.dims
     ), "ds_cell data variables should have a dimension 'cell'"
     assert (
-        len(ds_cell.T.cell) == ds_grid.dims['cell']
+        len(ds_cell.T.cell) == ds_grid.dims["cell"]
     ), f"ds_cell should have a dimension 'cell', with length {ds_grid.dims['cell']}."
     assert (
         sum(
