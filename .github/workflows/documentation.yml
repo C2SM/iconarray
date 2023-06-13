@@ -29,6 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: DocumentationHTML
     # Publish built docs to gh-pages branch.
     # ===============================
     - name: Commit documentation changes
