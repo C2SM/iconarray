@@ -1,4 +1,4 @@
-name: docs
+name: Documentation
 
 on:
   push:
@@ -7,10 +7,9 @@ on:
   pull_request:
     branches:
     - main
-    
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -25,10 +24,14 @@ jobs:
       with:
         name: DocumentationHTML
         path: doc/_build/
+
+  publish:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
     # Publish built docs to gh-pages branch.
     # ===============================
     - name: Commit documentation changes
-    - if: github.ref == 'refs/heads/main'
       run: |
         pwd
         ls doc
