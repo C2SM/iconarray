@@ -44,13 +44,15 @@ def test_grid_edge():
 
     ds_edgevars = iconarray.combine_grid_information(ds_edge, f_grid)
 
+    ds_grid = iconarray.open_dataset(f_grid)
+
     assert list(ds_edgevars.data_vars) == [
         "VN",
         "VT",
     ], "ds_edgevars should only have two data variables, ['VN', 'VT']"
     assert (
-        len(ds_edgevars.edge.values) == 1567452
-    ), "ds_edgevars should have a dimension edge, with length 1567452."
+        len(ds_edgevars.edge.values) == ds_grid.dims['edge']
+    ), f"ds_edgevars should have a dimension edge, with length {ds_grid.dims['edge']}."
     assert "edge" in list(
         ds_edgevars.VN.dims
     ), "ds_edgevars data variables should have a dimension edge"
@@ -76,6 +78,8 @@ def test_grid_cell():
 
     ds_cellvars = iconarray.combine_grid_information(ds_cell, f_grid)
 
+    ds_grid = iconarray.open_dataset(f_grid)
+
     assert list(ds_cellvars.data_vars) == [
         "P",
         "T",
@@ -86,8 +90,8 @@ def test_grid_cell():
         "QI",
     ], "ds_cellvars should only have two data variables, ['P', 'T', 'U', 'V', 'QV', 'QC', 'QI']"
     assert (
-        len(ds_cellvars.cell.values) == 1043968
-    ), "ds_cellvars should have a dimension 'cell', with length 1043968."
+        len(ds_cellvars.cell.values) == ds_grid.dims['cell']
+    ), f"ds_cellvars should have a dimension 'cell', with length {ds_grid.dims['cell']}."
     assert "cell" in list(
         ds_cellvars.P.dims
     ), "ds_cellvars data variables should have a dimension 'cell'"
