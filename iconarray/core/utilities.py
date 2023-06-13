@@ -4,17 +4,20 @@ The utilities.py module contains various functions useful for analysing or plott
 Contains public functions: ind_from_latlon, add_coordinates, get_stats wilks, show_data_vars
 """
 
+from typing import List
+
 import numpy as np
 import six
-import xarray
+import xarray as xr
 from scipy import stats
+from sklearn.neighbors import BallTree
 
 
 def awhere_drop(ds, cond):
     """
-    xarray.Dataset.where equivalent that preserves the dtype of the array.
+    xr.Dataset.where equivalent that preserves the dtype of the array.
 
-    The xarray.Dataset.where in general will not preserve the value type of the array. In case of drop=False, elements of the array that do not satisfy the condition are set to np.NaN, which can only be stored on a float type. Therefore the return of xarray.Dataset.where will be of dtype float64. This function computes a where with drop=True, ensuring the dtype of the input xarray is preserved.
+    The xr.Dataset.where in general will not preserve the value type of the array. In case of drop=False, elements of the array that do not satisfy the condition are set to np.NaN, which can only be stored on a float type. Therefore the return of xarray.Dataset.where will be of dtype float64. This function computes a where with drop=True, ensuring the dtype of the input xarray is preserved.
 
     Parameters
     ----------
@@ -35,60 +38,137 @@ def awhere_drop(ds, cond):
     return ret
 
 
-def ind_from_latlon(lats, lons, lat, lon, verbose=False):
+def ind_from_latlon(
+    lon_array: xr.DataArray,
+    lat_array: xr.DataArray,
+    lon_points: float,
+    lat_points: float,
+    n: int = 1,
+    verbose: bool = False,
+) -> List[int]:
     """
-    Find the nearest neighbouring index to given location.
+    Find the indices of the n closest points in two xarrays of longitude and latitude values.
+
+    That is to a given point specified by its own longitude and latitude values.
 
     Parameters
     ----------
-    lats : 2d array
-        Latitude grid
-    lons : 2d array
-        Longitude grid
-    lat : float
-        Latitude of location
-    lon : float
-        Longitude of location
-    verbose : bool
+    lon_array : xr.DataArray
+        A 1D or 2D xr of longitude values [degree].
+    lat_array : xr.DataArray
+        A 1D or 2D xr of latitude values [degree].
+    lon_point : float
+        The longitude value [degree] of the point to find the closest point(s) to.
+    lat_point : float
+        The latitude value [degree] of the point to find the closest point(s) to.
+    n : int, optional
+        The number of closest points to return. Default is 1.
+    verbose: bool, optional
         Print information. Defaults to False.
 
     Returns
-    ----------
-    index : int
-        Index of nearest grid point.
+    -------
+    List[int]
+        The indices of the closest n points to the given point.
 
-    See Also
-    ----------
-    iconarray.core.utilities
+    Implementation
+    --------------
+    The function builds a BallTree from the 1D or 2D array of longitude and latitude coordinates,
+    and queries it to find the n nearest neighbors to the given point.
 
-    Examples
+    Example
     ----------
     >>> # Get values of grid cell closest to coordinate
     >>> # E.g. Zürich:
     >>> lon = 8.54
     >>> lat = 47.38
-    >>> lats = np.rad2deg(ds.clat.values[:])
-    >>> lons = np.rad2deg(ds.clon.values[:])
+    >>> lats = ds.clat
+    >>> lons = ds.clon
+    >>> if ds.clat.attrs.get('units') == 'radian':
+    >>>     lats = np.rad2deg(lats)
+    >>>     lons = np.rad2deg(lons)
     >>> ind = iconarray.ind_from_latlon(
-    ...         lats,lons,lat,lon,verbose=True
+    ...         lats,lons,lat,lon,
+    ...         verbose=True, n=1
     ...         )
 
     >>> ind
     3352
     # Closest ind: 3352
-    #  Given lat: 47.380 vs found lat: 47.372
-    #  Given lon: 8.540 vs found lon: 8.527
+    # Given lat: 47.380 deg. Closest 1 lat/s found: 47.372
+    # Given lon: 8.540 deg. Closest 1 lon/s found: 8.527
 
     """
-    dist = [
-        np.sqrt((lats[i] - lat) ** 2 + (lons[i] - lon) ** 2) for i in range(len(lats))
+    # Utility function
+    def get_innermost_element(indices):
+        """
+        Recursively traverses nested lists or arrays to obtain the innermost element.
+
+        Args:
+            indices: A nested list or numpy array.
+
+        Returns:
+            The innermost element of the nested structure.
+
+        """
+        if isinstance(indices, (list, tuple, np.ndarray)):
+            if len(indices) > 0:
+                if isinstance(indices[0], (list, tuple, np.ndarray)):
+                    return get_innermost_element(indices[0])
+                else:
+                    return indices
+            else:
+                return indices
+        return [indices]
+
+    # Convert Input to radians
+    lon_array, lat_array, lon_points, lat_points = [
+        np.deg2rad(arr) for arr in [lon_array, lat_array, lon_points, lat_points]
     ]
-    ind = np.where(dist == np.min(dist))[0][0]
+
+    # Create a 2D array of lon and lat coordinates
+    lon_lat_array = np.column_stack(
+        (lon_array.values.flatten(), lat_array.values.flatten())
+    )
+
+    # Build a BallTree from this 2D array using the Haversine distance
+    tree = BallTree(lon_lat_array, metric="haversine")
+
+    # Find the index of the nearest neighbor(s) of the given point
+    points = np.column_stack((lon_points, lat_points))
+    _, indices = tree.query(points, k=n)
+
+    # Convert index to 2D indices if applicable, e.g., when using output remapped to lat-lon grind
+    if n == 1:
+        indices = [np.unravel_index(indices, lon_array.shape)]
+    else:
+        indices = [np.unravel_index(index, lon_array.shape) for index in indices]
+
+    # Unpack indices list
+    indices = get_innermost_element(indices)
+
+    # Print verbose information if requested
     if verbose:
-        print(f"Closest ind: {ind}")
-        print(f" Given lat: {lat:.3f} vs found lat: {lats[ind]:.3f}")
-        print(f" Given lon: {lon:.3f} vs found lon: {lons[ind]:.3f}")
-    return ind
+        closest_lats = " ".join(
+            f"{num:.4f}" for num in np.rad2deg(lat_array.values[indices])
+        )
+        closest_lons = " ".join(
+            f"{num:.4f}" for num in np.rad2deg(lon_array.values[indices])
+        )
+
+        indices_str = " ".join(map(str, indices.tolist()))
+        given_lat_str = f"{np.rad2deg(lat_points):.4f}"
+        given_lon_str = f"{np.rad2deg(lon_points):.4f}"
+
+        print(f"Closest indices: {indices_str}")
+        print(
+            f"Given lat: {given_lat_str} deg. Closest {n} lat/s found: {closest_lats}"
+        )
+        print(
+            f"Given lon: {given_lon_str} deg. Closest {n} lon/s found: {closest_lons}"
+        )
+
+    return indices
 
 
 def add_coordinates(lon, lat, lonmin, lonmax, latmin, latmax):
@@ -234,14 +314,14 @@ def show_data_vars(ds):
 
     Parameters
     ----------
-    ds : xarray.Dataset
+    ds : xr.Dataset
         Dataset of ICON GRIB data opened with cgrib engine or cfgrib.
     """
     if type(ds) is str:
         Exception(
             "Argument is not a Dataset. Please open the dataset via psy.open_dataset() and pass returned Dataset to this function."
         )
-    elif type(ds) is xarray.core.dataset.Dataset:
+    elif type(ds) is xr.core.dataset.Dataset:
         print(
             "{:<15} {:<32} {:<20} {:<20} {:<10}".format(
                 "psyplot name", "long_name", "GRIB_cfVarName", "GRIB_shortName", "units"
