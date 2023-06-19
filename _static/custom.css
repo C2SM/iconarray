@@ -1,1 +1,8 @@
-/* This file intentionally left blank. */
+
+.content-container h2 {
+    color: #000000 !important;
+}
+
+#site-navigation {
+    width: 375px !important;
+}

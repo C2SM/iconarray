@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>iconarray.core.crop.Crop &#8212; iconarray</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/iconarray.core.crop.Crop';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="iconarray.core.latlonhash" href="iconarray.core.latlonhash.html" />
+    <link rel="prev" title="iconarray.core.crop" href="iconarray.core.crop.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">iconarray</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../gettingstarted.html">Getting Started</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Core</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.crop.html">iconarray.core.crop</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">iconarray.core.crop.Crop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.latlonhash.html">iconarray.core.latlonhash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.latlonhash.Icon2latlon.html">iconarray.core.latlonhash.Icon2latlon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.utilities.html">iconarray.core.utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.utilities.ind_from_latlon.html">iconarray.core.utilities.ind_from_latlon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.utilities.show_data_vars.html">iconarray.core.utilities.show_data_vars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.interpolate.html">iconarray.core.interpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.interpolate.remap_ICON_to_regulargrid.html">iconarray.core.interpolate.remap_ICON_to_regulargrid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.core.interpolate.remap_ICON_to_ICON.html">iconarray.core.interpolate.remap_ICON_to_ICON</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Backend</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="iconarray.backend.grid.html">iconarray.backend.grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.backend.grid.combine_grid_information.html">iconarray.backend.grid.combine_grid_information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.backend.grid.get_cell_dim_name.html">iconarray.backend.grid.get_cell_dim_name</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.backend.grid.get_edge_dim_name.html">iconarray.backend.grid.get_edge_dim_name</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.backend.grid.get_time_coord_name.html">iconarray.backend.grid.get_time_coord_name</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.backend.grid.add_cell_data.html">iconarray.backend.grid.add_cell_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.backend.grid.add_edge_data.html">iconarray.backend.grid.add_edge_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.backend.grid.open_dataset.html">iconarray.backend.grid.open_dataset</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Plotting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="iconarray.plot.formatoptions.html">iconarray.plot.formatoptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.plot.formatoptions.borders.html">iconarray.plot.formatoptions.borders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.plot.formatoptions.lakes.html">iconarray.plot.formatoptions.lakes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.plot.formatoptions.rivers.html">iconarray.plot.formatoptions.rivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.plot.config.html">iconarray.plot.config</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Utility</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="iconarray.utils.get_data.html">iconarray.utils.get_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="iconarray.utils.get_data.get_example_data.html">iconarray.utils.get_data.get_example_data</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/C2SM/iconarray" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/C2SM/iconarray/edit/main/doc/generated/iconarray.core.crop.Crop.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/C2SM/iconarray/issues/new?title=Issue%20on%20page%20%2Fgenerated/iconarray.core.crop.Crop.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/generated/iconarray.core.crop.Crop.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>iconarray.core.crop.Crop</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iconarray.core.crop.Crop"><code class="docutils literal notranslate"><span class="pre">Crop</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iconarray.core.crop.Crop.__init__"><code class="docutils literal notranslate"><span class="pre">Crop.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="iconarray-core-crop-crop">
+<h1>iconarray.core.crop.Crop<a class="headerlink" href="#iconarray-core-crop-crop" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="iconarray.core.crop.Crop">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">iconarray.core.crop.</span></span><span class="sig-name descname"><span class="pre">Crop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_bnds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_bnds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#iconarray.core.crop.Crop" title="Permalink to this definition">#</a></dt>
+<dd><p>Cut the domain of an ICON grid and data to a region specified by a lat/lon retangle.</p>
+<p>All cells whose center coordinates are not contained within the lat/lon region will be dropped.
+All neighbour edges and vertices of the selected cells will be included in the cropped domain.
+As a result, some edges and/or vertices, boundaries of an included triangle, might have coordinate
+that are not contained within the lat/lon region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">xr.Dataset</span></code>) – The input dataset representing an ICON grid. The dataset should contain at least:</p>
+<ul>
+<li><p>cell,edge and vertex dimensions.</p></li>
+<li><p>clon,clat,elon,elat,vlon,vlat coordinates</p></li>
+<li><p>edge_of_cell, vertex_of_cell variables that provide the connectivity between edge and vertex locations to the cell</p></li>
+</ul>
+</li>
+<li><p><strong>lon_bnds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[float]</span></code>) – [low,high] longitude bounds of the cropped domain</p></li>
+<li><p><strong>lat_bnds</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[float]</span></code>) – [low,high] latitude bounds of the cropped domain</p></li>
+<li><p><strong>scale_factor</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – factor of resolution between the icon grid and an auxiliary latlon grid needed by the cropping algorithm.
+We recommend using the default value and decrease it only if required.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>load the grid dataset:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">in_grid</span> <span class="o">=</span> <span class="s1">&#39;icon_grid_0001_R19B08.nc&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grid</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">in_grid</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grid</span>
+<span class="gp">... </span><span class="o">&lt;</span><span class="n">xarray</span><span class="o">.</span><span class="n">Dataset</span><span class="o">&gt;</span>
+<span class="gp">... </span><span class="n">Dimensions</span><span class="p">:</span>                        <span class="p">(</span><span class="n">cell</span><span class="p">:</span> <span class="mi">1043968</span><span class="p">,</span> <span class="n">vertex</span><span class="p">:</span> <span class="mi">523485</span><span class="p">,</span>
+<span class="gp">... </span>                                    <span class="n">edge</span><span class="p">:</span> <span class="mi">1567452</span><span class="p">,</span> <span class="n">nv</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="n">nc</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ne</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="n">no</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>                                    <span class="n">max_chdom</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cell_grf</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="n">edge_grf</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+<span class="gp">... </span>                                    <span class="n">vert_grf</span><span class="p">:</span> <span class="mi">13</span><span class="p">)</span>
+<span class="gp">... </span><span class="n">Coordinates</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">clon</span>                           <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="mf">0.2887</span> <span class="mf">0.2889</span> <span class="o">...</span> <span class="mf">0.2423</span>
+<span class="gp">... </span>    <span class="n">clat</span>                           <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="mf">0.7384</span> <span class="mf">0.7384</span> <span class="o">...</span> <span class="mf">0.7474</span>
+<span class="gp">... </span>    <span class="n">vlon</span>                           <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">vlat</span>                           <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">elon</span>                           <span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">elat</span>                           <span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span><span class="n">Dimensions</span> <span class="n">without</span> <span class="n">coordinates</span><span class="p">:</span> <span class="n">cell</span><span class="p">,</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">nv</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">ne</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">max_chdom</span><span class="p">,</span>
+<span class="gp">... </span>                                <span class="n">cell_grf</span><span class="p">,</span> <span class="n">edge_grf</span><span class="p">,</span> <span class="n">vert_grf</span>
+<span class="gp">... </span><span class="n">Data</span> <span class="n">variables</span><span class="p">:</span> <span class="p">(</span><span class="mi">12</span><span class="o">/</span><span class="mi">51</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">cartesian_x_vertices</span>           <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">cartesian_y_vertices</span>           <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">cartesian_z_vertices</span>           <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">cell_area</span>                      <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">dual_area</span>                      <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">lon_cell_centre</span>                <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="o">...</span>                             <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">end_idx_e</span>                      <span class="p">(</span><span class="n">max_chdom</span><span class="p">,</span> <span class="n">edge_grf</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">refin_v_ctrl</span>                   <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">start_idx_v</span>                    <span class="p">(</span><span class="n">max_chdom</span><span class="p">,</span> <span class="n">vert_grf</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">end_idx_v</span>                      <span class="p">(</span><span class="n">max_chdom</span><span class="p">,</span> <span class="n">vert_grf</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">parent_edge_index</span>              <span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">parent_vertex_index</span>            <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span><span class="n">Attributes</span><span class="p">:</span> <span class="p">(</span><span class="mi">12</span><span class="o">/</span><span class="mi">18</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">title</span><span class="p">:</span>                <span class="n">ICON</span> <span class="n">grid</span> <span class="n">description</span>
+<span class="gp">... </span>    <span class="n">institution</span><span class="p">:</span>          <span class="n">Max</span> <span class="n">Planck</span> <span class="n">Institute</span> <span class="k">for</span> <span class="n">Meteorology</span><span class="o">/</span><span class="n">Deutscher</span> <span class="n">Wett</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">source</span><span class="p">:</span>               <span class="n">svn</span><span class="p">:</span><span class="o">//</span><span class="n">rclh</span><span class="o">.</span><span class="n">dwd</span><span class="o">.</span><span class="n">de</span><span class="o">/</span><span class="n">for0adm</span><span class="o">/</span><span class="n">SVN_icontools</span><span class="o">/</span><span class="n">tags</span><span class="o">/</span><span class="n">iconto</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">number_of_grid_used</span><span class="p">:</span>  <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">ICON_grid_file_uri</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">centre</span><span class="p">:</span>               <span class="mi">215</span>
+<span class="gp">... </span>    <span class="o">...</span>                   <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">inverse_flattening</span><span class="p">:</span>   <span class="mf">0.0</span>
+<span class="gp">... </span>    <span class="n">grid_level</span><span class="p">:</span>           <span class="mi">8</span>
+<span class="gp">... </span>    <span class="n">grid_root</span><span class="p">:</span>            <span class="mi">19</span>
+<span class="gp">... </span>    <span class="n">uuidOfParHGrid</span><span class="p">:</span>       <span class="n">e6ddd597</span><span class="o">-</span><span class="mi">9</span><span class="n">c90</span><span class="o">-</span><span class="mi">27</span><span class="n">b1</span><span class="o">-</span><span class="n">fbac</span><span class="o">-</span><span class="n">c40d47f72ba0</span>
+<span class="gp">... </span>    <span class="n">uuidOfHGrid</span><span class="p">:</span>          <span class="mi">5</span><span class="n">a0a863d</span><span class="o">-</span><span class="mi">2523</span><span class="o">-</span><span class="mi">9515</span><span class="o">-</span><span class="mi">7789</span><span class="o">-</span><span class="mf">4930e3452</span><span class="n">bc0</span>
+<span class="gp">... </span>    <span class="n">global_grid</span><span class="p">:</span>          <span class="mi">0</span>
+</pre></div>
+</div>
+<p>create a crop instance with the lat/lon coordinates for the region of interest</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crop</span> <span class="o">=</span> <span class="n">Crop</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.148</span><span class="p">,</span> <span class="mf">0.155</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.871</span><span class="p">,</span> <span class="mf">0.877</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crop</span><span class="o">.</span><span class="n">cropped_grid</span><span class="p">()</span>
+<span class="gp">... </span><span class="n">Dimensions</span><span class="p">:</span>                         <span class="p">(</span><span class="n">cell</span><span class="p">:</span> <span class="mi">986</span><span class="p">,</span> <span class="n">nv</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="mi">1530</span><span class="p">,</span> <span class="n">nc</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="n">no</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>                                    <span class="n">vertex</span><span class="p">:</span> <span class="mi">545</span><span class="p">,</span> <span class="n">ne</span><span class="p">:</span> <span class="mi">6</span><span class="p">)</span>
+<span class="gp">... </span><span class="n">Coordinates</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">clon</span>                           <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="mf">0.1544</span> <span class="mf">0.1546</span> <span class="o">...</span> <span class="mf">0.1549</span>
+<span class="gp">... </span>    <span class="n">clat</span>                           <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="mf">0.8766</span> <span class="mf">0.8768</span> <span class="o">...</span> <span class="mf">0.871</span> <span class="mf">0.8711</span>
+<span class="gp">... </span>    <span class="n">elon</span>                           <span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">elat</span>                           <span class="p">(</span><span class="n">edge</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">vlon</span>                           <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">vlat</span>                           <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span><span class="n">Dimensions</span> <span class="n">without</span> <span class="n">coordinates</span><span class="p">:</span> <span class="n">cell</span><span class="p">,</span> <span class="n">nv</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">no</span><span class="p">,</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">ne</span>
+<span class="gp">... </span><span class="n">Data</span> <span class="n">variables</span><span class="p">:</span> <span class="p">(</span><span class="mi">12</span><span class="o">/</span><span class="mi">45</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">cell_area</span>                      <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">lon_cell_centre</span>                <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">lat_cell_centre</span>                <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">edge_of_cell</span>                   <span class="p">(</span><span class="n">nv</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">int64</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">766</span> <span class="mi">766</span> <span class="o">...</span> <span class="mi">1528</span> <span class="mi">205</span> <span class="mi">205</span>
+<span class="gp">... </span>    <span class="n">vertex_of_cell</span>                 <span class="p">(</span><span class="n">nv</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">int64</span> <span class="mi">1</span> <span class="mi">137</span> <span class="mi">341</span> <span class="mi">138</span> <span class="o">...</span> <span class="mi">245</span> <span class="mi">244</span> <span class="mi">9</span>
+<span class="gp">... </span>    <span class="n">cell_area_p</span>                    <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="o">...</span>                             <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">dual_area_p</span>                    <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">vlon_vertices</span>                  <span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">ne</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">vlat_vertices</span>                  <span class="p">(</span><span class="n">vertex</span><span class="p">,</span> <span class="n">ne</span><span class="p">)</span> <span class="n">float64</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">edge_orientation</span>               <span class="p">(</span><span class="n">ne</span><span class="p">,</span> <span class="n">vertex</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">refin_v_ctrl</span>                   <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">parent_vertex_index</span>            <span class="p">(</span><span class="n">vertex</span><span class="p">)</span> <span class="n">int32</span> <span class="o">...</span>
+<span class="gp">... </span><span class="n">Attributes</span><span class="p">:</span> <span class="p">(</span><span class="mi">12</span><span class="o">/</span><span class="mi">18</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">title</span><span class="p">:</span>                <span class="n">ICON</span> <span class="n">grid</span> <span class="n">description</span>
+<span class="gp">... </span>    <span class="n">institution</span><span class="p">:</span>          <span class="n">Max</span> <span class="n">Planck</span> <span class="n">Institute</span> <span class="k">for</span> <span class="n">Meteorology</span><span class="o">/</span><span class="n">Deutscher</span> <span class="n">Wett</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">source</span><span class="p">:</span>               <span class="n">svn</span><span class="p">:</span><span class="o">//</span><span class="n">rclh</span><span class="o">.</span><span class="n">dwd</span><span class="o">.</span><span class="n">de</span><span class="o">/</span><span class="n">for0adm</span><span class="o">/</span><span class="n">SVN_icontools</span><span class="o">/</span><span class="n">tags</span><span class="o">/</span><span class="n">iconto</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">number_of_grid_used</span><span class="p">:</span>  <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">ICON_grid_file_uri</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">centre</span><span class="p">:</span>               <span class="mi">215</span>
+<span class="gp">... </span>    <span class="o">...</span>                   <span class="o">...</span>
+<span class="gp">... </span>    <span class="n">inverse_flattening</span><span class="p">:</span>   <span class="mf">0.0</span>
+<span class="gp">... </span>    <span class="n">grid_level</span><span class="p">:</span>           <span class="mi">8</span>
+<span class="gp">... </span>    <span class="n">grid_root</span><span class="p">:</span>            <span class="mi">19</span>
+<span class="gp">... </span>    <span class="n">uuidOfParHGrid</span><span class="p">:</span>       <span class="n">e6ddd597</span><span class="o">-</span><span class="mi">9</span><span class="n">c90</span><span class="o">-</span><span class="mi">27</span><span class="n">b1</span><span class="o">-</span><span class="n">fbac</span><span class="o">-</span><span class="n">c40d47f72ba0</span>
+<span class="gp">... </span>    <span class="n">uuidOfHGrid</span><span class="p">:</span>          <span class="mi">5</span><span class="n">a0a863d</span><span class="o">-</span><span class="mi">2523</span><span class="o">-</span><span class="mi">9515</span><span class="o">-</span><span class="mi">7789</span><span class="o">-</span><span class="mf">4930e3452</span><span class="n">bc0</span>
+<span class="gp">... </span>    <span class="n">global_grid</span><span class="p">:</span>          <span class="mi">0</span>
+</pre></div>
+</div>
+<p>open a dataset with data:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ds_cell</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s2">&quot;lfff00010000_cell.nc&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds_cell</span>
+<span class="gp">... </span><span class="n">Dimensions</span><span class="p">:</span>                  <span class="p">(</span><span class="n">generalVerticalLayer</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cell</span><span class="p">:</span> <span class="mi">1043968</span><span class="p">,</span>
+<span class="gp">... </span>                              <span class="n">vertices</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">... </span><span class="n">Coordinates</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">number</span>                   <span class="n">int64</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">forecast_reference_time</span>  <span class="n">datetime64</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">16</span>
+<span class="gp">... </span>    <span class="n">step</span>                     <span class="n">timedelta64</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span> <span class="mi">01</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="gp">... </span>  <span class="o">*</span> <span class="n">generalVerticalLayer</span>     <span class="p">(</span><span class="n">generalVerticalLayer</span><span class="p">)</span> <span class="n">float64</span> <span class="mf">1.0</span> <span class="mf">2.0</span> <span class="o">...</span> <span class="mf">80.0</span>
+<span class="gp">... </span>  <span class="o">*</span> <span class="n">time</span>                     <span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="n">datetime64</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">16</span><span class="n">T01</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="gp">... </span>    <span class="n">clon</span>                     <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.2887</span> <span class="mf">0.2889</span> <span class="o">...</span> <span class="mf">0.2422</span> <span class="mf">0.2423</span>
+<span class="gp">... </span>    <span class="n">clat</span>                     <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.7384</span> <span class="mf">0.7384</span> <span class="o">...</span> <span class="mf">0.7472</span> <span class="mf">0.7474</span>
+<span class="gp">... </span>    <span class="n">clat_bnds</span>                <span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.7385</span> <span class="mf">0.7384</span> <span class="o">...</span> <span class="mf">0.7475</span>
+<span class="gp">... </span>    <span class="n">clon_bnds</span>                <span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.2888</span> <span class="mf">0.2886</span> <span class="o">...</span> <span class="mf">0.2423</span>
+<span class="gp">... </span><span class="n">Dimensions</span> <span class="n">without</span> <span class="n">coordinates</span><span class="p">:</span> <span class="n">cell</span><span class="p">,</span> <span class="n">vertices</span>
+<span class="gp">... </span><span class="n">Data</span> <span class="n">variables</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">unknown</span>                  <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.0</span> <span class="o">....</span>
+<span class="gp">... </span>    <span class="n">pres</span>                     <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">4.675</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">t</span>                        <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">213.0</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">u</span>                        <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.0</span> <span class="o">....</span>
+<span class="gp">... </span>    <span class="n">v</span>                        <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="o">-</span><span class="mf">9.53</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">q</span>                        <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">3.067</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">clwmr</span>                    <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.0</span> <span class="o">....</span>
+<span class="gp">... </span><span class="n">Attributes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">GRIB_edition</span><span class="p">:</span>            <span class="mi">2</span>
+<span class="gp">... </span>    <span class="n">GRIB_centre</span><span class="p">:</span>             <span class="n">lssw</span>
+<span class="gp">... </span>    <span class="n">GRIB_centreDescription</span><span class="p">:</span>  <span class="n">Zurich</span>
+<span class="gp">... </span>    <span class="n">GRIB_subCentre</span><span class="p">:</span>          <span class="mi">255</span>
+<span class="gp">... </span>    <span class="n">Conventions</span><span class="p">:</span>             <span class="n">CF</span><span class="o">-</span><span class="mf">1.7</span>
+<span class="gp">... </span>    <span class="n">institution</span><span class="p">:</span>             <span class="n">Zurich</span>
+</pre></div>
+</div>
+<p>crop the dataset that contains all cell variables:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cell_rds</span> <span class="o">=</span> <span class="n">crop</span><span class="p">(</span><span class="n">ds_cell</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cell_rds</span>
+<span class="gp">... </span><span class="n">Dimensions</span><span class="p">:</span>                  <span class="p">(</span><span class="n">generalVerticalLayer</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cell</span><span class="p">:</span> <span class="mi">986</span><span class="p">,</span>
+<span class="gp">... </span>                            <span class="n">vertices</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">... </span><span class="n">Coordinates</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">number</span>                   <span class="n">int64</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">forecast_reference_time</span>  <span class="n">datetime64</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">16</span>
+<span class="gp">... </span>    <span class="n">step</span>                     <span class="n">timedelta64</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span> <span class="mi">01</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="gp">... </span><span class="o">*</span> <span class="n">generalVerticalLayer</span>     <span class="p">(</span><span class="n">generalVerticalLayer</span><span class="p">)</span> <span class="n">float64</span> <span class="mf">1.0</span> <span class="mf">2.0</span> <span class="o">...</span> <span class="mf">80.0</span>
+<span class="gp">... </span><span class="o">*</span> <span class="n">time</span>                     <span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="n">datetime64</span><span class="p">[</span><span class="n">ns</span><span class="p">]</span> <span class="mi">2022</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">16</span><span class="n">T01</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="gp">... </span>    <span class="n">clon</span>                     <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.1544</span> <span class="mf">0.1546</span> <span class="o">...</span> <span class="mf">0.1547</span> <span class="mf">0.1549</span>
+<span class="gp">... </span>    <span class="n">clat</span>                     <span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.8766</span> <span class="mf">0.8768</span> <span class="o">...</span> <span class="mf">0.871</span> <span class="mf">0.8711</span>
+<span class="gp">... </span>    <span class="n">clat_bnds</span>                <span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.8765</span> <span class="mf">0.8767</span> <span class="o">...</span> <span class="mf">0.8712</span>
+<span class="gp">... </span>    <span class="n">clon_bnds</span>                <span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.1544</span> <span class="mf">0.1546</span> <span class="o">...</span> <span class="mf">0.1547</span>
+<span class="gp">... </span><span class="n">Dimensions</span> <span class="n">without</span> <span class="n">coordinates</span><span class="p">:</span> <span class="n">cell</span><span class="p">,</span> <span class="n">vertices</span>
+<span class="gp">... </span><span class="n">Data</span> <span class="n">variables</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">unknown</span>                  <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.0</span> <span class="o">....</span>
+<span class="gp">... </span>    <span class="n">pres</span>                     <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">4.596</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">t</span>                        <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">213.2</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">u</span>                        <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">21.96</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">v</span>                        <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="o">-</span><span class="mf">11.1</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">q</span>                        <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">3.034</span><span class="o">...</span>
+<span class="gp">... </span>    <span class="n">clwmr</span>                    <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">generalVerticalLayer</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="n">float32</span> <span class="mf">0.0</span> <span class="o">....</span>
+<span class="gp">... </span><span class="n">Attributes</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">GRIB_edition</span><span class="p">:</span>            <span class="mi">2</span>
+<span class="gp">... </span>    <span class="n">GRIB_centre</span><span class="p">:</span>             <span class="n">lssw</span>
+<span class="gp">... </span>    <span class="n">GRIB_centreDescription</span><span class="p">:</span>  <span class="n">Zurich</span>
+<span class="gp">... </span>    <span class="n">GRIB_subCentre</span><span class="p">:</span>          <span class="mi">255</span>
+<span class="gp">... </span>    <span class="n">Conventions</span><span class="p">:</span>             <span class="n">CF</span><span class="o">-</span><span class="mf">1.7</span>
+<span class="gp">... </span>    <span class="n">institution</span><span class="p">:</span>             <span class="n">Zurich</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="iconarray.core.crop.Crop.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xarray.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_bnds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_bnds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#iconarray.core.crop.Crop.__init__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#iconarray.core.crop.Crop.__init__" title="iconarray.core.crop.Crop.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(grid, lon_bnds, lat_bnds[, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">crop_fields</span></code>()</p></td>
+<td><p>Crop all variables of the grid.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">crop_grid</span></code>()</p></td>
+<td><p>Crop the coordinates for cells, edges and vertices.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">cropped_grid</span></code>()</p></td>
+<td><p>Return a dataset of a grid cropped to the lat/lon area specified.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="iconarray.core.crop.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">iconarray.core.crop</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="iconarray.core.latlonhash.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">iconarray.core.latlonhash</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iconarray.core.crop.Crop"><code class="docutils literal notranslate"><span class="pre">Crop</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iconarray.core.crop.Crop.__init__"><code class="docutils literal notranslate"><span class="pre">Crop.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Victoria Cherkas, Annika Lauber
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, Victoria Cherkas, Annika Lauber.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a></p>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

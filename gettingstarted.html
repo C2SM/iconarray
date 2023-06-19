@@ -1,0 +1,561 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Getting Started &#8212; iconarray</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'gettingstarted';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="iconarray.core.crop" href="generated/iconarray.core.crop.html" />
+    <link rel="prev" title="Welcome to iconarray’s documentation!" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">iconarray</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Getting Started</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Core</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.crop.html">iconarray.core.crop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.crop.Crop.html">iconarray.core.crop.Crop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.latlonhash.html">iconarray.core.latlonhash</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.latlonhash.Icon2latlon.html">iconarray.core.latlonhash.Icon2latlon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.utilities.html">iconarray.core.utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.utilities.ind_from_latlon.html">iconarray.core.utilities.ind_from_latlon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.utilities.show_data_vars.html">iconarray.core.utilities.show_data_vars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.interpolate.html">iconarray.core.interpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.interpolate.remap_ICON_to_regulargrid.html">iconarray.core.interpolate.remap_ICON_to_regulargrid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.core.interpolate.remap_ICON_to_ICON.html">iconarray.core.interpolate.remap_ICON_to_ICON</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Backend</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.backend.grid.html">iconarray.backend.grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.backend.grid.combine_grid_information.html">iconarray.backend.grid.combine_grid_information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.backend.grid.get_cell_dim_name.html">iconarray.backend.grid.get_cell_dim_name</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.backend.grid.get_edge_dim_name.html">iconarray.backend.grid.get_edge_dim_name</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.backend.grid.get_time_coord_name.html">iconarray.backend.grid.get_time_coord_name</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.backend.grid.add_cell_data.html">iconarray.backend.grid.add_cell_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.backend.grid.add_edge_data.html">iconarray.backend.grid.add_edge_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.backend.grid.open_dataset.html">iconarray.backend.grid.open_dataset</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Plotting</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.plot.formatoptions.html">iconarray.plot.formatoptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.plot.formatoptions.borders.html">iconarray.plot.formatoptions.borders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.plot.formatoptions.lakes.html">iconarray.plot.formatoptions.lakes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.plot.formatoptions.rivers.html">iconarray.plot.formatoptions.rivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.plot.config.html">iconarray.plot.config</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Utility</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.utils.get_data.html">iconarray.utils.get_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/iconarray.utils.get_data.get_example_data.html">iconarray.utils.get_data.get_example_data</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/C2SM/iconarray" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/C2SM/iconarray/edit/main/doc/gettingstarted.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/C2SM/iconarray/issues/new?title=Issue%20on%20page%20%2Fgettingstarted.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/gettingstarted.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Getting Started</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon-grib-definitions">ICON GRIB Definitions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">#</a></h1>
+<p>Iconarray and the packages it depends on are installable with conda. Some of these dependencies,
+eg eccodes and cartopy are not easily installable with pip, but easily installable with conda.</p>
+<p>First clone the iconarray repository and <code class="docutils literal notranslate"><span class="pre">cd</span></code> into its parent directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">C2SM</span><span class="o">/</span><span class="n">iconarray</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">iconarray</span>
+</pre></div>
+</div>
+<p>If you are setting up a <strong>new conda environment</strong> for iconarray, carry out these two steps:</p>
+<ol class="arabic">
+<li><p>Create a conda environment (e.g. called iconarray) and install iconarray and its requirements:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">iconarray</span> <span class="o">-</span><span class="n">f</span> <span class="n">env</span><span class="o">/</span><span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+</li>
+<li><p>Activate environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">iconarray</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Alternatively if you are adding iconarray to your <strong>existing conda environment</strong>,
+carry out these two steps:</p>
+<ol class="arabic">
+<li><p>Update your existing conda environment by executing this command. It will install iconarray and all its missing dependencies into your existing conda environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">update</span> <span class="o">-</span><span class="n">n</span> <span class="p">{</span><span class="n">YOUR_ENVIRONMENT</span><span class="p">}</span> <span class="o">-</span><span class="n">f</span> <span class="n">env</span><span class="o">/</span><span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+</li>
+<li><p>You can then re-export an updated <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file of your environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="p">{</span><span class="n">YOUR_ENVIRONMENT</span><span class="p">}</span>
+<span class="n">conda</span> <span class="n">env</span> <span class="n">export</span> <span class="o">|</span> <span class="n">grep</span> <span class="o">-</span><span class="n">v</span> <span class="s2">&quot;^prefix: &quot;</span> <span class="o">&gt;</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Alternatively, you can also update your own environment.yml file manually, according to the
+<code class="docutils literal notranslate"><span class="pre">env/environment.yml</span></code> file.</p>
+<section id="icon-grib-definitions">
+<h2>ICON GRIB Definitions<a class="headerlink" href="#icon-grib-definitions" title="Permalink to this heading">#</a></h2>
+<p>If you are using the conda setup and want to use GRIB data,
+you probably need to set the <code class="docutils literal notranslate"><span class="pre">`GRIB_DEFINITION_PATH`</span></code>.
+The GRIB_DEFINITION_PATH environment variable can
+be configured in order to use local definition files (text files defining the decoding rules)
+instead of the default definition files provided with eccodes.
+This can be done on Tsa/Daint (CSCS) by sourcing the script setup-conda-env.sh.
+It only needs to be run a single time, as it will save the
+<code class="docutils literal notranslate"><span class="pre">`GRIB_DEFINITION_PATH`</span></code> environment variable to the conda environment.
+You will need to deactivate and reactivate the conda environment after doing this.
+You can check it has been correctly set by <cite>conda env config vars list</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">env</span><span class="o">/</span><span class="n">setup</span><span class="o">-</span><span class="n">conda</span><span class="o">-</span><span class="n">env</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>The above script also sets the Fieldextra installation path (<code class="docutils literal notranslate"><span class="pre">`FIELDEXTRA_PATH`</span></code>).
+Fieldextra is a tool which can be used for interpolating data to another grid
+(lon/lat or another ICON grid).
+The use of this specific installation of Fieldextra depends on your CSCS access rights,
+so you may need to change <code class="docutils literal notranslate"><span class="pre">`FIELDEXTRA_PATH`</span></code> if you have problems interpolating.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to iconarray’s documentation!</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="generated/iconarray.core.crop.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">iconarray.core.crop</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon-grib-definitions">ICON GRIB Definitions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Victoria Cherkas, Annika Lauber
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022, Victoria Cherkas, Annika Lauber.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a></p>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
