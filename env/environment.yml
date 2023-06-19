@@ -10,6 +10,7 @@ dependencies:
 - numpy
 - xarray
 - pytest
+- pytest-mock
 - scikit-learn
 - psy-view
 - psy-reg
