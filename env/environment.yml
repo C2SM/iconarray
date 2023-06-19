@@ -15,5 +15,5 @@ dependencies:
 - psy-reg
 - cartopy
 - pip:
-  - git+https://github.com/C2SM/iconarray@v0.3.0
+  - git+https://github.com/C2SM/iconarray@v0.3.1
 - pre-commit

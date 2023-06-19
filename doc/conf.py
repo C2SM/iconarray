@@ -29,7 +29,7 @@ copyright = "2022, Victoria Cherkas, Annika Lauber"
 author = "Victoria Cherkas, Annika Lauber"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.3.0"
+release = "v0.3.1"
 
 
 # -- General configuration ---------------------------------------------------
