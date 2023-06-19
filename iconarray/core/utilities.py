@@ -41,15 +41,16 @@ def awhere_drop(ds, cond):
 def ind_from_latlon(
     lon_array: xr.DataArray,
     lat_array: xr.DataArray,
-    lon_points: float,
-    lat_points: float,
+    lon_point: float,
+    lat_point: float,
     n: int = 1,
     verbose: bool = False,
 ) -> List[int]:
     """
-    Find the indices of the n closest points in two xarrays of longitude and latitude values.
+    Find the indices of the n closest cells in a grid, relative to a given latitude/longitude point.
 
-    That is to a given point specified by its own longitude and latitude values.
+    The function builds a BallTree from the provided 1D or 2D array of longitude and latitude coordinates,
+    and queries it to find the n nearest neighbors to the given point.
 
     Parameters
     ----------
@@ -71,10 +72,6 @@ def ind_from_latlon(
     List[int]
         The indices of the closest n points to the given point.
 
-    Implementation
-    --------------
-    The function builds a BallTree from the 1D or 2D array of longitude and latitude coordinates,
-    and queries it to find the n nearest neighbors to the given point.
 
     Example
     ----------
@@ -122,8 +119,8 @@ def ind_from_latlon(
         return [indices]
 
     # Convert Input to radians
-    lon_array, lat_array, lon_points, lat_points = [
-        np.deg2rad(arr) for arr in [lon_array, lat_array, lon_points, lat_points]
+    lon_array, lat_array, lon_point, lat_point = [
+        np.deg2rad(arr) for arr in [lon_array, lat_array, lon_point, lat_point]
     ]
 
     # Create a 2D array of lon and lat coordinates
@@ -135,7 +132,7 @@ def ind_from_latlon(
     tree = BallTree(lon_lat_array, metric="haversine")
 
     # Find the index of the nearest neighbor(s) of the given point
-    points = np.column_stack((lon_points, lat_points))
+    points = np.column_stack((lon_point, lat_point))
     _, indices = tree.query(points, k=n)
 
     # Convert index to 2D indices if applicable, e.g., when using output remapped to lat-lon grind
@@ -157,8 +154,8 @@ def ind_from_latlon(
         )
 
         indices_str = " ".join(map(str, indices.tolist()))
-        given_lat_str = f"{np.rad2deg(lat_points):.4f}"
-        given_lon_str = f"{np.rad2deg(lon_points):.4f}"
+        given_lat_str = f"{np.rad2deg(lat_point):.4f}"
+        given_lon_str = f"{np.rad2deg(lon_point):.4f}"
 
         print(f"Closest indices: {indices_str}")
         print(
