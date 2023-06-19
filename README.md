@@ -2,8 +2,7 @@
 
 [![Available on pypi](https://badge.fury.io/py/iconarray.svg)](https://pypi.python.org/pypi/iconarray/)
 [![Docs](https://github.com/C2SM/iconarray/workflows/Documentation/badge.svg?branch=main)](https://c2sm.github.io/iconarray/)
-[![Build Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=build)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
-[![Test Status](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/badge/icon?config=test)](https://jenkins-mch.cscs.ch/job/iconarray_testsuite/)
+[![Build/Test Status](https://jenkins-mch.cscs.ch/buildStatus/icon?job=IconArray%2Ficonarray_testsuite)](https://jenkins-mch.cscs.ch/job/IconArray/job/iconarray_testsuite/)
 
 ## Introduction
 
