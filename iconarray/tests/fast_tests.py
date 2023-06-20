@@ -15,6 +15,8 @@ from iconarray.backend.grid import (
     get_cell_dim_name,
     get_dim_names,
     get_edge_dim_name,
+    _add_cell_encoding,
+    _add_edge_encoding
 )
 
 
@@ -220,3 +222,27 @@ def test_get_dim_names_exception(data, grid, request):
 
     with pytest.raises(WrongGridException):
         cell, edge = get_dim_names(data, grid_data)
+
+
+@pytest.mark.parametrize("data", [("data_simple")])
+def test_add_cell_encoding(data, request):
+    """Test that _add_cell_encoding ensures clon and clat in coordinate encoding."""
+    # noqa: DAR101
+    data = request.getfixturevalue(data)
+
+    _add_cell_encoding(data["T"])
+    assert all(
+        x in data["T"].encoding["coordinates"].split(" ") for x in ["clon", "clat"]
+    )
+
+
+@pytest.mark.parametrize("data", [("data_simple")])
+def test_add_edge_encoding(data, request):
+    """Test that _add_edge_encoding ensures elon and elat in coordinate encoding."""
+    # noqa: DAR101
+    data = request.getfixturevalue(data)
+
+    _add_edge_encoding(data["U"])
+    assert all(
+        x in data["U"].encoding["coordinates"].split(" ") for x in ["elon", "elat"]
+    )

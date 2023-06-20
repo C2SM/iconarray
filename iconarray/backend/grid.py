@@ -30,23 +30,25 @@ class WrongGridException(Exception):
         )
 
 
-def _add_cell_encoding(obj):
-    try:
-        if "clat" not in obj.encoding["coordinates"]:
-            obj.encoding["coordinates"] += " clat"
-        if "clon" not in obj.encoding["coordinates"]:
-            obj.encoding["coordinates"] += " clon"
-    except Exception:
+def _add_cell_encoding(obj: xr.DataArray):
+    if hasattr(obj.encoding, "coordinates"):
+        coords = obj.encoding["coordinates"]
+        if "clat" not in coords:
+            coords += " clat"
+        if "clon" not in coords:
+            coords += " clon"
+    else:
         obj.encoding["coordinates"] = "clon clat"
 
 
-def _add_edge_encoding(obj):
-    try:
-        if "elat" not in obj.encoding["coordinates"]:
-            obj.encoding["coordinates"] += " elat"
-        if "elon" not in obj.encoding["coordinates"]:
-            obj.encoding["coordinates"] += " elon"
-    except Exception:
+def _add_edge_encoding(obj: xr.DataArray):
+    if hasattr(obj.encoding, "coordinates"):
+        coords = obj.encoding["coordinates"]
+        if "elat" not in coords:
+            coords += " elat"
+        if "elon" not in coords:
+            coords += " elon"
+    else:
         obj.encoding["coordinates"] = "elon elat"
 
 
