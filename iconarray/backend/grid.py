@@ -95,8 +95,6 @@ def combine_grid_information(file, grid_file):
     ----------
     TypeError
         Grid or data file cannot be opened to xr.core.dataset.Dataset
-    WrongGridException
-        Cell dimension and grid dimension are none
 
     See Also
     ----------
@@ -129,16 +127,13 @@ def combine_grid_information(file, grid_file):
         )
         sys.exit()
 
-    cell_dim = get_cell_dim_name(ds, grid)
+    cell_dim, edge_dim = get_dim_names(ds, grid)
+
     if "cell" not in ds.dims and cell_dim is not None:
         ds = ds.rename_dims({cell_dim: "cell"})
 
-    edge_dim = get_edge_dim_name(ds, grid)
     if "edge" not in ds.dims and edge_dim is not None:
         ds = ds.rename_dims({edge_dim: "edge"})
-
-    if cell_dim is None and edge_dim is None:
-        raise WrongGridException(grid)
 
     time_coord = get_time_coord_name(ds)
     if time_coord != "time":
@@ -160,6 +155,36 @@ def combine_grid_information(file, grid_file):
             _add_edge_encoding(v)
 
     return ds
+
+
+def get_dim_names(ds, grid):
+    """
+    Get name of dimension in ICON data xarray dataset which identifies the cell and edge dimension.
+
+    Parameters
+    ----------
+    ds : xarray.Dataset
+        xarray.Dataset of ICON data.
+    grid : xarray.Dataset
+        xarray.Dataset of grid data.
+
+    Returns
+    ----------
+    dims : tuple[cell_dim: str, edge_dim: str]
+        Name of the cell and edge dimension.
+
+    Raises
+    ----------
+    WrongGridException
+        If grid and dataset have dimensions which do not match.
+    """
+    cell_dim = get_cell_dim_name(ds, grid)
+    edge_dim = get_edge_dim_name(ds, grid)
+
+    if cell_dim is None and edge_dim is None:
+        raise WrongGridException(grid)
+
+    return cell_dim, edge_dim
 
 
 def get_cell_dim_name(ds, grid):

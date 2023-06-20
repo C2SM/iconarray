@@ -3,9 +3,19 @@
 import codecs
 from unittest.mock import Mock, mock_open
 
+import numpy as np
 import pytest
+import xarray as xr
 
-from iconarray.backend.grid import _identify_datatype, _identifyGRIB, _identifyNC
+from iconarray.backend.grid import (
+    WrongGridException,
+    _identify_datatype,
+    _identifyGRIB,
+    _identifyNC,
+    get_cell_dim_name,
+    get_dim_names,
+    get_edge_dim_name,
+)
 
 
 @pytest.mark.parametrize(
@@ -65,3 +75,148 @@ def test_identifyGRIB(open_mock, expected, request):
     _ = request.getfixturevalue(open_mock)
     assert _identifyGRIB("file.grib") == expected
     codecs.open.assert_called_once()
+
+
+def _create_test_data(
+    add_attrs: bool = True,
+    ncells: int = 8,
+    cell: str = "cell",
+    nedges: int = 12,
+    edge: str = "edge",
+) -> xr.Dataset:
+    rs = np.random.RandomState()
+    _vars = {
+        "T": [cell, "height"],
+        "U": [edge, "height"],
+        "V": [edge, "height"],
+        "T_2M": [cell],
+    }
+
+    _dims = {cell: ncells, edge: nedges, "height": 10}
+
+    obj = xr.Dataset()
+    obj[cell] = (cell, np.arange(_dims[cell]))
+    obj[edge] = (edge, np.arange(_dims[edge]))
+    obj["height"] = ("height", 10 * np.arange(_dims["height"]))
+    for v, dims in sorted(_vars.items()):
+        data = rs.normal(size=tuple(_dims[d] for d in dims))
+        obj[v] = (dims, data)
+        if add_attrs:
+            obj[v].attrs = {"foo": "variable"}
+
+    assert all(obj.data.flags.writeable for obj in obj.variables.values())
+    return obj
+
+
+def _create_test_grid_data(cell: int = 8, edge: int = 12) -> xr.Dataset:
+    rs = np.random.RandomState()
+
+    _coords = {
+        "clon": "cell",
+        "clat": "cell",
+        "elon": "edge",
+        "elat": "edge",
+    }
+
+    _dims = {"cell": cell, "edge": edge}
+
+    obj = xr.Dataset()
+
+    for v, coord in sorted(_coords.items()):
+        obj.coords[v] = (_coords[v], sorted(rs.random_sample(size=_dims[coord])))
+
+    assert all(obj.data.flags.writeable for obj in obj.variables.values())
+    return obj
+
+
+@pytest.fixture
+def data_simple():
+    """Test dataset which matches the grid_data() fixture."""
+    # noqa: DAR
+    return _create_test_data()
+
+
+@pytest.fixture
+def data_with_diff_cell_name():
+    """Test dataset which matches the grid_data() fixture but varying dimension names."""
+    # noqa: DAR
+    return _create_test_data(cell="values", edge="values2")
+
+
+@pytest.fixture
+def data_for_different_grid():
+    """Test dataset which does not match the grid_data() fixture."""
+    # noqa: DAR
+    return _create_test_data(ncells=20, nedges=30)
+
+
+@pytest.fixture
+def grid_data():
+    """Test grid dataset."""
+    # noqa: DAR
+    return _create_test_grid_data()
+
+
+@pytest.mark.parametrize(
+    "data,grid,expected",
+    [
+        ("data_simple", "grid_data", "cell"),
+        ("data_with_diff_cell_name", "grid_data", "values"),
+        ("data_for_different_grid", "grid_data", None),
+    ],
+)
+def test_get_cell_dim_name(data, grid, expected, request):
+    """Test that get_cell_dim_name returns the name of the edge dimension or None."""
+    # noqa: DAR101
+    data = request.getfixturevalue(data)
+    grid_data = request.getfixturevalue(grid)
+    cell = get_cell_dim_name(data, grid_data)
+
+    assert cell == expected
+
+
+@pytest.mark.parametrize(
+    "data,grid,expected",
+    [
+        ("data_simple", "grid_data", "edge"),
+        ("data_with_diff_cell_name", "grid_data", "values2"),
+        ("data_for_different_grid", "grid_data", None),
+    ],
+)
+def test_get_edge_dim_name(data, grid, expected, request):
+    """Test get_edge_dim_name returns the name of cell dimension, or None."""
+    # noqa: DAR101
+    data = request.getfixturevalue(data)
+    grid_data = request.getfixturevalue(grid)
+    edge = get_edge_dim_name(data, grid_data)
+
+    assert edge == expected
+
+
+@pytest.mark.parametrize(
+    "data,grid,expected",
+    [
+        ("data_simple", "grid_data", "cell,edge"),
+        ("data_with_diff_cell_name", "grid_data", "values,values2"),
+    ],
+)
+def test_get_dim_names(data, grid, expected, request):  # noqa: DAR101
+    """Test that get_dim_names works as expected."""
+    # noqa: DAR101
+    data = request.getfixturevalue(data)
+    grid_data = request.getfixturevalue(grid)
+    cell, edge = get_dim_names(data, grid_data)
+
+    assert cell == expected.split(",")[0]
+    assert edge == expected.split(",")[1]
+
+
+@pytest.mark.parametrize("data,grid", [("data_for_different_grid", "grid_data")])
+def test_get_dim_names_exception(data, grid, request):
+    """Test that get_dim_names raises WrongGridException if wrong grid is used."""
+    # noqa: DAR101
+    data = request.getfixturevalue(data)
+    grid_data = request.getfixturevalue(grid)
+
+    with pytest.raises(WrongGridException):
+        cell, edge = get_dim_names(data, grid_data)
