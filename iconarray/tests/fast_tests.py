@@ -3,13 +3,15 @@
 import codecs
 from unittest.mock import Mock, mock_open, patch
 
-import numpy as np
 import cfgrib
+import numpy as np
 import pytest
 import xarray as xr
 
 from iconarray.backend.grid import (
     WrongGridException,
+    _add_cell_encoding,
+    _add_edge_encoding,
     _identify_datatype,
     _identifyGRIB,
     _identifyNC,
@@ -17,8 +19,6 @@ from iconarray.backend.grid import (
     get_cell_dim_name,
     get_dim_names,
     get_edge_dim_name,
-    _add_cell_encoding,
-    _add_edge_encoding,
 )
 
 
@@ -248,6 +248,8 @@ def test_add_edge_encoding(data, request):
     assert all(
         x in data["U"].encoding["coordinates"].split(" ") for x in ["elon", "elat"]
     )
+
+
 @pytest.fixture
 def mocker_open_gribfile(mocker):
     """Mock cfgrib.open_datasets()."""
