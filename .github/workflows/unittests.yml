@@ -37,7 +37,7 @@ jobs:
       id: cache
 
     - name: Update environment
-      run: mamba env update -n my-env -f env/environment.yml && pip install .
+      run: mamba env update -n my-env -f env/environment.yml && pip install -e .
       if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Run tests
