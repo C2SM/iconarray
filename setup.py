@@ -35,10 +35,6 @@ setup(
     install_requires=[
         "cfgrib>=0.9.9.1",
         "xarray>=0.15",
-        "psyplot",
-        "psy-reg",
-        "psy-simple",
-        "psy-maps",
         "numpy",
         "six",
     ],  # Optional
