@@ -41,7 +41,6 @@ setup(
         "psy-maps",
         "numpy",
         "six",
-        "cartopy",
     ],  # Optional
     extras_require={
         "tests": ["flake8", "pytest"],
