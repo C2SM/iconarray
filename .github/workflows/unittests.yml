@@ -36,9 +36,6 @@ jobs:
         key: ${{ runner.os }}-conda-build-${{ hashFiles('env/environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
       id: cache
 
-    - name: Install dependencies
-      run: apt-get update -y && apt-get install -y libgeos-dev
-
     - name: Update environment
       run: mamba env update -n my-env -f env/environment.yml && pip install .
       if: steps.cache.outputs.cache-hit != 'true'
