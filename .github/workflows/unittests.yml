@@ -33,7 +33,7 @@ jobs:
     - uses: actions/cache@v2
       with:
         path: /usr/share/miniconda3/envs/my-env
-        key: linux-64-conda-${{ hashFiles('env/environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+        key: ${{ runner.os }}-conda-build-${{ hashFiles('env/environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
       id: cache
 
     - name: Update environment
