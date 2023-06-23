@@ -1,9 +1,10 @@
 """A collection of fast tests."""
 
 import codecs
-from unittest.mock import Mock, mock_open
+from unittest.mock import Mock, mock_open, patch
 
 import numpy as np
+import cfgrib
 import pytest
 import xarray as xr
 
@@ -12,11 +13,12 @@ from iconarray.backend.grid import (
     _identify_datatype,
     _identifyGRIB,
     _identifyNC,
+    _open_GRIB,
     get_cell_dim_name,
     get_dim_names,
     get_edge_dim_name,
     _add_cell_encoding,
-    _add_edge_encoding
+    _add_edge_encoding,
 )
 
 
@@ -53,7 +55,7 @@ def mocker_open_isnc(mocker):
 def mocker_open_isgrib(mocker):
     """Mock codecs.open() for a GRIB file."""
     # noqa: DAR101
-    mocked_nc_data = mock_open(read_data="grib mocked data")
+    mocked_nc_data = mock_open(read_data="GRIB mocked data")
     mocker.patch("codecs.open", mocked_nc_data)
 
 
@@ -246,3 +248,35 @@ def test_add_edge_encoding(data, request):
     assert all(
         x in data["U"].encoding["coordinates"].split(" ") for x in ["elon", "elat"]
     )
+@pytest.fixture
+def mocker_open_gribfile(mocker):
+    """Mock cfgrib.open_datasets()."""
+    # noqa: DAR101
+    mocked_gribfile = mock_open(read_data="grib mocked data")
+    mocker.patch("cfgrib.open_datasets", mocked_gribfile)
+    cfgrib.open_datasets.seide_effect = KeyError("paramId")
+
+
+def test_open_GRIB_raise(mocker):
+    """Test if _open_GRIB raises correclty."""  # noqa: DAR101
+    mocked_gribfile = mock_open(read_data="grib mocked data")
+    mocker.patch("cfgrib.open_datasets", mocked_gribfile)
+    cfgrib.open_datasets.side_effect = KeyError("paramId")
+
+    mocked_function = Mock()
+    mocked_function.return_value = "var1, var2"
+
+    with pytest.raises(KeyError) as e:
+        with patch("iconarray.backend.grid.show_GRIB_shortnames", new=mocked_function):
+            _open_GRIB(
+                "file", "variable", decode_coords={}, decode_times={}, backend_kwargs={}
+            )
+    assert e.exconly().startswith('KeyError: "Cannot filter dataset by variable')
+
+    cfgrib.open_datasets.side_effect = KeyError("else")
+    with pytest.raises(KeyError) as e:
+        with patch("iconarray.backend.grid.show_GRIB_shortnames", new=mocked_function):
+            _open_GRIB(
+                "file", "variable", decode_coords={}, decode_times={}, backend_kwargs={}
+            )
+    assert e.exconly() == "KeyError: 'else'"
