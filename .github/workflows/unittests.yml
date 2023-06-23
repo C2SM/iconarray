@@ -14,14 +14,7 @@ env:
 
 jobs:
   build:
-
-    strategy:
-      matrix:
-        include:
-        - os: ubuntu-latest
-          label: linux-64
-          prefix: /usr/share/miniconda3/envs/my-env
-    name: unittests
+    name: Tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -44,7 +37,7 @@ jobs:
       id: cache
 
     - name: Update environment
-      run: mamba env update -n my-env -f env/environment.yml
+      run: mamba env update -n my-env -f env/environment.yml && pip install .
       if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Run tests
