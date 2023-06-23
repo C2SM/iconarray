@@ -282,3 +282,8 @@ def test_open_GRIB_raise(mocker):
                 "file", "variable", decode_coords={}, decode_times={}, backend_kwargs={}
             )
     assert e.exconly() == "KeyError: 'else'"
+
+
+
+def test_dummy():
+    assert 1 == 1
