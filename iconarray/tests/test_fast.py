@@ -256,7 +256,7 @@ def mocker_open_gribfile(mocker):
     # noqa: DAR101
     mocked_gribfile = mock_open(read_data="grib mocked data")
     mocker.patch("cfgrib.open_datasets", mocked_gribfile)
-    cfgrib.open_datasets.seide_effect = KeyError("paramId")
+    cfgrib.open_datasets.side_effect = KeyError("paramId")
 
 
 def test_open_GRIB_raise(mocker):
