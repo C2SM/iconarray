@@ -11,9 +11,8 @@ import pytest
 import xarray as xr
 from xarray.testing import assert_identical
 
-from iconarray import combine_grid_information, open_dataset, filter_by_var
-from iconarray.backend.grid import _identify_datatype, _open_GRIB
-
+from iconarray import combine_grid_information, filter_by_var, open_dataset
+from iconarray.backend.grid import _open_GRIB
 
 f_vt_vn = "data/example_data/grib/vnvt00010000"  # ONLY VN, VT variables
 f_alldata = "data/example_data/grib/lfff00010000_edgeplots"  # VN, VT AND cell center variables (P, T, U, V etc)
@@ -21,6 +20,7 @@ f_grid = "data/example_data/grids/icon_grid_0001_R19B08_mch.nc"  # GRID file
 
 f_alldata_cropped = "data/example_data/grib/lfff00010000_edgeplots_cropped"  # VN, VT AND cell center variables (P, T, U, V etc)
 f_grid_cropped = "data/example_data/grids/icon_grid_0001_R19B08_mch.nc"  # GRID file
+
 
 def _open_file(data):
     dss = cfgrib.open_datasets(
@@ -148,6 +148,7 @@ def test_grid_dataset_cell(alldata):
         ds_cellvars.P.dims
     ), "ds_cellvars data variables should have a dimension 'cell'"
 
+
 @pytest.mark.parametrize(
     "file",
     [
@@ -156,7 +157,14 @@ def test_grid_dataset_cell(alldata):
     ],
 )
 def test_filter(file):
-    """Test that we can filter a xarray.Dataset to a xarray.DataArray with a single variable."""
+    """
+    Test that we can filter a xarray.Dataset to a xarray.DataArray with a single variable.
+
+    Parameters
+    ----------
+    file : str | Path
+        location of GRIB file
+    """
     ds_t = open_dataset(file, "T")
 
     ds = open_dataset(file)
@@ -166,6 +174,7 @@ def test_filter(file):
 
     assert len(list(ds_t.data_vars)) == 1
     assert list(ds_t.data_vars)[0] == "T"
+
 
 def test_open_GRIB_raise():
     """Test if _open_GRIB raises correclty with input file."""  # noqa: DAR101
@@ -187,6 +196,3 @@ def test_var_not_found():
         assert all(
             [x in str(e) for x in var_list]
         ), "list of variables in files incorrect"
-
-        
-
