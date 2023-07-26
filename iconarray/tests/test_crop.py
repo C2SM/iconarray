@@ -1,4 +1,4 @@
-"""tests for crop module."""
+"""Tests for the crop module."""
 import os
 
 import xarray as xr

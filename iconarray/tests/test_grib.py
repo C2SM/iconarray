@@ -11,12 +11,16 @@ import pytest
 import xarray as xr
 from xarray.testing import assert_identical
 
-import iconarray
+from iconarray import combine_grid_information, open_dataset, filter_by_var
+from iconarray.backend.grid import _identify_datatype, _open_GRIB
+
 
 f_vt_vn = "data/example_data/grib/vnvt00010000"  # ONLY VN, VT variables
 f_alldata = "data/example_data/grib/lfff00010000_edgeplots"  # VN, VT AND cell center variables (P, T, U, V etc)
 f_grid = "data/example_data/grids/icon_grid_0001_R19B08_mch.nc"  # GRID file
 
+f_alldata_cropped = "data/example_data/grib/lfff00010000_edgeplots_cropped"  # VN, VT AND cell center variables (P, T, U, V etc)
+f_grid_cropped = "data/example_data/grids/icon_grid_0001_R19B08_mch.nc"  # GRID file
 
 def _open_file(data):
     dss = cfgrib.open_datasets(
@@ -61,9 +65,9 @@ def test_grid_edge(alldata):
     _, ds_edge = alldata
     ds_edge = ds_edge.copy()
 
-    ds_edgevars = iconarray.combine_grid_information(ds_edge, f_grid)
+    ds_edgevars = combine_grid_information(ds_edge, f_grid)
 
-    ds_grid = iconarray.open_dataset(f_grid)
+    ds_grid = open_dataset(f_grid)
 
     assert list(ds_edgevars.data_vars) == [
         "VN",
@@ -97,9 +101,9 @@ def test_grid_cell(alldata):
     ds_cell, _ = alldata
     ds_cell = ds_cell.copy()
 
-    ds_cellvars = iconarray.combine_grid_information(ds_cell, f_grid)
+    ds_cellvars = combine_grid_information(ds_cell, f_grid)
 
-    ds_grid = iconarray.open_dataset(f_grid)
+    ds_grid = open_dataset(f_grid)
 
     assert list(ds_cellvars.data_vars) == [
         "P",
@@ -138,33 +142,51 @@ def test_grid_dataset_cell(alldata):
     ds_cell, _ = alldata
     ds_cell = ds_cell.copy()
 
-    ds_cellvars = iconarray.combine_grid_information(ds_cell, grid_ds)
+    ds_cellvars = combine_grid_information(ds_cell, grid_ds)
 
     assert "cell" in list(
         ds_cellvars.P.dims
     ), "ds_cellvars data variables should have a dimension 'cell'"
 
-
-def test_filter():
+@pytest.mark.parametrize(
+    "file",
+    [
+        (f_alldata),
+        (f_alldata_cropped),
+    ],
+)
+def test_filter(file):
     """Test that we can filter a xarray.Dataset to a xarray.DataArray with a single variable."""
-    ds_t = iconarray.open_dataset(f_alldata, "T")
+    ds_t = open_dataset(file, "T")
 
-    ds = iconarray.open_dataset(f_alldata)
-    ds_t2 = iconarray.filter_by_var(ds, "T")
+    ds = open_dataset(file)
+    ds_t2 = filter_by_var(ds, "T")
 
     assert_identical(ds_t, ds_t2)
 
     assert len(list(ds_t.data_vars)) == 1
     assert list(ds_t.data_vars)[0] == "T"
 
+def test_open_GRIB_raise():
+    """Test if _open_GRIB raises correclty with input file."""  # noqa: DAR101
+    grib_file = "data/example_data/grib/lfff00000000"
+    with pytest.raises(KeyError) as e:
+        _open_GRIB(
+            grib_file, "var", decode_coords={}, decode_times={}, backend_kwargs={}
+        )
+    assert e.exconly().startswith('KeyError: "Cannot filter dataset by variable')
+
 
 def test_var_not_found():
     """Test the output of vars available in the file if the requested var is not found."""
-    ds = iconarray.open_dataset(f_alldata)
+    ds = open_dataset(f_alldata)
     var_list = list(itertools.chain.from_iterable([list(sds.keys()) for sds in ds]))
     try:
-        _ = iconarray.open_dataset(f_alldata, "T_MISSING")
+        _ = open_dataset(f_alldata, "T_MISSING")
     except KeyError as e:
         assert all(
             [x in str(e) for x in var_list]
         ), "list of variables in files incorrect"
+
+        
+

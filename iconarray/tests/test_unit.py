@@ -1,4 +1,4 @@
-"""A collection of fast tests."""
+"""A collection of unit tests with no data dependency."""
 
 import codecs
 from unittest.mock import Mock, mock_open, patch
@@ -283,7 +283,3 @@ def test_open_GRIB_raise(mocker):
             )
     assert e.exconly() == "KeyError: 'else'"
 
-
-
-def test_dummy():
-    assert 1 == 1
